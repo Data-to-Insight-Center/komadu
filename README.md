@@ -1,11 +1,13 @@
 komadu
 ======
 
-W3C Prov based provenance implementation
+Provenance Collection and Visualization Tool
 
 Komadu is a redesign of Karma (OPM based provenance implementation) which supports the W3C PROV 
 specification. It comes with a new Client API which aligns with the W3C PROV standards. This Client API 
 is more generalized and supports capturing any kind of provenance. 
+
+Following is a quick start guide for Komadu. More information can be found in docs/KomaduUserGuide.pdf.
 
 User Guide
 ==========
@@ -33,8 +35,8 @@ Building the Source
 3. Edit the services.xml file found under service-core-aar/src/main/resources/META-INF and set the correct 
     path in the "komadu.properties.file.path" parameter.
 
-4. Build Komadu.
-    mvn clean install
+4. Build Komadu. You have to skip the test cases till we deploy Komadu on Tomcat.
+    mvn clean install -Dmaven.test.skip=true
 
 Set up Komadu Database
 ----------------------
@@ -79,6 +81,7 @@ Set up Tomcat and deploy Komadu service
 Executing Test Cases
 --------------------
 
-You can load the axis2-client-core module to your IDE and execute the main in  KomaduTests.java class. 
-We will be adding this test execution into the maven script soon.
+Once you have successfully deployed Komadu on Tomcat, you can execute the test cases through maven.
 
+1. Move into axis2-client-core
+2. Execute the command 'mvn clean install -o'
