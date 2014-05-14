@@ -1,0 +1,205 @@
+<prov:document xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:ext="http://komadu.d2i.indiana.edu/external" xmlns:kom="http://komadu.d2i.indiana.edu" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:prov="http://www.w3.org/ns/prov#" xmlns:quer="http://komadu.d2i.indiana.edu/query" xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/">
+  <prov:activity prov:id="kom:Activity_187">
+    <kom:activityUri xsi:type="xsd:string">service1_5323</kom:activityUri>
+    <kom:type xsi:type="xsd:string">SERVICE</kom:type>
+    <kom:contextWorkflowUri xsi:type="xsd:string">workflow1_5323</kom:contextWorkflowUri>
+    <kom:timestep xsi:type="xsd:string">20</kom:timestep>
+    <kom:workflowNodeID xsi:type="xsd:string">20</kom:workflowNodeID>
+    <ext:domain xsi:type="xsd:string">scientific</ext:domain>
+  </prov:activity>
+  <prov:activity prov:id="kom:Activity_190">
+    <kom:activityUri xsi:type="xsd:string">method1_5323</kom:activityUri>
+    <kom:type xsi:type="xsd:string">METHOD</kom:type>
+    <kom:contextWorkflowUri xsi:type="xsd:string">workflow1_5323</kom:contextWorkflowUri>
+    <kom:contextServiceUri xsi:type="xsd:string">service1_5323</kom:contextServiceUri>
+    <kom:timestep xsi:type="xsd:string">20</kom:timestep>
+    <kom:workflowNodeID xsi:type="xsd:string">20</kom:workflowNodeID>
+    <ext:domain xsi:type="xsd:string">scientific</ext:domain>
+  </prov:activity>
+  <prov:activity prov:id="kom:Activity_188">
+    <kom:activityUri xsi:type="xsd:string">workflow1_5323</kom:activityUri>
+    <kom:type xsi:type="xsd:string">WORKFLOW</kom:type>
+    <kom:timestep xsi:type="xsd:string">20</kom:timestep>
+    <kom:workflowNodeID xsi:type="xsd:string">20</kom:workflowNodeID>
+    <ext:domain xsi:type="xsd:string">scientific</ext:domain>
+  </prov:activity>
+  <prov:entity prov:id="kom:File_169">
+    <kom:type xsi:type="xsd:string">File</kom:type>
+    <kom:url xsi:type="xsd:string">file://foo/bar/data10.txt_5323</kom:url>
+    <kom:size xsi:type="xsd:string">500</kom:size>
+    <kom:creation-date xsi:type="xsd:string">2014-03-19 15:35:36.0</kom:creation-date>
+    <kom:file-name xsi:type="xsd:string">data10.txt_5323</kom:file-name>
+    <kom:md5_checksum xsi:type="xsd:string">dummy_md5_data10.txt_5323</kom:md5_checksum>
+  </prov:entity>
+  <prov:entity prov:id="kom:File_168">
+    <kom:type xsi:type="xsd:string">File</kom:type>
+    <kom:url xsi:type="xsd:string">file://foo/bar/data9.txt_5323</kom:url>
+    <kom:size xsi:type="xsd:string">500</kom:size>
+    <kom:creation-date xsi:type="xsd:string">2014-03-19 15:35:36.0</kom:creation-date>
+    <kom:file-name xsi:type="xsd:string">data9.txt_5323</kom:file-name>
+    <kom:md5_checksum xsi:type="xsd:string">dummy_md5_data9.txt_5323</kom:md5_checksum>
+  </prov:entity>
+  <prov:entity prov:id="kom:File_159">
+    <kom:type xsi:type="xsd:string">File</kom:type>
+    <kom:url xsi:type="xsd:string">file://foo/bar/data1.txt_5323</kom:url>
+    <kom:size xsi:type="xsd:string">500</kom:size>
+    <kom:creation-date xsi:type="xsd:string">2014-03-19 15:35:34.0</kom:creation-date>
+    <kom:file-name xsi:type="xsd:string">data1.txt_5323</kom:file-name>
+    <kom:md5_checksum xsi:type="xsd:string">dummy_md5_data1.txt_5323</kom:md5_checksum>
+  </prov:entity>
+  <prov:entity prov:id="kom:File_163">
+    <kom:type xsi:type="xsd:string">File</kom:type>
+    <kom:url xsi:type="xsd:string">file://foo/bar/data6.txt_5323</kom:url>
+    <kom:size xsi:type="xsd:string">500</kom:size>
+    <kom:creation-date xsi:type="xsd:string">2014-03-19 15:35:36.0</kom:creation-date>
+    <kom:file-name xsi:type="xsd:string">data6.txt_5323</kom:file-name>
+    <kom:md5_checksum xsi:type="xsd:string">dummy_md5_data6.txt_5323</kom:md5_checksum>
+  </prov:entity>
+  <prov:entity prov:id="kom:File_160">
+    <kom:type xsi:type="xsd:string">File</kom:type>
+    <kom:url xsi:type="xsd:string">file://foo/bar/data2.txt_5323</kom:url>
+    <kom:size xsi:type="xsd:string">500</kom:size>
+    <kom:creation-date xsi:type="xsd:string">2014-03-19 15:35:34.0</kom:creation-date>
+    <kom:file-name xsi:type="xsd:string">data2.txt_5323</kom:file-name>
+    <kom:md5_checksum xsi:type="xsd:string">dummy_md5_data2.txt_5323</kom:md5_checksum>
+  </prov:entity>
+  <prov:entity prov:id="kom:File_167">
+    <kom:type xsi:type="xsd:string">File</kom:type>
+    <kom:url xsi:type="xsd:string">file://foo/bar/data8.txt_5323</kom:url>
+    <kom:size xsi:type="xsd:string">500</kom:size>
+    <kom:creation-date xsi:type="xsd:string">2014-03-19 15:35:36.0</kom:creation-date>
+    <kom:file-name xsi:type="xsd:string">data8.txt_5323</kom:file-name>
+    <kom:md5_checksum xsi:type="xsd:string">dummy_md5_data8.txt_5323</kom:md5_checksum>
+  </prov:entity>
+  <prov:entity prov:id="kom:File_166">
+    <kom:type xsi:type="xsd:string">File</kom:type>
+    <kom:url xsi:type="xsd:string">file://foo/bar/data7.txt_5323</kom:url>
+    <kom:size xsi:type="xsd:string">500</kom:size>
+    <kom:creation-date xsi:type="xsd:string">2014-03-19 15:35:36.0</kom:creation-date>
+    <kom:file-name xsi:type="xsd:string">data7.txt_5323</kom:file-name>
+    <kom:md5_checksum xsi:type="xsd:string">dummy_md5_data7.txt_5323</kom:md5_checksum>
+  </prov:entity>
+  <prov:entity prov:id="kom:File_165">
+    <kom:type xsi:type="xsd:string">File</kom:type>
+    <kom:url xsi:type="xsd:string">file://foo/bar/data11.txt_5323</kom:url>
+    <kom:size xsi:type="xsd:string">500</kom:size>
+    <kom:creation-date xsi:type="xsd:string">2014-03-19 15:35:37.0</kom:creation-date>
+    <kom:file-name xsi:type="xsd:string">data11.txt_5323</kom:file-name>
+    <kom:md5_checksum xsi:type="xsd:string">dummy_md5_data11.txt_5323</kom:md5_checksum>
+  </prov:entity>
+  <prov:entity prov:id="kom:File_164">
+    <kom:type xsi:type="xsd:string">File</kom:type>
+    <kom:url xsi:type="xsd:string">file://foo/bar/data5.txt_5323</kom:url>
+    <kom:size xsi:type="xsd:string">500</kom:size>
+    <kom:creation-date xsi:type="xsd:string">2014-03-19 15:35:35.0</kom:creation-date>
+    <kom:file-name xsi:type="xsd:string">data5.txt_5323</kom:file-name>
+    <kom:md5_checksum xsi:type="xsd:string">dummy_md5_data5.txt_5323</kom:md5_checksum>
+  </prov:entity>
+  <prov:agent prov:id="kom:Agent_119">
+    <kom:type xsi:type="xsd:string">PERSON</kom:type>
+    <kom:url xsi:type="xsd:string">agent1_5323</kom:url>
+    <kom:name xsi:type="xsd:string">Isuru Suriarachchi</kom:name>
+    <kom:affiliation xsi:type="xsd:string">testaff</kom:affiliation>
+    <kom:email xsi:type="xsd:string">isuriara@indiana.edu</kom:email>
+  </prov:agent>
+  <prov:agent prov:id="kom:Agent_120">
+    <kom:type xsi:type="xsd:string">PERSON</kom:type>
+    <kom:url xsi:type="xsd:string">agent2_5323</kom:url>
+    <kom:name xsi:type="xsd:string">John Fraser</kom:name>
+    <kom:affiliation xsi:type="xsd:string">testaff2</kom:affiliation>
+    <kom:email xsi:type="xsd:string">john@indiana.edu</kom:email>
+  </prov:agent>
+  <prov:wasDerivedFrom prov:id="kom:Derivation_159_164">
+    <prov:generatedEntity prov:ref="kom:File_164"/>
+    <prov:usedEntity prov:ref="kom:File_159"/>
+  </prov:wasDerivedFrom>
+  <prov:wasGeneratedBy prov:id="kom:Generation_63">
+    <prov:entity prov:ref="kom:File_164"/>
+    <prov:activity prov:ref="kom:Activity_187"/>
+    <prov:location xsi:type="xsd:string">Location1</prov:location>
+    <kom:generation-time xsi:type="xsd:dateTime">2014-03-19 15:35:35.0</kom:generation-time>
+    <ext:total_time xsi:type="xsd:string">1.23h</ext:total_time>
+  </prov:wasGeneratedBy>
+  <prov:wasDerivedFrom prov:id="kom:Derivation_10">
+    <prov:generatedEntity prov:ref="kom:File_168"/>
+    <prov:usedEntity prov:ref="kom:File_163"/>
+    <prov:type xsi:type="xsd:string">PRIMARY_SOURCE</prov:type>
+    <ext:dummy_derivation xsi:type="xsd:string">dummy_val</ext:dummy_derivation>
+  </prov:wasDerivedFrom>
+  <prov:alternateOf>
+    <prov:alternate1 prov:ref="kom:File_163"/>
+    <prov:alternate2 prov:ref="kom:File_169"/>
+  </prov:alternateOf>
+  <prov:wasAttributedTo prov:id="kom:Attribution_12">
+    <prov:entity prov:ref="kom:File_160"/>
+    <prov:agent prov:ref="kom:Agent_119"/>
+    <ext:dummy_att xsi:type="xsd:string">attribution_att</ext:dummy_att>
+  </prov:wasAttributedTo>
+  <prov:wasAssociatedWith prov:id="kom:Association_172">
+    <prov:activity prov:ref="kom:Activity_187"/>
+    <prov:agent prov:ref="kom:Agent_120"/>
+    <ext:programmer xsi:type="xsd:string">brian</ext:programmer>
+  </prov:wasAssociatedWith>
+  <prov:specializationOf>
+    <prov:specificEntity prov:ref="kom:File_163"/>
+    <prov:generalEntity prov:ref="kom:File_165"/>
+  </prov:specializationOf>
+  <prov:used prov:id="kom:Usage_57">
+    <prov:activity prov:ref="kom:Activity_187"/>
+    <prov:entity prov:ref="kom:File_159"/>
+    <prov:location xsi:type="xsd:string">Location2</prov:location>
+    <kom:used-time xsi:type="xsd:dateTime">2014-03-19 15:35:34.0</kom:used-time>
+    <ext:total_time xsi:type="xsd:string">0.53h</ext:total_time>
+  </prov:used>
+  <prov:wasDerivedFrom prov:id="kom:Derivation_8">
+    <prov:generatedEntity prov:ref="kom:File_166"/>
+    <prov:usedEntity prov:ref="kom:File_163"/>
+    <prov:type xsi:type="xsd:string">REVISION</prov:type>
+    <ext:dummy_revision xsi:type="xsd:string">dummy_val</ext:dummy_revision>
+  </prov:wasDerivedFrom>
+  <prov:wasDerivedFrom prov:id="kom:Derivation_9">
+    <prov:generatedEntity prov:ref="kom:File_167"/>
+    <prov:usedEntity prov:ref="kom:File_163"/>
+    <prov:type xsi:type="xsd:string">QUOTATION</prov:type>
+    <ext:dummy_quotation xsi:type="xsd:string">dummy_val</ext:dummy_quotation>
+  </prov:wasDerivedFrom>
+  <prov:actedOnBehalfOf prov:id="kom:Delegation_57">
+    <prov:delegate prov:ref="kom:Agent_119"/>
+    <prov:responsible prov:ref="kom:Agent_120"/>
+    <ext:type xsi:type="xsd:string">contract</ext:type>
+  </prov:actedOnBehalfOf>
+  <prov:wasInformedBy prov:id="kom:Communication_12">
+    <prov:informed prov:ref="kom:Activity_188"/>
+    <prov:informant prov:ref="kom:Activity_187"/>
+    <ext:dummy_att xsi:type="xsd:string">communication_att</ext:dummy_att>
+  </prov:wasInformedBy>
+  <prov:wasGeneratedBy prov:id="kom:Generation_62">
+    <prov:entity prov:ref="kom:File_160"/>
+    <prov:activity prov:ref="kom:Activity_188"/>
+    <prov:location xsi:type="xsd:string">Location1</prov:location>
+    <kom:generation-time xsi:type="xsd:dateTime">2014-03-19 15:35:34.0</kom:generation-time>
+    <ext:total_time xsi:type="xsd:string">1.23h</ext:total_time>
+  </prov:wasGeneratedBy>
+  <prov:wasInvalidatedBy prov:id="kom:Invalidation_14">
+    <prov:entity prov:ref="kom:File_160"/>
+    <prov:activity prov:ref="kom:Activity_187"/>
+    <prov:location xsi:type="xsd:string">Location4</prov:location>
+    <kom:invalidation-time xsi:type="xsd:dateTime">2014-03-19 15:35:35.0</kom:invalidation-time>
+    <ext:dummy_invalidation_att xsi:type="xsd:string">dummy_val_invalidation</ext:dummy_invalidation_att>
+  </prov:wasInvalidatedBy>
+  <prov:wasDerivedFrom prov:id="kom:Derivation_7">
+    <prov:generatedEntity prov:ref="kom:File_163"/>
+    <prov:usedEntity prov:ref="kom:File_160"/>
+    <ext:dummy_derivation xsi:type="xsd:string">dummy_val</ext:dummy_derivation>
+  </prov:wasDerivedFrom>
+  <prov:wasAssociatedWith prov:id="kom:Association_173">
+    <prov:activity prov:ref="kom:Activity_190"/>
+    <prov:agent prov:ref="kom:Agent_119"/>
+    <ext:programmer xsi:type="xsd:string">brian</ext:programmer>
+  </prov:wasAssociatedWith>
+  <prov:wasAssociatedWith prov:id="kom:Association_171">
+    <prov:activity prov:ref="kom:Activity_188"/>
+    <prov:agent prov:ref="kom:Agent_119"/>
+    <ext:programmer xsi:type="xsd:string">brian</ext:programmer>
+  </prov:wasAssociatedWith>
+</prov:document>

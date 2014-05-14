@@ -1,0 +1,58 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+
+    <modelVersion>4.0.0</modelVersion>
+    <artifactId>komadu-service</artifactId>
+    <packaging>aar</packaging>
+    <name>Komadu Service Core - AAR</name>
+    <description>
+        W3C PROV Based Komadu implementation - service core aar
+    </description>
+    <parent>
+        <groupId>edu.indiana.d2i.komadu</groupId>
+        <artifactId>komadu-parent</artifactId>
+        <version>1.0</version>
+    </parent>
+
+    <dependencies>
+        <dependency>
+            <groupId>edu.indiana.d2i.komadu</groupId>
+            <artifactId>komadu-service-core</artifactId>
+            <version>${pom.version}</version>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.axis2</groupId>
+                <artifactId>axis2-aar-maven-plugin</artifactId>
+                <version>${axis2.version}</version>
+                <extensions>true</extensions>
+                <configuration>
+                    <servicesXmlFile>${basedir}/src/main/resources/META-INF/services.xml</servicesXmlFile>
+                    <includeDependencies>false</includeDependencies>
+                    <fileSets>
+                        <fileSet>
+                            <directory>${basedir}/../service-core/target</directory>
+                            <outputDirectory>lib</outputDirectory>
+                            <includes>
+                                <include>*.jar</include>
+                            </includes>
+                        </fileSet>
+                        <fileSet>
+                            <directory>${basedir}/../service-core/target/generated-code/resources</directory>
+                            <includes>
+                                <include>**/*.class</include>
+                                <include>**/*.xsb</include>
+                            </includes>
+                        </fileSet>
+                    </fileSets>
+                </configuration>
+            </plugin>
+
+        </plugins>
+    </build>
+
+</project>
