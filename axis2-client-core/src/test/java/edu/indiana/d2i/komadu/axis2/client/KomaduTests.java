@@ -720,6 +720,16 @@ public class KomaduTests {
         members.setMemberArray(memberArray);
         collection.setMembers(members);
         entity.setCollection(collection);
+
+        // Attributes
+        AttributesType attributes = AttributesType.Factory.newInstance();
+        AttributeType[] attributesArr = new AttributeType[1];
+        // Attribute 1
+        AttributeType att1 = createAttribute("coll_attribute", "coll_att_val");
+        attributesArr[0] = att1;
+        attributes.setAttributeArray(attributesArr);
+        entity.setAttributes(attributes);
+
         return entity;
     }
 

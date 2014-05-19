@@ -808,17 +808,17 @@ public class BaseDBIngesterImplementer implements IngesterImplementer<Long, Stri
             tuple.addAttribute("collection_uri", collection.getCollectionURI(), TableAttributeData.DataType.STRING);
 
             // insert the collection tuple
-            Long collectionId = insertTuple("exe_collection", tuple, "addNewCollection", connection);
+            insertTuple("exe_collection", tuple, "addNewCollection", connection);
             KomaduUtils.manageDBLock(DBLockConstants.LOCK_RELEASE, collection.getCollectionURI(), connection);
 
             // handle members of collection
             MembersType members = collection.getMembers();
             for (EntityType member : members.getMemberArray()) {
                 IngestionResult memberResult = addNewEntity(member, connection);
-                addNewMembership(collectionId, memberResult.getDbId(), connection);
+                addNewMembership(baseEntityId, memberResult.getDbId(), connection);
             }
             // finally return collection ids
-            ingestionResult = new IngestionResult(collection.getCollectionURI(), collectionId);
+            ingestionResult = new IngestionResult(collection.getCollectionURI(), baseEntityId);
         }
         return ingestionResult;
     }
