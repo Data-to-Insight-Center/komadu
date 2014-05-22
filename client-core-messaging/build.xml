@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project basedir="." default="all">
+    <property file="build.properties"/>
+	<property environment="env"/>
+    <property name="project.base.dir" value="${project.base.dir}"/>
+    <property name="maven.class.path" value=""/>
+    <property name="name" value="karma"/>
+    <property name="src" value="${project.base.dir}/src"/>
+    <property name="test" value="${project.base.dir}/test"/>
+    <property name="build" value="${project.base.dir}/build"/>
+    <property name="classes" value="${build}/classes"/>
+    <property name="lib" value="${build}/lib"/>
+	<property name="templates" value="${project.base.dir}/templates"/>
+	<property name="bin" value="${project.base.dir}/bin"/>
+	<property name="config" value="${project.base.dir}/config"/>
+    <property name="message.conf" value="${config}/karma.properties"/>
+	<property name="deploy.command" value="${project.base.dir}/deploy.sh"/>
+	<path id="classpath">
+        <fileset dir="${project.base.dir}/lib" includes="**/*.jar"/>
+		<path location="${classes}"/>
+    </path>
+	<target depends="jar.client, jar.test, deploy" name="all"/>
+	<target name="init">
+        <mkdir dir="${build}"/>
+        <mkdir dir="${classes}"/>
+        <mkdir dir="${lib}"/>
+    </target>
+    <target depends="init" name="compile.src">
+        <javac debug="on" memoryMaximumSize="256m" memoryInitialSize="256m" fork="true" destdir="${classes}" srcdir="${src}">
+           	<classpath>
+                <fileset dir="lib">
+                    <include name="*.jar"/>
+                </fileset>
+        	</classpath>
+        </javac>
+    </target>
+    <target depends="jar.client" name="compile.test">
+        <javac debug="on" memoryMaximumSize="256m" memoryInitialSize="256m" fork="true" destdir="${classes}">
+            <src path="${test}"/>
+        	<classpath>
+        		<path refid="classpath"/>
+        		<fileset dir="${lib}">
+					<include name="*.jar"/>
+				</fileset>
+			</classpath>
+        </javac>
+    </target>
+    <target name="jar.client" depends="compile.src">
+        <jar destfile="${lib}/${name}-client.jar" basedir="${classes}">
+        	<manifest>
+                <attribute name="Main-Class" value="edu.indiana.d2i.komadu.client.messaging.Notification"/>
+            </manifest>
+        </jar>
+    </target>
+	<target name="jar.test" depends="compile.test">
+        <jar destfile="${lib}/${name}-client-test.jar">
+        	<fileset dir="${classes}">
+                <include name="edu/indiana/d2i/komadu/client/test/*.class"/>
+	        </fileset>
+        </jar>
+    </target>
+    <target name="sendNotification" depends="jar.client">
+    	<echo message="Sending Notification ${notification} to Komadu Server..." />
+        <java fork="true" classname="edu.indiana.d2i.komadu.client.messaging.Notification">
+        	<arg value="${message.conf}"/>
+        	<arg file="${notification}"/>
+        	<classpath>
+            	<path refid="classpath"/>
+            	<path location="${lib}/${name}-client.jar"/>
+			</classpath>
+        </java>
+    </target>
+	<target name="query" depends="jar.client">
+        <echo message="Sending Query ${query} to Komadu Server..." />
+        <java fork="true" classname="edu.indiana.d2i.komadu.client.messaging.Query">
+            <arg value="${message.conf}"/>
+            <arg file="${query}"/>
+            <classpath>
+                <path refid="classpath"/>
+                <path location="${lib}/${name}-client.jar"/>
+            </classpath>
+        </java>
+    </target>
+	<target name="deploy">
+		<exec executable="${deploy.command}">
+			<arg value="${project.base.dir}"/>
+		</exec>
+	</target>
+	<target name="run">
+		<java fork="true" classname="${runClass}" >
+        	<arg line="${runArgs}"/>
+        	<classpath>
+        		<path refid="classpath"/>
+            	<path location="${lib}/${name}-client.jar"/>
+        		<path location="${lib}/${name}-client-test.jar"/>
+			</classpath>
+        </java>
+	</target>
+    <target name="clean">
+        <delete dir="${build}"/>
+    	<delete dir="${bin}"/>
+    </target>
+</project>

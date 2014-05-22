@@ -1,0 +1,19 @@
+cd $KOMADU_CLIENT
+function usage
+{
+    echo "Usage: query.sh <komadu configuration file> <query xml file> <output file>"
+}
+
+if [ "$3" = "" ];
+then
+    usage;
+    exit 1
+fi
+for i in $(ls lib |grep jar); do
+	CLASSPATH=$CLASSPATH:$KOMADU_CLIENT/lib/$i
+done
+for j in $(ls build/lib |grep jar); do
+	CLASSPATH=$CLASSPATH:$KOMADU_CLIENT/build/lib/$j
+done
+#echo $CLASSPATH
+java -classpath $CLASSPATH edu.indiana.d2i.komadu.client.messaging.Query $1 $2 > $3
