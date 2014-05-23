@@ -29,16 +29,16 @@ CLASSES=$CLASSES
 " > ./bin/KomaduServer.sh
 
 echo '
-function usage
-{
         echo 
         echo "#########################################"
-        echo "#            KomaduServer.sh             #"
+        echo "#            KomaduServer.sh            #"
         echo "#########################################"
         echo
         echo "$ KomaduServer.sh <properties_file>"
-		echo
-}
+        echo
+        echo "Komadu standalone server started..."
+        echo "Listening for incoming messages..."
+	echo
 
 if [ "$1" = "" ];
 then
