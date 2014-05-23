@@ -3,11 +3,11 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 
     <modelVersion>4.0.0</modelVersion>
-    <artifactId>komadu-service-core</artifactId>
+    <artifactId>komadu-service-core-messaging</artifactId>
     <packaging>jar</packaging>
-    <name>Komadu Service Core</name>
+    <name>Komadu Messaging Core</name>
     <description>
-        W3C PROV Based Komadu implementation - service core
+        W3C PROV Based Komadu implementation - Messaging core
     </description>
     <parent>
         <groupId>edu.indiana.d2i.komadu</groupId>
@@ -105,9 +105,9 @@
             <artifactId>commons-collections</artifactId>
         </dependency>
         <dependency>
-			<groupId>com.rabbitmq</groupId>
-  			<artifactId>amqp-client</artifactId>
-		</dependency>
+            <groupId>com.rabbitmq</groupId>
+            <artifactId>amqp-client</artifactId>
+        </dependency>
         <dependency>
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
@@ -170,27 +170,6 @@
                     </execution>
                 </executions>
             </plugin>
-
-            <!--<plugin>-->
-                <!--<groupId>org.apache.axis2</groupId>-->
-                <!--<artifactId>axis2-aar-maven-plugin</artifactId>-->
-                <!--<version>${axis2.version}</version>-->
-                <!--<extensions>true</extensions>-->
-                <!--<configuration>-->
-                    <!--<servicesXmlFile>${basedir}/src/main/resources/META-INF/services.xml-->
-                    <!--</servicesXmlFile>-->
-                    <!--<includeDependencies>false</includeDependencies>-->
-                    <!--<fileSets>-->
-                        <!--<fileSet>-->
-                            <!--<directory>${basedir}/target/generated-code/resources</directory>-->
-                            <!--<includes>-->
-                                <!--<include>**/*.class</include>-->
-                                <!--<include>**/*.xsb</include>-->
-                            <!--</includes>-->
-                        <!--</fileSet>-->
-                    <!--</fileSets>-->
-                <!--</configuration>-->
-            <!--</plugin>-->
 
         </plugins>
     </build>

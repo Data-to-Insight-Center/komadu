@@ -1,9 +1,9 @@
 #!/bin/sh
 
 SRC_JAVA=./src
-BUILD=$(pwd)/target/
-LIB=$(pwd)/target/dependency/
-CLASSES=$BUILD/classes
+BUILD=$(pwd)/target
+LIB=$(pwd)/target/dependency
+CLASSES=$BUILD/classes:$BUILD/generated-code/resources
 BIN=$(pwd)/bin
 RETVAL=0
 prog="build.sh"
