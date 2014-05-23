@@ -18,6 +18,8 @@
 
 package edu.indiana.d2i.komadu.util;
 
+import java.io.IOException;
+
 import edu.indiana.d2i.komadu.ingest.AsyncRawNotificationProcessor;
 import edu.indiana.d2i.komadu.ingest.IngesterImplementer;
 import edu.indiana.d2i.komadu.ingest.NotificationIngester;
@@ -28,6 +30,10 @@ import edu.indiana.d2i.komadu.ingest.db.BaseDBIngesterImplementer;
 import edu.indiana.d2i.komadu.ingest.db.DBConnectionPool;
 import edu.indiana.d2i.komadu.query.QueryImplementer;
 import edu.indiana.d2i.komadu.query.db.BaseDBQuerier;
+import edu.indiana.d2i.komadu.messaging.MessageConfig;
+import edu.indiana.d2i.komadu.messaging.MessageDaemons;
+import edu.indiana.d2i.komadu.messaging.MessageDaemonsConfig;
+
 import org.apache.log4j.Logger;
 import org.apache.log4j.PropertyConfigurator;
 
@@ -83,57 +89,55 @@ public class ServiceLauncher {
         return querier;
     }
 
-//    public static boolean startMessageReceiverDaemon() {
-//
-//
-//
-//        String MessagingUsername= propertyReader.getProperty("messaging.username");
-//
-//        String MessagingPassword= propertyReader.getProperty("messaging.password");
-//
-//        String MessagingHostname= propertyReader.getProperty("messaging.hostname");
-//
-//        int MessagingHostPort= Integer.parseInt(propertyReader.getProperty("messaging.hostport"));
-//
-//        String MessagingVirtualHost= propertyReader.getProperty("messaging.virtualhost");
-//
-//        String MessagingExchangeName= propertyReader.getProperty("messaging.exchangename")==null? "KarmaExchange": propertyReader.getProperty("messaging.exchangename");
-//
-//        String MessagingQueueName= propertyReader.getProperty("messaging.queuename")==null? "KarmaQueue": propertyReader.getProperty("messaging.queuename");
-//
-//        String MessagingRoutingKey= propertyReader.getProperty("messaging.routingkey")==null? "KarmaKey": propertyReader.getProperty("messaging.routingkey");
-//
-//        int MessagingRetryInterval= Integer.parseInt(propertyReader.getProperty("messaging.retry.interval")==null? "5": propertyReader.getProperty("messaging.retry.interval"));
-//
-//        int MessagingRetryThreshold= Integer.parseInt(propertyReader.getProperty("messaging.retry.threshold")==null? "5": propertyReader.getProperty("messaging.retry.threshold"));
-//
-//        MessageDaemonsConfig msgdmconf=new MessageDaemonsConfig();
-//
-//        msgdmconf.setNumberOfNotificationDaemons(Integer.parseInt(propertyReader.getProperty("messaging.daemon.notification")==null? "1": propertyReader.getProperty("messaging.daemon.notification")));
-//
-//        msgdmconf.setNumberOfQueryDaemons(Integer.parseInt(propertyReader.getProperty("messaging.daemon.query")==null? "1": propertyReader.getProperty("messaging.daemon.query")));
-//
-//        MessageDaemons msgrd;
-//
-//        MessageConfig msgconf;
-//
-//        try {
-//
-//            msgconf=new MessageConfig(MessagingUsername, MessagingPassword, MessagingHostname, MessagingHostPort, MessagingVirtualHost, MessagingExchangeName, MessagingQueueName, MessagingRoutingKey, MessagingRetryInterval, MessagingRetryThreshold);
-//
-//            msgrd = new MessageDaemons(msgdmconf, msgconf, ingester, querier);
-//
-//            msgrd.start();
-//
-//        } catch (IOException e) {
-//
-//            e.printStackTrace();
-//            return false;
-//
-//        }
-//        return true;
-//
-//    }
+    public static boolean startMessageReceiverDaemon() {
+
+        String MessagingUsername= propertyReader.getProperty("messaging.username");
+
+        String MessagingPassword= propertyReader.getProperty("messaging.password");
+
+        String MessagingHostname= propertyReader.getProperty("messaging.hostname");
+
+        int MessagingHostPort= Integer.parseInt(propertyReader.getProperty("messaging.hostport"));
+
+        String MessagingVirtualHost= propertyReader.getProperty("messaging.virtualhost");
+
+        String MessagingExchangeName= propertyReader.getProperty("messaging.exchangename")==null? "KarmaExchange": propertyReader.getProperty("messaging.exchangename");
+
+        String MessagingQueueName= propertyReader.getProperty("messaging.queuename")==null? "KarmaQueue": propertyReader.getProperty("messaging.queuename");
+
+        String MessagingRoutingKey= propertyReader.getProperty("messaging.routingkey")==null? "KarmaKey": propertyReader.getProperty("messaging.routingkey");
+        
+        int MessagingRetryInterval= Integer.parseInt(propertyReader.getProperty("messaging.retry.interval")==null? "5": propertyReader.getProperty("messaging.retry.interval"));
+        
+        int MessagingRetryThreshold= Integer.parseInt(propertyReader.getProperty("messaging.retry.threshold")==null? "5": propertyReader.getProperty("messaging.retry.threshold"));
+
+        MessageDaemonsConfig msgdmconf=new MessageDaemonsConfig();
+        
+        msgdmconf.setNumberOfNotificationDaemons(Integer.parseInt(propertyReader.getProperty("messaging.daemon.notification")==null? "1": propertyReader.getProperty("messaging.daemon.notification")));
+        
+        msgdmconf.setNumberOfQueryDaemons(Integer.parseInt(propertyReader.getProperty("messaging.daemon.query")==null? "1": propertyReader.getProperty("messaging.daemon.query")));
+        
+        MessageDaemons msgrd;
+
+        MessageConfig msgconf;
+
+        try {
+
+            msgconf=new MessageConfig(MessagingUsername, MessagingPassword, MessagingHostname, MessagingHostPort, MessagingVirtualHost, MessagingExchangeName, MessagingQueueName, MessagingRoutingKey, MessagingRetryInterval, MessagingRetryThreshold);
+
+            msgrd = new MessageDaemons(msgdmconf, msgconf, ingester, querier);
+
+            msgrd.start();
+
+        } catch (IOException e) {
+
+            e.printStackTrace();
+            return false;
+
+        } 
+        return true;
+
+    }
 
     private static void startConnectionPool() throws ClassNotFoundException {
         String databaseLocation = propertyReader.getProperty("database.location");
@@ -198,10 +202,10 @@ public class ServiceLauncher {
             }
             String propertiesFilePath = args[0];
             ServiceLauncher.start(propertiesFilePath);
-//            if(!ServiceLauncher.startMessageReceiverDaemon()){
-                //If MessageReceiverDaemon can't be started, shall we shutdown the whole Karma Server? If yes, add the code here.
-//                shutdown();
-//            }
+            if(!ServiceLauncher.startMessageReceiverDaemon()){
+            	//If MessageReceiverDaemon can't be started, shall we shutdown the whole Karma Server? If yes, add the code here.
+            	shutdown();
+            }
 
         } catch (Throwable e) {
             log.fatal("Unable to launch service", e);

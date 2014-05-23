@@ -53,6 +53,28 @@ public class NotificationSummary {
             return UNKNOWN_TYPES;
         }
 
+        // TODO : Check this..
+        public static NotificationTypeEnum determineNotificationTypeFromXmlBeansDocument(XmlObject document, Integer flog) {
+            String document_string = document.xmlText();
+            if(document_string.contains("addAgentAgentRelationship")){
+                return ADD_AGENT_AGENT_RELATION;
+            } else if (document_string.contains("addAgentActivityRelationship")){
+                return ADD_AGENT_ACTIVITY_RELATION;
+            } else if (document_string.contains("addActivityActivityRelationship")){
+                return ADD_ACTIVITY_ACTIVITY_RELATION;
+            } else if (document_string.contains("addEntityEntityRelationship")){
+                return ADD_ENTITY_ENTITY_RELATION;
+            } else if (document_string.contains("addActivityEntityRelationship")){
+                return ADD_ACTIVITY_ENTITY_RELATION;
+            } else if(document_string.contains("addAgentEntityRelationship")){
+                return ADD_AGENT_ACTIVITY_RELATION;
+            } else if(document_string.contains("addAttributes")){
+                return ADD_ATTRIBUTES;
+            } else {
+                return UNKNOWN_TYPES;
+            }
+        }
+
     }
 
 }

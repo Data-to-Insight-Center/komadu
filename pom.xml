@@ -16,7 +16,6 @@
         <module>service-core</module>
         <module>service-core-aar</module>
         <module>axis2-client-core</module>
-        <module>service-core-messaging</module>
     </modules>
 
     <dependencyManagement>
