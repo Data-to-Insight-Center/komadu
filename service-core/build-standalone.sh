@@ -29,22 +29,22 @@ CLASSES=$CLASSES
 " > ./bin/KomaduServer.sh
 
 echo '
-        echo 
-        echo "#########################################"
-        echo "#            KomaduServer.sh            #"
-        echo "#########################################"
-        echo
-        echo "$ KomaduServer.sh <properties_file>"
-        echo
-        echo "Komadu standalone server started..."
-        echo "Listening for incoming messages..."
-	echo
-
 if [ "$1" = "" ];
 then
-    usage;
+    echo
+    echo "#########################################"
+    echo "#            KomaduServer.sh            #"
+    echo "#########################################"
+    echo
+    echo "$ KomaduServer.sh <properties_file>"
+    echo
     exit 1
 fi
+
+echo
+echo "Komadu standalone server started..."
+echo "Listening for incoming messages..."
+echo
 
 CP=:$CLASSPATH:$CLASSES:.
 java -classpath $CP  edu.indiana.d2i.komadu.util.ServiceLauncher $1
