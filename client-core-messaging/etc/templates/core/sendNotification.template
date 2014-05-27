@@ -1,12 +1,8 @@
 cd $KOMADU_CLIENT
-function usage
-{
-    echo "Usage: sendNotification.sh <komadu configuration file> <notification xml file>"
-}
 
 if [ "$2" = "" ];
 then
-    usage;
+    echo "Usage: sendNotification.sh <komadu configuration file> <notification xml file>"
     exit 1
 fi
 for i in $(ls lib |grep jar); do

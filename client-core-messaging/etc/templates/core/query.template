@@ -1,12 +1,8 @@
 cd $KOMADU_CLIENT
-function usage
-{
-    echo "Usage: query.sh <komadu configuration file> <query xml file> <output file>"
-}
 
 if [ "$3" = "" ];
 then
-    usage;
+    echo "Usage: query.sh <komadu configuration file> <query xml file> <output file>"
     exit 1
 fi
 for i in $(ls lib |grep jar); do
