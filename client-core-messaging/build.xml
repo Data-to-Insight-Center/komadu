@@ -4,7 +4,7 @@
     <property environment="env"/>
     <property name="project.base.dir" value="${project.base.dir}"/>
     <property name="maven.class.path" value=""/>
-    <property name="name" value="karma"/>
+    <property name="name" value="komadu"/>
     <property name="src" value="${project.base.dir}/src"/>
     <property name="test" value="${project.base.dir}/test"/>
     <property name="build" value="${project.base.dir}/build"/>
@@ -13,7 +13,7 @@
     <property name="templates" value="${project.base.dir}/templates"/>
     <property name="bin" value="${project.base.dir}/bin"/>
     <property name="config" value="${project.base.dir}/config"/>
-    <property name="message.conf" value="${config}/karma.properties"/>
+    <property name="message.conf" value="${config}/komadu.properties"/>
     <property name="deploy.command" value="${project.base.dir}/deploy.sh"/>
     <path id="classpath">
         <fileset dir="${project.base.dir}/lib" includes="**/*.jar"/>
@@ -23,6 +23,7 @@
     <target name="init">
         <mkdir dir="${build}"/>
         <mkdir dir="${classes}"/>
+        <mkdir dir="${lib}"/>
         <copy file="../service-core/target/komadu-service-core-1.0.jar" todir="lib"/>
     </target>
     <target depends="init" name="compile.src">

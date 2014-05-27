@@ -1,14 +1,8 @@
 #!/bin/sh
 
-function usage
-{
-echo "Usage: deploy.sh <komadu_client_base_dir>"
-
-}
-
 if [ "$1" = "" ];
 then
-usage;
+echo "Usage: deploy.sh <komadu_client_base_dir>"
 exit 1
 fi
 KOMADU_CLIENT=$1
