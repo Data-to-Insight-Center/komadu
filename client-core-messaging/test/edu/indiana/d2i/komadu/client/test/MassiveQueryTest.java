@@ -24,7 +24,7 @@ public class MassiveQueryTest {
 		int iternation=Integer.parseInt(args[2]);
 		long startTime = System.currentTimeMillis();
 		MessageConfig msgconf=new MessageConfig(MessageConfigPath);
-		Query query=new Query(msgconf);
+		Query query=new Query(msgconf, MessageConfigPath);
 		for (int i = 0; i < iternation; i++) {
 			System.out.println("["+i+"]\n"+query.query(new File(pathToQueryFile)));
 			

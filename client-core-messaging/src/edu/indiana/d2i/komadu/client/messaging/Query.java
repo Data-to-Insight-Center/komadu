@@ -1,6 +1,6 @@
 /*
 #
-# Copyright 2007 The Trustees of Indiana University
+# Copyright 2014 The Trustees of Indiana University
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -16,9 +16,9 @@
 #
 # -----------------------------------------------------------------
 #
-# Project:		Karma Provenance Client
+# Project:		Komadu Provenance Client
 # File:			Notification.java
-# Description:	API for sending notifications to Karma Provenance Server, 
+# Description:	API for sending notifications to Komadu Provenance Server, 
 #				through Messaging Bus.  
 #
 # -----------------------------------------------------------------
@@ -57,15 +57,18 @@ public class Query {
 	private Sender sender;
 	private Receiver receiver;
 	private MessageConfig msgconf;
+	private File schemaFile;
 	
 	/**
 	 * 
 	 * @param msgconf
 	 */
-	public Query(MessageConfig msgconf){
+	public Query(MessageConfig msgconf, String msgconfPath){
 		try {
 			this.msgconf=msgconf;
 			this.sender=new Sender(msgconf,MessagingOperationTypes.SEND_QUERY_REQUEST);
+			String schemaPath=PropertyReader.getInstance(msgconfPath).getProperty("komadu.query.schema");
+			this.schemaFile=new File(schemaPath);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -79,7 +82,7 @@ public class Query {
 	public String sendQueryRequest(XmlObject query) throws XmlException{
 		
 		try{
-			if(!query.validate()){
+			if(!Validation.validate(query,schemaFile)){
 				throw new XmlException("Fail to Send Message: Invalid Query Format");
 			}else{
 				String ResponseRoutingKey=UUID.randomUUID().toString();
@@ -112,7 +115,7 @@ public class Query {
 	public String sendQueryRequest(String query){
 		//Validate Query Format
     	try {
-			if(!XmlObject.Factory.parse(query).validate()){
+			if(!Validation.validate(query,schemaFile)){
 				throw new XmlException("Fail to Send Message: Invalid Query Format");
 			}else{
 				String ResponseRoutingKey=UUID.randomUUID().toString();
@@ -149,7 +152,7 @@ public class Query {
 		try {
 	    	XmlObject query=XmlObject.Factory.parse(QueryFile);
 			//Validate Query Format
-	    	if(!query.validate()){
+	    	if(!Validation.validate(query,schemaFile)){
 				throw new XmlException("Fail to Send Message: Invalid Query Format");
 			}else{
 				String ResponseRoutingKey=UUID.randomUUID().toString();
@@ -302,7 +305,7 @@ public class Query {
 		String pathToQueryFile=args[1];
 		long startTime = System.currentTimeMillis();
 		MessageConfig msgconf=new MessageConfig(MessageConfigPath);
-		Query query=new Query(msgconf);
+		Query query=new Query(msgconf, MessageConfigPath);
 		String queryResult=query.query(new File(pathToQueryFile));
 		query.closeConnection();
 		
