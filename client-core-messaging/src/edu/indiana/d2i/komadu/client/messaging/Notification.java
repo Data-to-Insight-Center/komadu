@@ -172,7 +172,6 @@ public class Notification {
 
 	
 	
-	
 	public static void main(String[] args) {
 		if(args.length!=2){
 			System.out.println("SendNotification:\nargs[0]: Message Configuration File.\nargs[1]: Notification in XML file format.");
@@ -195,8 +194,4 @@ public class Notification {
 		long endTime = System.currentTimeMillis();
 		System.out.println("Total Execution Time: "+(endTime-startTime));
 	}
-//		File dataFile=new File("/Users/quzhou/java/Komadu-Client-Core/samples/notification/notification1.xml");
-//		File schemaFile=new File("/Users/quzhou/Komadu/komadu/axis2-client-core/config/komadu_ingest_schema.xsd");
-//		validate(dataFile,schemaFile);
-//	}
 }
