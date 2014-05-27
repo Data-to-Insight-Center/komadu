@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project basedir="." default="all">
-    <property file="build.properties"/>
     <property environment="env"/>
-    <property name="project.base.dir" value="${project.base.dir}"/>
+    <property name="project.base.dir" value="."/>
     <property name="maven.class.path" value=""/>
     <property name="name" value="komadu"/>
     <property name="src" value="${project.base.dir}/src"/>
