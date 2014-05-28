@@ -1,0 +1,4 @@
+<quer:getAgentGraphRequest xmlns:quer="http://komadu.d2i.indiana.edu/query">
+    <quer:informationDetailLevel>FINE</quer:informationDetailLevel>
+    <quer:agentID>agent1_58</quer:agentID>
+</quer:getAgentGraphRequest>

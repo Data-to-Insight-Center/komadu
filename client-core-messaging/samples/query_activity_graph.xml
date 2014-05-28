@@ -1,0 +1,5 @@
+<quer:getActivityGraphRequest xmlns:quer="http://komadu.d2i.indiana.edu/query">
+  <quer:informationDetailLevel>FINE</quer:informationDetailLevel>
+  <quer:activityURI>workflow1_58</quer:activityURI>
+</quer:getActivityGraphRequest>
+

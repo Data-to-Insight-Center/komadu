@@ -1,0 +1,50 @@
+<kom:addAgentAgentRelationship xmlns:kom="http://komadu.d2i.indiana.edu">
+ <kom:delegateAgent>
+   <kom:userAgent>
+     <kom:agentID>agent1_58</kom:agentID>
+     <kom:attributes>
+       <kom:attribute>
+         <kom:property>phone</kom:property>
+         <kom:value>8123334455</kom:value>
+       </kom:attribute>
+       <kom:attribute>
+         <kom:property>address</kom:property>
+         <kom:value>10th Street, Bloomington, IN, 47408</kom:value>
+       </kom:attribute>
+     </kom:attributes>
+     <kom:fullName>Isuru Suriarachchi</kom:fullName>
+     <kom:affiliation>testaff</kom:affiliation>
+     <kom:email>isuriara@indiana.edu</kom:email>
+   </kom:userAgent>
+   <kom:type>PERSON</kom:type>
+ </kom:delegateAgent>
+ <kom:responsibleAgent>
+   <kom:userAgent>
+     <kom:agentID>agent2_58</kom:agentID>
+     <kom:attributes>
+       <kom:attribute>
+         <kom:property>phone</kom:property>
+         <kom:value>8123337788</kom:value>
+       </kom:attribute>
+       <kom:attribute>
+         <kom:property>address</kom:property>
+         <kom:value>15th Street, Bloomington, IN, 47408</kom:value>
+       </kom:attribute>
+     </kom:attributes>
+     <kom:fullName>John Fraser</kom:fullName>
+     <kom:affiliation>testaff2</kom:affiliation>
+     <kom:email>john@indiana.edu</kom:email>
+   </kom:userAgent>
+   <kom:type>PERSON</kom:type>
+ </kom:responsibleAgent>
+ <kom:delegation>
+   <kom:delegateAgentID>agent1_58</kom:delegateAgentID>
+   <kom:responsibleAgentID>agent2_58</kom:responsibleAgentID>
+   <kom:attributes>
+     <kom:attribute>
+       <kom:property>type</kom:property>
+       <kom:value>contract</kom:value>
+     </kom:attribute>
+   </kom:attributes>
+ </kom:delegation>
+</kom:addAgentAgentRelationship>
