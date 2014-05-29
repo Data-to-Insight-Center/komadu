@@ -39,6 +39,7 @@ public class KomaduTests {
     private static String workflowGraphId = null;
     private static String agentGraphId = null;
     private static String entityGraphURI = null;
+    private static String service1Id = null;
 
     @BeforeClass
     public static void init() {
@@ -76,7 +77,7 @@ public class KomaduTests {
              */
             workflowGraphId = "workflow1_" + runId;
             String workflow2Id = "workflow2_" + runId;
-            String service1Id = "service1_" + runId;
+            service1Id = "service1_" + runId;
             String method1Id = "method1_" + runId;
             ActivityType workflowActivity = createWorkflowActivity(workflowGraphId);
             ActivityType workflow2Activity = createWorkflowActivity(workflow2Id);
@@ -238,6 +239,26 @@ public class KomaduTests {
             entityGraphRequest.setGetEntityGraphRequest(entityRequestType);
             GetEntityGraphResponseDocument entityResponse = stub.getEntityGraph(entityGraphRequest);
             System.out.println(entityResponse.getGetEntityGraphResponse().getDocument());
+        } catch (RemoteException e) {
+            e.printStackTrace();
+            Assert.fail();
+        }
+    }
+
+    @Test
+    public void testFindActivity() {
+        try {
+            System.out.println("\n\n Find Activity \n\n");
+            FindActivityRequestDocument findActivityRequest = FindActivityRequestDocument.Factory.newInstance();
+            FindActivityRequestType findActivityRequestType = FindActivityRequestType.Factory.newInstance();
+            findActivityRequestType.setName("workflow1");
+            findActivityRequestType.setNextActivityID(service1Id);
+            findActivityRequest.setFindActivityRequest(findActivityRequestType);
+            FindActivityResponseDocument responseDocument = stub.findActivity(findActivityRequest);
+            String[] activityIDArray = responseDocument.getFindActivityResponse().getActivityIDList().getActivityIDArray();
+            for (String id : activityIDArray) {
+                System.out.println("Found Activity: " + id + "\n");
+            }
         } catch (RemoteException e) {
             e.printStackTrace();
             Assert.fail();

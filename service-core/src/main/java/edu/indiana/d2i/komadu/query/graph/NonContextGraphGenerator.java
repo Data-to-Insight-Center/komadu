@@ -455,7 +455,7 @@ public abstract class NonContextGraphGenerator extends GraphGenerator {
                     unexpandedNodes.push(new GraphNode(GraphNode.NodeType.ACTIVITY, informedID));
                 }
                 // create relationship
-                WasInformedBy informedBy = pFactory.newWasInformedBy(infromantActivity, infromedActivity);
+                WasInformedBy informedBy = pFactory.newWasInformedBy(infromedActivity, infromantActivity);
                 // add the informedBy element into the list of relationships
                 relationships.put(activityActivityId, informedBy);
             }
@@ -506,7 +506,7 @@ public abstract class NonContextGraphGenerator extends GraphGenerator {
                 }
 
                 WasInformedBy informedBy = pFactory.newWasInformedBy(getIdQName(QueryConstants.COMMUNICATION_IDENTIFIER +
-                        communicationID), infromantActivity, infromedActivity);
+                        communicationID), infromedActivity, infromantActivity);
 
                 if (infoDetailLevel != null && infoDetailLevel.equals(DetailEnumType.FINE)) {
                     // add external attributes too

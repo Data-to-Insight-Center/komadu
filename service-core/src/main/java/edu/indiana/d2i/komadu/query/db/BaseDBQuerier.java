@@ -241,43 +241,49 @@ public class BaseDBQuerier implements QueryImplementer {
                 .newInstance();
         FindActivityResponseType findActivityResponseType = findActivityResponseDocument
                 .addNewFindActivityResponse();
-        ServiceIDListType serviceNameList = findActivityResponseType.addNewServiceIDList();
+        ActivityIDListType activityIDListType = findActivityResponseType.addNewActivityIDList();
 
         try {
             StringBuilder query = new StringBuilder();
             if (findActivityRequestType.isSetAttributeList()) {
-                query.append(PROVSqlQuery.FIND_SERVICE_ATTRIBUTE);
+                if (findActivityRequestType.isSetNextActivityID())
+                    query.append(PROVSqlQuery.FIND_ACTIVITY_ATTRIBUTE_COMM);
+                else
+                    query.append(PROVSqlQuery.FIND_ACTIVITY_ATTRIBUTE);
             } else {
-                query.append(PROVSqlQuery.FIND_SERVICE);
+                if (findActivityRequestType.isSetNextActivityID())
+                    query.append(PROVSqlQuery.FIND_ACTIVITY_COMM);
+                else
+                    query.append(PROVSqlQuery.FIND_ACTIVITY);
             }
 
-            String nextService = findActivityRequestType.getNextServiceID();
-            String nextServiceID;
-            if (nextService != null) {
-                PreparedStatement findNextServiceStmt;
-                if (nextService.startsWith(QueryConstants.ACTIVITY_IDENTIFIER)) {
-                    // if the service id is provided
-                    nextService = nextService.replace(QueryConstants.ACTIVITY_IDENTIFIER, "");
-                    findNextServiceStmt = connection.prepareStatement(PROVSqlQuery.GET_SERVICE_BY_ID);
+            String nextActivity = findActivityRequestType.getNextActivityID();
+            String nextActivityID;
+            if (nextActivity != null) {
+                PreparedStatement findNextActivityStmt;
+                if (nextActivity.startsWith(QueryConstants.ACTIVITY_IDENTIFIER)) {
+                    // if the activity id is provided
+                    nextActivity = nextActivity.replace(QueryConstants.ACTIVITY_IDENTIFIER, "");
+                    findNextActivityStmt = connection.prepareStatement(PROVSqlQuery.GET_ACTIVITY_BY_ID);
                 } else {
                     // there the uri is provided
-                    findNextServiceStmt = connection.prepareStatement(PROVSqlQuery.GET_SERVICE_BY_URI);
+                    findNextActivityStmt = connection.prepareStatement(PROVSqlQuery.GET_ACTIVITY_BY_URI);
                 }
-                findNextServiceStmt.setString(1, nextService);
-                ResultSet nextServiceRes = findNextServiceStmt.executeQuery();
+                findNextActivityStmt.setString(1, nextActivity);
+                ResultSet nextActivityRes = findNextActivityStmt.executeQuery();
 
-                int nextServiceCount = 0;
-                if (nextServiceRes.next()) {
-                    nextServiceID = nextServiceRes.getString(1);
-                    query.append("AND c.informed_id LIKE ").append(nextServiceID).append(" ");
-                    nextServiceCount++;
+                int nextActivityCount = 0;
+                if (nextActivityRes.next()) {
+                    nextActivityID = nextActivityRes.getString(1);
+                    query.append("AND c.informed_id = '").append(nextActivityID).append("' ");
+                    nextActivityCount++;
                 }
 
-                nextServiceRes.close();
-                findNextServiceStmt.close();
+                nextActivityRes.close();
+                findNextActivityStmt.close();
 
-                if (nextServiceCount == 0) {
-                    l.info("No service with specified next service found.");
+                if (nextActivityCount == 0) {
+                    l.info("No activity with specified next activity found.");
                     l.debug("Exiting findActivity() with success.");
                     return findActivityResponseDocument;
                 }
@@ -287,7 +293,7 @@ public class BaseDBQuerier implements QueryImplementer {
             String hostName = findActivityRequestType.getHostName();
             String name = findActivityRequestType.getName();
             String workflowID = findActivityRequestType.getWorkflowID();
-            String subServiceID = findActivityRequestType.getSubServiceID();
+            String serviceID = findActivityRequestType.getServiceID();
 //            Calendar initializationTime = findActivityRequestType.getInitializationTime();
 //            Calendar terminationTime = findActivityRequestType.getTerminationTime();
 //            boolean isSuccess = findActivityRequestType.getIsSuccess();
@@ -301,8 +307,8 @@ public class BaseDBQuerier implements QueryImplementer {
                 query.append("AND a.activity_uri LIKE '%").append(name).append("%' ");
             if (findActivityRequestType.isSetWorkflowID())
                 query.append("AND a.context_workflow_uri LIKE '%").append(workflowID).append("%' ");
-            if (findActivityRequestType.isSetSubServiceID())
-                query.append("AND a.context_service_uri LIKE '%").append(subServiceID).append("%' ");
+            if (findActivityRequestType.isSetServiceID())
+                query.append("AND a.context_service_uri LIKE '%").append(serviceID).append("%' ");
             // TODO : Add invocation time, termination time and status into communication?
 //            if (findActivityRequestType.isSetInitializationTime())
 //                query.append("AND i.invocation_start_time LIKE '%").append(initializationTime).append("%' ");
@@ -338,8 +344,8 @@ public class BaseDBQuerier implements QueryImplementer {
             }
             res = findActivityStmt.executeQuery();
             while (res.next()) {
-                XmlString serviceName = serviceNameList.addNewServiceID();
-                serviceName.setStringValue(res.getString("activity_uri"));
+                XmlString activityID = activityIDListType.addNewActivityID();
+                activityID.setStringValue(res.getString("activity_uri"));
             }
             res.close();
             findActivityStmt.close();

@@ -168,15 +168,20 @@ public class PROVSqlQuery {
     public static final String GET_PROV_SPECIALIZATIONS = "SELECT * FROM exe_specialization WHERE ";
     public static final String GET_PROV_MEMBERSHIPS = "SELECT * FROM exe_collection_membership WHERE ";
 
-    public static final String FIND_SERVICE = "SELECT distinct(a.activity_uri) FROM exe_activity a, exe_communication c WHERE "
-            + "a.activity_type = 'SERVICE' AND a.activity_id = c.informed_id ";
+    public static final String FIND_ACTIVITY = "SELECT distinct(a.activity_uri) FROM exe_activity a WHERE ";
 
-    public static String FIND_SERVICE_ATTRIBUTE = "SELECT distinct(a.activity_uri) FROM exe_activity a, exe_communication c, exe_activity_attribute an WHERE "
-            + "a.activity_type = 'SERVICE' AND a.activity_id = an.activity_id AND a.activity_id = c.informed_id ";
+    public static String FIND_ACTIVITY_ATTRIBUTE = "SELECT distinct(a.activity_uri) FROM exe_activity a, exe_activity_attribute an WHERE "
+            + "AND a.activity_id = an.activity_id ";
+
+    public static final String FIND_ACTIVITY_COMM = "SELECT distinct(a.activity_uri) FROM exe_activity a, exe_communication c WHERE "
+            + "a.activity_id = c.informant_id ";
+
+    public static String FIND_ACTIVITY_ATTRIBUTE_COMM = "SELECT distinct(a.activity_uri) FROM exe_activity a, exe_communication c, exe_activity_attribute an WHERE "
+            + "AND a.activity_id = an.activity_id AND a.activity_id = c.informant_id ";
 
     public static final String ATTRIBUTE_COMPARISON = "OR an.attribute_value LIKE ? ";
-    public static final String GET_SERVICE_BY_URI = "SELECT * FROM exe_activity WHERE activity_uri = ? ";
-    public static final String GET_SERVICE_BY_ID = "SELECT * FROM exe_activity WHERE activity_id = ? ";
+    public static final String GET_ACTIVITY_BY_URI = "SELECT * FROM exe_activity WHERE activity_uri = ? ";
+    public static final String GET_ACTIVITY_BY_ID = "SELECT * FROM exe_activity WHERE activity_id = ? ";
 
     public static final String GET_ENTITY_TYPE = "SELECT entity_type FROM exe_entity WHERE entity_id = ? ";
     public static final String GET_FILE_BY_ID = "SELECT * FROM exe_file WHERE file_id = ? ";

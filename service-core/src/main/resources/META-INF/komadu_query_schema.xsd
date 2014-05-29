@@ -66,7 +66,7 @@
 
     <complexType name="getActivityDetailResponseType">
         <sequence>
-            <element name="serviceDetailList" type="qi:serviceDetailListType" />
+            <element name="activityDetailList" type="qi:activityDetailListType" />
         </sequence>
     </complexType>
 
@@ -118,42 +118,6 @@
         </choice>
     </complexType>
 
-    <complexType name="findAbstractServiceRequestType">
-        <choice>
-            <element name="returnAll" type="xsd:boolean" />
-            <sequence>
-                <element minOccurs="0" name="methodName" type="xsd:string" />
-                <element minOccurs="0" name="workflowID" type="xsd:string" />
-                <!--<element minOccurs="0" name="subServiceName" type="xsd:string" />-->
-                <element minOccurs="0" name="nextServiceName" type="xsd:string" />
-                <element minOccurs="0" name="serviceName" type="xsd:string" />
-                <element minOccurs="0" name="version" type="xsd:string" />
-                <element minOccurs="0" name="attributeList" type="komadu:attributesType" />
-                <element minOccurs="0" name="isInputOfEntityID" type="xsd:string" />
-                <element minOccurs="0" name="isOutputOfEntityID" type="xsd:string" />
-                <element minOccurs="0" name="hasInstanceOfService" type="xsd:string" />
-            </sequence>
-        </choice>
-    </complexType>
-
-    <complexType name="findAbstractServiceResponseType">
-        <sequence>
-            <element name="uniqueIDList" type="qi:uniqueIDListType" />
-            <element name="serviceNameList" type="qi:serviceIDListType" />
-        </sequence>
-    </complexType>
-
-    <complexType name="getAbstractServiceDetailRequestType">
-        <sequence>
-            <element name="uniqueIDList" type="qi:uniqueIDListType" />
-        </sequence>
-    </complexType>
-    <complexType name="getAbstractServiceDetailResponseType">
-        <sequence>
-            <element name="abstractServiceDetailListType" type="qi:abstractServiceDetailListType" />
-        </sequence>
-    </complexType>
-
     <complexType name="findActivityRequestType">
         <all>
             <element minOccurs="0" name="name" type="xsd:string" />
@@ -164,8 +128,8 @@
             <!--<element minOccurs="0" name="terminationTime" type="xsd:dateTime" />-->
             <!--<element minOccurs="0" name="isSuccess" type="xsd:boolean" />-->
             <element minOccurs="0" name="workflowID" type="xsd:string" />
-            <element minOccurs="0" name="subServiceID" type="xsd:string" />
-            <element minOccurs="0" name="nextServiceID" type="xsd:string" />
+            <element minOccurs="0" name="serviceID" type="xsd:string" />
+            <element minOccurs="0" name="nextActivityID" type="xsd:string" />
             <element minOccurs="0" name="attributeList" type="komadu:attributesType" />
         </all>
     </complexType>
@@ -176,7 +140,7 @@
                 <element name="uniqueURIList" type="qi:uniqueURIListType" />
             </sequence>
             <sequence>
-                <element name="serviceIDList" type="qi:serviceIDListType" />
+                <element name="activityIDList" type="qi:activityIDListType" />
             </sequence>
         </choice>
     </complexType>
@@ -234,90 +198,18 @@
         </choice>
     </complexType>
 
-    <complexType name="findAbstractMethodRequestType">
-        <choice>
-            <element name="returnAll" type="xsd:boolean" />
-            <sequence>
-                <element minOccurs="0" name="serviceIDList" type="qi:serviceIDListType" />
-                <element minOccurs="0" name="methodNameList" type="qi:methodNameListType" />
-                <element minOccurs="0" name="methodParamsName" type="xsd:string" />
-                <element minOccurs="0" name="annotationList" type="komadu:attributesType" />
-                <element minOccurs="0" name="isInputOfEntityID" type="xsd:string" />
-                <element minOccurs="0" name="isOutputOfEntityID" type="xsd:string" />
-                <element minOccurs="0" name="hasInstanceOfMethod" type="xsd:string" />
-            </sequence>
-        </choice>
-    </complexType>
-
-    <complexType name="findAbstractMethodResponseType">
-        <choice>
-            <sequence>
-                <element name="uniqueIDList" type="qi:uniqueIDListType" />
-            </sequence>
-            <sequence>
-                <element name="methodNameList" type="qi:methodNameListType" />
-            </sequence>
-        </choice>
-    </complexType>
-
-    <complexType name="getAbstractMethodDetailRequestType">
+    <complexType name="activityDetailListType">
         <sequence>
-            <element name="uniqueIDList" type="qi:uniqueIDListType" />
+            <element minOccurs="0" maxOccurs="unbounded" name="activityDetail"
+                     type="qi:activityDetail" />
         </sequence>
     </complexType>
 
-    <complexType name="getAbstractMethodDetailResponseType">
-        <sequence>
-            <element name="abstractMethodList" type="qi:abstractMethodListType" />
-        </sequence>
-    </complexType>
-
-    <complexType name="findAbstractEntityRequestType">
-        <choice>
-            <element name="returnAll" type="xsd:boolean" />
-            <sequence>
-                <element minOccurs="0" name="entityNameList" type="qi:entityNameListType" />
-                <element minOccurs="0" name="entityTypeList" type="qi:entityTypeListType" />
-                <element minOccurs="0" name="isInputOfServiceID" type="xsd:string" />
-                <element minOccurs="0" name="isOutputOfServiceID" type="xsd:string" />
-                <element minOccurs="0" name="isInputOfMethodID" type="xsd:string" />
-                <element minOccurs="0" name="isOutputOfMethodID" type="xsd:string" />
-                <element minOccurs="0" name="hasInstanceOfEntity" type="xsd:string" />
-            </sequence>
-        </choice>
-    </complexType>
-
-    <complexType name="findAbstractEntityResponseType">
-        <sequence>
-            <element name="uniqueIDList" type="qi:uniqueIDListType" />
-            <element name="entityNameList" type="qi:entityNameListType" />
-        </sequence>
-    </complexType>
-
-    <complexType name="getAbstractEntityDetailRequestType">
-        <sequence>
-            <element name="entityIDList" type="qi:entityIDListType" />
-        </sequence>
-    </complexType>
-
-    <complexType name="getAbstractEntityDetailResponseType">
-        <sequence>
-            <element name="abstractEntityList" type="qi:abstractEntityListType" />
-        </sequence>
-    </complexType>
-
-    <complexType name="serviceDetailListType">
-        <sequence>
-            <element minOccurs="0" maxOccurs="unbounded" name="serviceDetail"
-                     type="qi:serviceDetail" />
-        </sequence>
-    </complexType>
-
-    <complexType name="serviceDetail">
+    <complexType name="activityDetail">
         <all>
             <element name="type" type="xsd:string" />
             <element minOccurs="0" name="workflowID" type="xsd:string" />
-            <element minOccurs="0" name="serviceID" type="xsd:string" />
+            <element minOccurs="0" name="activityID" type="xsd:string" />
             <element minOccurs="0" name="timestep" type="xsd:int" />
             <element minOccurs="0" name="workflowNodeID" type="xsd:string" />
             <element minOccurs="0" name="instanceOf" type="xsd:string" />
@@ -333,9 +225,9 @@
             <element minOccurs="0" maxOccurs="unbounded" name="uniqueURI" type="xsd:anyURI" />
         </sequence>
     </complexType>
-    <complexType name="serviceIDListType">
+    <complexType name="activityIDListType">
         <sequence>
-            <element minOccurs="0" maxOccurs="unbounded" name="serviceID" type="xsd:string" />
+            <element minOccurs="0" maxOccurs="unbounded" name="activityID" type="xsd:string" />
         </sequence>
     </complexType>
     <complexType name="uniqueIDListType">
@@ -456,24 +348,6 @@
     <!-- ======================================================================== -->
     <!-- ==   GLOBAL ELEMENTS DEFINITION                                       == -->
     <!-- ======================================================================== -->
-    <element name="findAbstractServiceRequest" type="qi:findAbstractServiceRequestType" />
-    <element name="findAbstractServiceResponse" type="qi:findAbstractServiceResponseType" />
-    
-    <element name="getAbstractServiceDetailRequest" type="qi:getAbstractServiceDetailRequestType" />
-    <element name="getAbstractServiceDetailResponse" type="qi:getAbstractServiceDetailResponseType" />
-    
-    <element name="findAbstractMethodRequest" type="qi:findAbstractMethodRequestType" />
-    <element name="findAbstractMethodResponse" type="qi:findAbstractMethodResponseType" />
-    
-    <element name="getAbstractMethodDetailRequest" type="qi:getAbstractMethodDetailRequestType" />
-    <element name="getAbstractMethodDetailResponse" type="qi:getAbstractMethodDetailResponseType" />
-    
-    <element name="findAbstractEntityRequest" type="qi:findAbstractEntityRequestType" />
-    <element name="findAbstractEntityResponse" type="qi:findAbstractEntityResponseType" />
-    
-    <element name="getAbstractEntityDetailRequest" type="qi:getAbstractEntityDetailRequestType" />
-    <element name="getAbstractEntityDetailResponse" type="qi:getAbstractEntityDetailResponseType" />
-    
     <element name="findActivityRequest" type="qi:findActivityRequestType" />
     <element name="findActivityResponse" type="qi:findActivityResponseType" />
 
