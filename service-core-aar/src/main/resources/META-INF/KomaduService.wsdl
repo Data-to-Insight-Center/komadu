@@ -57,20 +57,20 @@
     </wsdl:message>
     
     <!--Query API Messages-->
-    <wsdl:message name="findServiceRequest">
-        <wsdl:part name="parameters" element="qi:findServiceRequest" />
+    <wsdl:message name="findActivityRequest">
+        <wsdl:part name="parameters" element="qi:findActivityRequest" />
     </wsdl:message>
     
-    <wsdl:message name="findServiceResponse">
-        <wsdl:part name="parameters" element="qi:findServiceResponse" />
+    <wsdl:message name="findActivityResponse">
+        <wsdl:part name="parameters" element="qi:findActivityResponse" />
     </wsdl:message>
 
-    <wsdl:message name="getServiceDetailRequest">
-        <wsdl:part name="parameters" element="qi:getServiceDetailRequest" />
+    <wsdl:message name="getActivityDetailRequest">
+        <wsdl:part name="parameters" element="qi:getActivityDetailRequest" />
     </wsdl:message>
 
-    <wsdl:message name="getServiceDetailResponse">
-        <wsdl:part name="parameters" element="qi:getServiceDetailResponse" />
+    <wsdl:message name="getActivityDetailResponse">
+        <wsdl:part name="parameters" element="qi:getActivityDetailResponse" />
     </wsdl:message>
 
     <wsdl:message name="findEntityRequest">
@@ -151,14 +151,14 @@
         <!-- == QUERY OPERATIONS ==                     -->
         <!-- ========================================== -->
         <!--Execution Level-->
-        <wsdl:operation name="findService">
-            <wsdl:input message="tns:findServiceRequest" />
-            <wsdl:output message="tns:findServiceResponse" />
+        <wsdl:operation name="findActivity">
+            <wsdl:input message="tns:findActivityRequest" />
+            <wsdl:output message="tns:findActivityResponse" />
         </wsdl:operation>
 
-        <wsdl:operation name="getServiceDetail">
-            <wsdl:input message="tns:getServiceDetailRequest" />
-            <wsdl:output message="tns:getServiceDetailResponse" />
+        <wsdl:operation name="getActivityDetail">
+            <wsdl:input message="tns:getActivityDetailRequest" />
+            <wsdl:output message="tns:getActivityDetailResponse" />
         </wsdl:operation>
 
         <wsdl:operation name="findEntity">
@@ -245,8 +245,8 @@
 
         <!--Query operations-->
         <!--Execution level-->
-        <wsdl:operation name="findService">
-            <soap:operation soapAction="http://komadu.d2i.indiana.edu/findService" />
+        <wsdl:operation name="findActivity">
+            <soap:operation soapAction="http://komadu.d2i.indiana.edu/findActivity" />
             <wsdl:input>
                 <soap:body use="literal" />
             </wsdl:input>
@@ -255,8 +255,8 @@
             </wsdl:output>
         </wsdl:operation>
 
-        <wsdl:operation name="getServiceDetail">
-            <soap:operation soapAction="http://komadu.d2i.indiana.edu/getServiceDetail" />
+        <wsdl:operation name="getActivityDetail">
+            <soap:operation soapAction="http://komadu.d2i.indiana.edu/getActivityDetail" />
             <wsdl:input>
                 <soap:body use="literal" />
             </wsdl:input>

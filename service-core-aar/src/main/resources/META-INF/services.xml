@@ -47,9 +47,9 @@
         <operation name="addActivityEntityRelationship" mep="http://www.w3.org/ns/wsdl/in-only" namespace="http://komadu.d2i.indiana.edu">
             <actionMapping>http://komadu.d2i.indiana.edu/addActivityEntityRelationship</actionMapping>
         </operation>
-        <operation name="getServiceDetail" mep="http://www.w3.org/ns/wsdl/in-out" namespace="http://komadu.d2i.indiana.edu">
-            <actionMapping>http://www.dataandsearch.org/karma/getServiceDetail</actionMapping>
-            <outputActionMapping>http://komadu.d2i.indiana.edu/KomaduService/getServiceDetailResponse</outputActionMapping>
+        <operation name="getActivityDetail" mep="http://www.w3.org/ns/wsdl/in-out" namespace="http://komadu.d2i.indiana.edu">
+            <actionMapping>http://www.dataandsearch.org/karma/getActivityDetail</actionMapping>
+            <outputActionMapping>http://komadu.d2i.indiana.edu/KomaduService/getActivityDetailResponse</outputActionMapping>
         </operation>
         <!--<operation name="getAbstractServiceDetail" mep="http://www.w3.org/ns/wsdl/in-out" namespace="http://komadu.d2i.indiana.edu">-->
             <!--<actionMapping>http://www.dataandsearch.org/karma/getAbstractServiceDetail</actionMapping>-->
@@ -88,9 +88,9 @@
             <actionMapping>http://www.dataandsearch.org/karma/getEntityDetail</actionMapping>
             <outputActionMapping>http://komadu.d2i.indiana.edu/KomaduService/getEntityDetailResponse</outputActionMapping>
         </operation>
-        <operation name="findService" mep="http://www.w3.org/ns/wsdl/in-out" namespace="http://komadu.d2i.indiana.edu">
-            <actionMapping>http://komadu.d2i.indiana.edu/findService</actionMapping>
-            <outputActionMapping>http://komadu.d2i.indiana.edu/KomaduService/findServiceResponse</outputActionMapping>
+        <operation name="findActivity" mep="http://www.w3.org/ns/wsdl/in-out" namespace="http://komadu.d2i.indiana.edu">
+            <actionMapping>http://komadu.d2i.indiana.edu/findActivity</actionMapping>
+            <outputActionMapping>http://komadu.d2i.indiana.edu/KomaduService/findActivityResponse</outputActionMapping>
         </operation>
         <operation name="addEntityEntityRelationship" mep="http://www.w3.org/ns/wsdl/in-only" namespace="http://komadu.d2i.indiana.edu">
             <actionMapping>http://komadu.d2i.indiana.edu/addEntityEntityRelationship</actionMapping>

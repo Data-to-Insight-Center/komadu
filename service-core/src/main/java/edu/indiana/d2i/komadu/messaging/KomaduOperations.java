@@ -9,10 +9,8 @@ import org.apache.xmlbeans.XmlOptions;
 import edu.indiana.d2i.komadu.ingest.IngestException;
 import edu.indiana.d2i.komadu.ingest.NotificationIngester;
 import edu.indiana.d2i.komadu.ingest.NotificationSummary;
-import edu.indiana.d2i.komadu.ingest.NotificationSummary.NotificationTypeEnum;
-import edu.indiana.d2i.komadu.ingest.db.BaseDBIngesterImplementer;
-import edu.indiana.d2i.komadu.query.FindServiceRequestDocument;
-import edu.indiana.d2i.komadu.query.FindServiceResponseDocument;
+import edu.indiana.d2i.komadu.query.FindActivityRequestDocument;
+import edu.indiana.d2i.komadu.query.FindActivityResponseDocument;
 import edu.indiana.d2i.komadu.query.GetActivityGraphRequestDocument;
 import edu.indiana.d2i.komadu.query.GetActivityGraphResponseDocument;
 import edu.indiana.d2i.komadu.query.GetAgentGraphRequestDocument;
@@ -86,17 +84,17 @@ public class KomaduOperations {
 			QueryTypeEnum QueryType= QueryTypeEnum.determineQueryTypeFromXmlBeansDocument(query);
 			switch(QueryType){
 			case FIND_SERVICE:
-				FindServiceResponseDocument findServiceResponseDocument = null;
+                FindActivityResponseDocument findActivityResponseDocument = null;
 
 				try {
-					findServiceResponseDocument = querier.findService((FindServiceRequestDocument)query);
+					findActivityResponseDocument = querier.findActivity((FindActivityRequestDocument) query);
 				} catch (QueryException qe) {
 					l.error("Error in findServiceRequest().");
 					l.error(qe.getMessage());
 					return ERROR_STRING + ": " + qe.getMessage();
 				}
 
-				return  findServiceResponseDocument.xmlText(new XmlOptions().setSavePrettyPrint());
+				return  findActivityResponseDocument.xmlText(new XmlOptions().setSavePrettyPrint());
 
 			case GET_CONTEXT_WORKFLOW_GRAPH:
 				GetContextWorkflowGraphResponseDocument getContextWorkflowGraphResponseDocument  = null;

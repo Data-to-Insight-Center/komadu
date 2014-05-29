@@ -53,7 +53,7 @@
         </restriction>
     </simpleType>
 
-    <complexType name="getServiceDetailRequestType">
+    <complexType name="getActivityDetailRequestType">
         <choice>
             <sequence>
                 <element name="uniqueURIList" type="qi:uniqueURIListType" />
@@ -64,7 +64,7 @@
         </choice>
     </complexType>
 
-    <complexType name="getServiceDetailResponseType">
+    <complexType name="getActivityDetailResponseType">
         <sequence>
             <element name="serviceDetailList" type="qi:serviceDetailListType" />
         </sequence>
@@ -154,7 +154,7 @@
         </sequence>
     </complexType>
 
-    <complexType name="findServiceRequestType">
+    <complexType name="findActivityRequestType">
         <all>
             <element minOccurs="0" name="name" type="xsd:string" />
             <element minOccurs="0" name="hostName" type="xsd:string" />
@@ -170,7 +170,7 @@
         </all>
     </complexType>
 
-    <complexType name="findServiceResponseType">
+    <complexType name="findActivityResponseType">
         <choice>
             <sequence>
                 <element name="uniqueURIList" type="qi:uniqueURIListType" />
@@ -474,11 +474,11 @@
     <element name="getAbstractEntityDetailRequest" type="qi:getAbstractEntityDetailRequestType" />
     <element name="getAbstractEntityDetailResponse" type="qi:getAbstractEntityDetailResponseType" />
     
-    <element name="findServiceRequest" type="qi:findServiceRequestType" />
-    <element name="findServiceResponse" type="qi:findServiceResponseType" />
+    <element name="findActivityRequest" type="qi:findActivityRequestType" />
+    <element name="findActivityResponse" type="qi:findActivityResponseType" />
 
-    <element name="getServiceDetailRequest" type="qi:getServiceDetailRequestType" />
-    <element name="getServiceDetailResponse" type="qi:getServiceDetailResponseType" />
+    <element name="getActivityDetailRequest" type="qi:getActivityDetailRequestType" />
+    <element name="getActivityDetailResponse" type="qi:getActivityDetailResponseType" />
 
     <element name="findEntityRequest" type="qi:findEntityRequestType" />
     <element name="findEntityResponse" type="qi:findEntityResponseType" />

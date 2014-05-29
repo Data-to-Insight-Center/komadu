@@ -42,14 +42,14 @@ public class BaseDBQuerier implements QueryImplementer {
     public static final Log l = LogFactory.getLog(BaseDBQuerier.class);
     private long cacheExpiration = 0;
 
-    public FindServiceResponseDocument findService(FindServiceRequestDocument findServiceRequest)
+    public FindActivityResponseDocument findActivity(FindActivityRequestDocument findActivityRequest)
             throws QueryException {
         Connection connection = DBConnectionPool.getInstance().getEntry();
-        FindServiceResponseDocument response = null;
+        FindActivityResponseDocument response = null;
         try {
-            response = findService(connection, findServiceRequest.getFindServiceRequest());
+            response = findActivity(connection, findActivityRequest.getFindActivityRequest());
         } catch (SQLException e) {
-            l.error("Error while executing findService()", e);
+            l.error("Error while executing findActivity()", e);
         }
         return response;
     }
@@ -227,31 +227,31 @@ public class BaseDBQuerier implements QueryImplementer {
         return getAgentGraphResponseDocument;
     }
 
-    public FindServiceResponseDocument findService(Connection connection, FindServiceRequestType
-            findServiceRequestType) throws QueryException, SQLException {
+    public FindActivityResponseDocument findActivity(Connection connection, FindActivityRequestType
+            findActivityRequestType) throws QueryException, SQLException {
 
-        l.debug("Entering findService()");
+        l.debug("Entering findActivity()");
         assert (connection != null);
-        assert (findServiceRequestType != null);
+        assert (findActivityRequestType != null);
 
-        PreparedStatement findServiceStmt = null;
+        PreparedStatement findActivityStmt = null;
         ResultSet res = null;
 
-        FindServiceResponseDocument findServiceResponseDocument = FindServiceResponseDocument.Factory
+        FindActivityResponseDocument findActivityResponseDocument = FindActivityResponseDocument.Factory
                 .newInstance();
-        FindServiceResponseType findServiceResponseType = findServiceResponseDocument
-                .addNewFindServiceResponse();
-        ServiceIDListType serviceNameList = findServiceResponseType.addNewServiceIDList();
+        FindActivityResponseType findActivityResponseType = findActivityResponseDocument
+                .addNewFindActivityResponse();
+        ServiceIDListType serviceNameList = findActivityResponseType.addNewServiceIDList();
 
         try {
             StringBuilder query = new StringBuilder();
-            if (findServiceRequestType.isSetAttributeList()) {
+            if (findActivityRequestType.isSetAttributeList()) {
                 query.append(PROVSqlQuery.FIND_SERVICE_ATTRIBUTE);
             } else {
                 query.append(PROVSqlQuery.FIND_SERVICE);
             }
 
-            String nextService = findServiceRequestType.getNextServiceID();
+            String nextService = findActivityRequestType.getNextServiceID();
             String nextServiceID;
             if (nextService != null) {
                 PreparedStatement findNextServiceStmt;
@@ -278,40 +278,40 @@ public class BaseDBQuerier implements QueryImplementer {
 
                 if (nextServiceCount == 0) {
                     l.info("No service with specified next service found.");
-                    l.debug("Exiting findService() with success.");
-                    return findServiceResponseDocument;
+                    l.debug("Exiting findActivity() with success.");
+                    return findActivityResponseDocument;
                 }
             }
 
-            String architecture = findServiceRequestType.getArchitecture();
-            String hostName = findServiceRequestType.getHostName();
-            String name = findServiceRequestType.getName();
-            String workflowID = findServiceRequestType.getWorkflowID();
-            String subServiceID = findServiceRequestType.getSubServiceID();
-//            Calendar initializationTime = findServiceRequestType.getInitializationTime();
-//            Calendar terminationTime = findServiceRequestType.getTerminationTime();
-//            boolean isSuccess = findServiceRequestType.getIsSuccess();
-            AttributesType attributeList = findServiceRequestType.getAttributeList();
+            String architecture = findActivityRequestType.getArchitecture();
+            String hostName = findActivityRequestType.getHostName();
+            String name = findActivityRequestType.getName();
+            String workflowID = findActivityRequestType.getWorkflowID();
+            String subServiceID = findActivityRequestType.getSubServiceID();
+//            Calendar initializationTime = findActivityRequestType.getInitializationTime();
+//            Calendar terminationTime = findActivityRequestType.getTerminationTime();
+//            boolean isSuccess = findActivityRequestType.getIsSuccess();
+            AttributesType attributeList = findActivityRequestType.getAttributeList();
 
-            if (findServiceRequestType.isSetArchitecture())
+            if (findActivityRequestType.isSetArchitecture())
                 query.append("AND a.activity_uri LIKE '%").append(architecture).append("%' ");
-            if (findServiceRequestType.isSetHostName())
+            if (findActivityRequestType.isSetHostName())
                 query.append("AND a.activity_uri LIKE '%").append(hostName).append("%' ");
-            if (findServiceRequestType.isSetName())
+            if (findActivityRequestType.isSetName())
                 query.append("AND a.activity_uri LIKE '%").append(name).append("%' ");
-            if (findServiceRequestType.isSetWorkflowID())
+            if (findActivityRequestType.isSetWorkflowID())
                 query.append("AND a.context_workflow_uri LIKE '%").append(workflowID).append("%' ");
-            if (findServiceRequestType.isSetSubServiceID())
+            if (findActivityRequestType.isSetSubServiceID())
                 query.append("AND a.context_service_uri LIKE '%").append(subServiceID).append("%' ");
             // TODO : Add invocation time, termination time and status into communication?
-//            if (findServiceRequestType.isSetInitializationTime())
+//            if (findActivityRequestType.isSetInitializationTime())
 //                query.append("AND i.invocation_start_time LIKE '%").append(initializationTime).append("%' ");
-//            if (findServiceRequestType.isSetTerminationTime())
+//            if (findActivityRequestType.isSetTerminationTime())
 //                query.append("AND i.execution_end_time LIKE '%").append(terminationTime).append("%' ");
 //
 //            // default to SUCCESS if not specified
-//            l.debug("isSetIsSuccess: " + findServiceRequestType.isSetIsSuccess());
-//            if (!findServiceRequestType.isSetIsSuccess())
+//            l.debug("isSetIsSuccess: " + findActivityRequestType.isSetIsSuccess());
+//            if (!findActivityRequestType.isSetIsSuccess())
 //                query.append("AND i.execution_status = '"
 //                        + StatusEnum.SUCCESS.toString() + "' ");
 //            else if (isSuccess)
@@ -321,43 +321,43 @@ public class BaseDBQuerier implements QueryImplementer {
 //                query.append("AND i.execution_status = '"
 //                        + StatusEnum.FAILED.toString() + "' ");
 
-            if (findServiceRequestType.isSetAttributeList()) {
+            if (findActivityRequestType.isSetAttributeList()) {
                 for (int i = 0; i < attributeList.sizeOfAttributeArray(); i++) {
                     query.append(PROVSqlQuery.ATTRIBUTE_COMPARISON);
                 }
             }
 
-            findServiceStmt = connection.prepareStatement(query.toString());
-            l.debug("findServiceStmt: " + findServiceStmt);
+            findActivityStmt = connection.prepareStatement(query.toString());
+            l.debug("findActivityStmt: " + findActivityStmt);
 
-            if (findServiceRequestType.isSetAttributeList()) {
+            if (findActivityRequestType.isSetAttributeList()) {
                 for (int i = 1; i <= attributeList.sizeOfAttributeArray(); i++) {
-                    findServiceStmt.setString(i, '%' + findServiceRequestType
+                    findActivityStmt.setString(i, '%' + findActivityRequestType
                             .getAttributeList().getAttributeArray(i).getValue() + '%');
                 }
             }
-            res = findServiceStmt.executeQuery();
+            res = findActivityStmt.executeQuery();
             while (res.next()) {
                 XmlString serviceName = serviceNameList.addNewServiceID();
                 serviceName.setStringValue(res.getString("activity_uri"));
             }
             res.close();
-            findServiceStmt.close();
+            findActivityStmt.close();
         } catch (SQLException e) {
-            l.error("Exiting findService() with SQL errors.");
+            l.error("Exiting findActivity() with SQL errors.");
             l.error(e.toString());
             return null;
         } finally {
-            if (findServiceStmt != null) {
-                findServiceStmt.close();
+            if (findActivityStmt != null) {
+                findActivityStmt.close();
             }
             if (res != null) {
                 res.close();
             }
         }
-        l.debug("Response: " + findServiceResponseDocument);
-        l.debug("Exiting findService() with success.");
-        return findServiceResponseDocument;
+        l.debug("Response: " + findActivityResponseDocument);
+        l.debug("Exiting findActivity() with success.");
+        return findActivityResponseDocument;
     }
 
 }

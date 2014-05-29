@@ -60,8 +60,8 @@ public class QuerySummary {
 	public static final QuerySummary UNKNOWN_QUERY_SUMMARY = new QuerySummary(
 			QueryTypeEnum.UNKNOWN_TYPES);
 
-	/*  public FindServiceResponseDocument findService(
-            FindServiceRequestDocument findServiceRequest)
+	/*  public FindActivityResponseDocument findActivity(
+            FindActivityRequestDocument findServiceRequest)
             throws QueryException;
 
     public GetContextWorkflowGraphResponseDocument getContextWorkflowGraph(
@@ -90,7 +90,7 @@ public class QuerySummary {
 
 		public static QueryTypeEnum determineQueryTypeFromXmlBeansDocument(
 				XmlObject document) {
-			if (document instanceof  FindServiceRequestDocument) {
+			if (document instanceof  FindActivityRequestDocument) {
 				return FIND_SERVICE;
 			} else if (document instanceof GetContextWorkflowGraphRequestDocument) {
 				return GET_CONTEXT_WORKFLOW_GRAPH;

@@ -20,8 +20,8 @@ package edu.indiana.d2i.komadu.query;
 
 public interface QueryImplementer {
 
-    public FindServiceResponseDocument findService(
-            FindServiceRequestDocument findServiceRequest)
+    public FindActivityResponseDocument findActivity(
+            FindActivityRequestDocument findActivityRequest)
             throws QueryException;
 
     public GetContextWorkflowGraphResponseDocument getContextWorkflowGraph(

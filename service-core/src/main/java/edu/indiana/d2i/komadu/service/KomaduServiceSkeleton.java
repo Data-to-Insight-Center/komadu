@@ -258,10 +258,10 @@ public class KomaduServiceSkeleton implements KomaduServiceSkeletonInterface, Li
 //    }
 
     @Override
-    public GetServiceDetailResponseDocument getServiceDetail(
-            GetServiceDetailRequestDocument getServiceDetailRequest) {
+    public GetActivityDetailResponseDocument getActivityDetail(
+            GetActivityDetailRequestDocument getActivityDetailRequest) {
         if (log.isDebugEnabled())
-            log.debug(getServiceDetailRequest);
+            log.debug(getActivityDetailRequest);
         
         log.error("Operation not implemented..");
         return null;
@@ -287,17 +287,17 @@ public class KomaduServiceSkeleton implements KomaduServiceSkeletonInterface, Li
     }
 
     @Override
-    public FindServiceResponseDocument findService(FindServiceRequestDocument findServiceRequest) {
+    public FindActivityResponseDocument findActivity(FindActivityRequestDocument findActivityRequest) {
         if (log.isDebugEnabled())
-            log.debug(findServiceRequest);
+            log.debug(findActivityRequest);
         
-        FindServiceResponseDocument findServiceResponseDocument = null;
+        FindActivityResponseDocument findActivityResponseDocument = null;
         try {
-            findServiceResponseDocument = querier.findService(findServiceRequest);
+            findActivityResponseDocument = querier.findActivity(findActivityRequest);
         } catch (QueryException qe) {
-            log.error("Failed to query findService");
+            log.error("Failed to query findActivity");
         }
-        return findServiceResponseDocument;
+        return findActivityResponseDocument;
     }
 
     @Override
