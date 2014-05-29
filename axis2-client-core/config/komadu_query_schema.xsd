@@ -75,7 +75,7 @@
             <element name="entityIDList" type="qi:entityIDListType" />
         </sequence>
     </complexType>
-    
+
     <complexType name="getEntityDetailResponseType">
         <sequence>
             <element name="entityDetailList" type="qi:entityDetailListType" />
@@ -209,7 +209,7 @@
         <all>
             <element name="type" type="xsd:string" />
             <element minOccurs="0" name="workflowID" type="xsd:string" />
-            <element minOccurs="0" name="activityID" type="xsd:string" />
+            <element minOccurs="0" name="serviceID" type="xsd:string" />
             <element minOccurs="0" name="timestep" type="xsd:int" />
             <element minOccurs="0" name="workflowNodeID" type="xsd:string" />
             <element minOccurs="0" name="instanceOf" type="xsd:string" />

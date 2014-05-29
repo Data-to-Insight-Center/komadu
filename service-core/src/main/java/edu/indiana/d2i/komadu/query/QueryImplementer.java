@@ -24,6 +24,18 @@ public interface QueryImplementer {
             FindActivityRequestDocument findActivityRequest)
             throws QueryException;
 
+    public FindEntityResponseDocument findEntity(
+            FindEntityRequestDocument findEntityRequest)
+            throws QueryException;
+
+    public GetActivityDetailResponseDocument getActivityDetail(
+            GetActivityDetailRequestDocument getActivityDetailRequest)
+            throws QueryException;
+
+    public GetEntityDetailResponseDocument getEntityDetail(
+            GetEntityDetailRequestDocument getEntityDetailRequest)
+            throws QueryException;
+
     public GetContextWorkflowGraphResponseDocument getContextWorkflowGraph(
             GetContextWorkflowGraphRequestDocument getWorkflowGraphRequest)
             throws QueryException;

@@ -27,10 +27,7 @@ import org.apache.commons.logging.LogFactory;
 import org.apache.xmlbeans.XmlString;
 import org.w3.www.ns.prov.Document;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 
 
 public class BaseDBQuerier implements QueryImplementer {
@@ -52,6 +49,31 @@ public class BaseDBQuerier implements QueryImplementer {
             l.error("Error while executing findActivity()", e);
         }
         return response;
+    }
+
+    @Override
+    public FindEntityResponseDocument findEntity(FindEntityRequestDocument findEntityRequest)
+            throws QueryException {
+        return null;
+    }
+
+    @Override
+    public GetActivityDetailResponseDocument getActivityDetail(
+            GetActivityDetailRequestDocument getActivityDetailRequest) throws QueryException {
+        Connection connection = DBConnectionPool.getInstance().getEntry();
+        GetActivityDetailResponseDocument response = null;
+        try {
+            response = getActivityDetail(connection,                    getActivityDetailRequest.getGetActivityDetailRequest());
+        } catch (SQLException e) {
+            l.error("Error while executing getActivityDetail()", e);
+        }
+        return response;
+    }
+
+    @Override
+    public GetEntityDetailResponseDocument getEntityDetail(
+            GetEntityDetailRequestDocument getEntityDetailRequest) throws QueryException {
+        return null;
     }
 
     public GetContextWorkflowGraphResponseDocument getContextWorkflowGraph(
@@ -364,6 +386,104 @@ public class BaseDBQuerier implements QueryImplementer {
         l.debug("Response: " + findActivityResponseDocument);
         l.debug("Exiting findActivity() with success.");
         return findActivityResponseDocument;
+    }
+
+    public GetActivityDetailResponseDocument getActivityDetail(
+            Connection connection, GetActivityDetailRequestType activityDetailRequestType)
+            throws QueryException, SQLException {
+        l.info("Entering getActivityDetail()");
+        assert (connection != null);
+        assert (activityDetailRequestType != null);
+
+        PreparedStatement activityDetailStmt = null;
+        ResultSet res = null;
+
+        GetActivityDetailResponseDocument getActivityDetailResponseDocument =
+                GetActivityDetailResponseDocument.Factory.newInstance();
+        GetActivityDetailResponseType getActivityDetailResponseType = getActivityDetailResponseDocument
+                .addNewGetActivityDetailResponse();
+        ActivityDetailListType activityDetailList = getActivityDetailResponseType
+                .addNewActivityDetailList();
+
+        if (activityDetailRequestType.getUniqueURIList() != null) {
+            for (String uri : activityDetailRequestType.getUniqueURIList().getUniqueURIArray()) {
+                try {
+                    activityDetailStmt = connection.prepareStatement(PROVSqlQuery.GET_ACTIVITY_DETAIL_BY_URI);
+                    activityDetailStmt.setString(1, uri);
+                    res = activityDetailStmt.executeQuery();
+                    if (res.next()) {
+                        ActivityDetail activityDetail = activityDetailList.addNewActivityDetail();
+                        activityDetail.setId(uri);
+                        populateActivityDetails(res, activityDetail);
+                    }
+                } catch (SQLException e) {
+                    l.error("Exiting getActivityDetail() with SQL errors.", e);
+                    return null;
+                } finally {
+                    if (activityDetailStmt != null) {
+                        activityDetailStmt.close();
+                        activityDetailStmt = null;
+                    }
+                    if (res != null) {
+                        res.close();
+                        res = null;
+                    }
+                }
+            }
+        } else {
+            for (String id : activityDetailRequestType.getUniqueIDList().getUniqueIDArray()) {
+                try {
+                    activityDetailStmt = connection.prepareStatement(PROVSqlQuery.GET_ACTIVITY_DETAIL_BY_ID);
+                    activityDetailStmt.setString(1, id.replace(QueryConstants.ACTIVITY_IDENTIFIER, ""));
+                    res = activityDetailStmt.executeQuery();
+                    if (res.next()) {
+                        if (res.next()) {
+                            ActivityDetail activityDetail = activityDetailList.addNewActivityDetail();
+                            activityDetail.setId(id);
+                            populateActivityDetails(res, activityDetail);
+                        }
+                    }
+                } catch (SQLException e) {
+                    l.error("Exiting getActivityDetail() with SQL errors.", e);
+                    return null;
+                } finally {
+                    if (activityDetailStmt != null) {
+                        activityDetailStmt.close();
+                        activityDetailStmt = null;
+                    }
+                    if (res != null) {
+                        res.close();
+                        res = null;
+                    }
+                }
+            }
+        }
+
+        l.debug("Response: " + getActivityDetailResponseDocument);
+        l.debug("Exiting getActivityDetail() with success.");
+        return getActivityDetailResponseDocument;
+    }
+
+    private void populateActivityDetails(ResultSet res, ActivityDetail activityDetail) throws SQLException {
+        String activityType = res.getString("activity_type");
+        String context_workflow_uri = res.getString("context_workflow_uri");
+        String context_service_uri = res.getString("context_service_uri");
+        int timestep = res.getInt("timestep");
+        String context_wf_node_id_token = res.getString("context_wf_node_id_token");
+        String instance_of = res.getString("instance_of");
+
+        if (activityType != null)
+            activityDetail.setType(activityType);
+        if (context_workflow_uri != null)
+            activityDetail.setWorkflowID(context_workflow_uri);
+        if (context_service_uri != null)
+            activityDetail.setServiceID(context_service_uri);
+        if (timestep != -1)
+            activityDetail.setTimestep(timestep);
+        if (context_wf_node_id_token != null)
+            activityDetail.setWorkflowNodeID(context_wf_node_id_token);
+        if (instance_of != null)
+            activityDetail.setInstanceOf(instance_of);
     }
 
 }

@@ -232,9 +232,14 @@ public class KomaduServiceSkeleton implements KomaduServiceSkeletonInterface, Li
             GetEntityDetailRequestDocument getEntityDetailRequest) {
         if (log.isDebugEnabled())
             log.debug(getEntityDetailRequest);
-        
-        log.error("Operation not implemented..");
-        return null;
+
+        GetEntityDetailResponseDocument getEntityDetailResponseDocument = null;
+        try {
+            getEntityDetailResponseDocument = querier.getEntityDetail(getEntityDetailRequest);
+        } catch (QueryException qe) {
+            log.error("Failed to query getEntityDetail");
+        }
+        return getEntityDetailResponseDocument;
     }
 
 //    @Override
@@ -262,9 +267,14 @@ public class KomaduServiceSkeleton implements KomaduServiceSkeletonInterface, Li
             GetActivityDetailRequestDocument getActivityDetailRequest) {
         if (log.isDebugEnabled())
             log.debug(getActivityDetailRequest);
-        
-        log.error("Operation not implemented..");
-        return null;
+
+        GetActivityDetailResponseDocument getActivityDetailResponseDocument = null;
+        try {
+            getActivityDetailResponseDocument = querier.getActivityDetail(getActivityDetailRequest);
+        } catch (QueryException qe) {
+            log.error("Failed to query getActivityDetail");
+        }
+        return getActivityDetailResponseDocument;
     }
 
 //    @Override
@@ -281,9 +291,14 @@ public class KomaduServiceSkeleton implements KomaduServiceSkeletonInterface, Li
     public FindEntityResponseDocument findEntity(FindEntityRequestDocument findEntityRequest) {
         if (log.isDebugEnabled())
             log.debug(findEntityRequest);
-        
-        log.error("Operation not implemented..");
-        return null;
+
+        FindEntityResponseDocument findEntityResponseDocument = null;
+        try {
+            findEntityResponseDocument = querier.findEntity(findEntityRequest);
+        } catch (QueryException qe) {
+            log.error("Failed to query findEntity");
+        }
+        return findEntityResponseDocument;
     }
 
     @Override

@@ -257,7 +257,35 @@ public class KomaduTests {
             FindActivityResponseDocument responseDocument = stub.findActivity(findActivityRequest);
             String[] activityIDArray = responseDocument.getFindActivityResponse().getActivityIDList().getActivityIDArray();
             for (String id : activityIDArray) {
-                System.out.println("Found Activity: " + id + "\n");
+                System.out.println("Found Activity: " + id);
+            }
+        } catch (RemoteException e) {
+            e.printStackTrace();
+            Assert.fail();
+        }
+    }
+
+    @Test
+    public void testGetActivityDetail() {
+        try {
+            System.out.println("\n\n Get Activity Detail \n\n");
+            GetActivityDetailRequestDocument getActivityDetailRequestDocument =
+                    GetActivityDetailRequestDocument.Factory.newInstance();
+            GetActivityDetailRequestType getActivityDetailRequestType = GetActivityDetailRequestType.Factory.newInstance();
+            UniqueURIListType uniqueURIListType = UniqueURIListType.Factory.newInstance();
+            uniqueURIListType.setUniqueURIArray(new String[]{workflowGraphId});
+            getActivityDetailRequestType.setUniqueURIList(uniqueURIListType);
+            getActivityDetailRequestDocument.setGetActivityDetailRequest(getActivityDetailRequestType);
+            GetActivityDetailResponseDocument responseDocument = stub.getActivityDetail(getActivityDetailRequestDocument);
+            ActivityDetailListType list = responseDocument.getGetActivityDetailResponse().getActivityDetailList();
+            for (ActivityDetail detail : list.getActivityDetailArray()) {
+                System.out.println("Activity ID: " + detail.getId());
+                System.out.println("Activity Type: " + detail.getType());
+                System.out.println("Activity Context Service ID: " + detail.getServiceID());
+                System.out.println("Activity Timestep: " + detail.getTimestep());
+                System.out.println("Activity Context Workflow ID: " + detail.getWorkflowID());
+                System.out.println("Activity Node ID: " + detail.getWorkflowNodeID());
+                System.out.println("Activity Instance Of: " + detail.getInstanceOf());
             }
         } catch (RemoteException e) {
             e.printStackTrace();

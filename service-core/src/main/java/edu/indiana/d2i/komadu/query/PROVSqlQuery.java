@@ -183,6 +183,9 @@ public class PROVSqlQuery {
     public static final String GET_ACTIVITY_BY_URI = "SELECT * FROM exe_activity WHERE activity_uri = ? ";
     public static final String GET_ACTIVITY_BY_ID = "SELECT * FROM exe_activity WHERE activity_id = ? ";
 
+    public static final String GET_ACTIVITY_DETAIL_BY_URI = "SELECT * FROM exe_activity a WHERE a.activity_uri = ? ";
+    public static final String GET_ACTIVITY_DETAIL_BY_ID = "SELECT * FROM exe_activity a WHERE a.activity_id = ? ";
+
     public static final String GET_ENTITY_TYPE = "SELECT entity_type FROM exe_entity WHERE entity_id = ? ";
     public static final String GET_FILE_BY_ID = "SELECT * FROM exe_file WHERE file_id = ? ";
     public static final String GET_BLOCK_BY_ID = "SELECT * FROM exe_block WHERE block_id = ? ";
