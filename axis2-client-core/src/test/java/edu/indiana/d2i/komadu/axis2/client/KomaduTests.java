@@ -294,7 +294,7 @@ public class KomaduTests {
     }
 
     @Test
-    public void testFindEntity() {
+    public void testFindEntityAndDetail() {
         try {
             System.out.println("\n\n Find Entity \n\n");
             FindEntityRequestDocument findEntityRequest = FindEntityRequestDocument.Factory.newInstance();
@@ -305,11 +305,35 @@ public class KomaduTests {
             findEntityRequest.setFindEntityRequest(findEntityRequestType);
             FindEntityResponseDocument responseDocument = stub.findEntity(findEntityRequest);
             UniqueFileListType fileList = responseDocument.getFindEntityResponse().getUniqueFileURIList();
+            String fileIdForDetail = null;
             for (FileURIDetailsType uriDetail : fileList.getFileURIDetailsTypeArray()) {
                 System.out.println("Found File Entity");
                 System.out.println("File URI : " + uriDetail.getFileURI());
                 System.out.println("File ID : " + uriDetail.getFileID());
+                fileIdForDetail = uriDetail.getFileID();
                 System.out.println("File Creation Date : " + uriDetail.getCreationDate());
+            }
+            
+            // getEntityDetail Test
+            if (fileIdForDetail != null) {
+                System.out.println("\n\n Get Entity Detail \n\n");
+                GetEntityDetailRequestDocument getEntityDetailRequestDocument =
+                        GetEntityDetailRequestDocument.Factory.newInstance();
+                GetEntityDetailRequestType getEntityDetailRequestType = GetEntityDetailRequestType.Factory.newInstance();
+                EntityIDListType idList = EntityIDListType.Factory.newInstance();
+                idList.setEntityIDArray(new String[]{fileIdForDetail});
+                getEntityDetailRequestType.setEntityIDList(idList);
+                getEntityDetailRequestDocument.setGetEntityDetailRequest(getEntityDetailRequestType);
+                GetEntityDetailResponseDocument detailResponseDocument = stub.getEntityDetail(getEntityDetailRequestDocument);
+                EntityDetailListType list = detailResponseDocument.getGetEntityDetailResponse().getEntityDetailList();
+                for (EntityDetail detail : list.getEntityDetailArray()) {
+                    System.out.println("Entity ID: " + detail.getId());
+                    System.out.println("File Name: " + detail.getFileName());
+                    System.out.println("File URI: " + detail.getFileURI());
+                    System.out.println("File Creation Date: " + detail.getCreationDate());
+                    System.out.println("File Owner: " + detail.getOwner());
+                    System.out.println("File MD5: " + detail.getMd5());
+                }
             }
         } catch (RemoteException e) {
             e.printStackTrace();

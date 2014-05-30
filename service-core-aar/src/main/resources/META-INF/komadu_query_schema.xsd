@@ -90,8 +90,6 @@
                     <element minOccurs="0" name="blockContent" type="xsd:string" />
                     <element minOccurs="0" name="blockMD5Checksum" type="xsd:string" />
                     <element minOccurs="0" name="blockSize" type="xsd:long" />
-                    <element minOccurs="0" name="blockIsInstanceOfEntity"
-                             type="xsd:string" />
                 </sequence>
                 <sequence>
                     <element minOccurs="0" name="fileName" type="xsd:string" />
@@ -100,8 +98,6 @@
                     <element minOccurs="0" name="fileCreationDate" type="xsd:dateTime" />
                     <element minOccurs="0" name="fileMD5Checksum" type="xsd:string" />
                     <element minOccurs="0" name="fileSize" type="xsd:long" />
-                    <element minOccurs="0" name="fileIsInstanceOfEntity"
-                             type="xsd:string" />
                 </sequence>
             </choice>
         </sequence>
@@ -209,7 +205,7 @@
         <all>
             <element name="type" type="xsd:string" />
             <element minOccurs="0" name="workflowID" type="xsd:string" />
-            <element minOccurs="0" name="activityID" type="xsd:string" />
+            <element minOccurs="0" name="serviceID" type="xsd:string" />
             <element minOccurs="0" name="timestep" type="xsd:int" />
             <element minOccurs="0" name="workflowNodeID" type="xsd:string" />
             <element minOccurs="0" name="instanceOf" type="xsd:string" />
@@ -339,7 +335,7 @@
     <complexType name="membershipDetail">
         <all>
             <element name="entityType" type="qi:entityEnumType" />
-            <element minOccurs="0" name="instanceOf" type="xsd:string" />
+            <!--<element minOccurs="0" name="instanceOf" type="xsd:string" />-->
         </all>
         <attribute name="id" type="xsd:string" use="required"/>
     </complexType>

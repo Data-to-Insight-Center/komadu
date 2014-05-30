@@ -192,6 +192,11 @@ public class PROVSqlQuery {
     public static final String GET_COLLECTION_BY_ID = "SELECT * FROM exe_collection WHERE collection_id = ? ";
     public static final String GET_GENERIC_ENTITY_BY_ID = "SELECT * FROM exe_generic_entity WHERE generic_entity_id = ? ";
 
+    public static final String GET_FILE = "SELECT * FROM exe_file WHERE file_id = ?";
+    public static final String GET_BLOCK = "SELECT * FROM exe_block WHERE block_id = ?";
+    public static final String GET_COLLECTION = "SELECT * FROM exe_collection c WHERE c.collection_id = ?";
+    public static final String GET_MEMBERSHIP = "SELECT * FROM exe_collection_membership m, exe_entity e "
+            + "WHERE m.collection_id = ? AND m.member_id = e.entity_id";
 
     /**
      * Queries needed for graph generations by inference

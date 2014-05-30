@@ -75,7 +75,7 @@
             <element name="entityIDList" type="qi:entityIDListType" />
         </sequence>
     </complexType>
-
+    
     <complexType name="getEntityDetailResponseType">
         <sequence>
             <element name="entityDetailList" type="qi:entityDetailListType" />
@@ -335,7 +335,7 @@
     <complexType name="membershipDetail">
         <all>
             <element name="entityType" type="qi:entityEnumType" />
-            <element minOccurs="0" name="instanceOf" type="xsd:string" />
+            <!--<element minOccurs="0" name="instanceOf" type="xsd:string" />-->
         </all>
         <attribute name="id" type="xsd:string" use="required"/>
     </complexType>

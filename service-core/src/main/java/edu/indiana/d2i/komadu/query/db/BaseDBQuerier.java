@@ -72,7 +72,7 @@ public class BaseDBQuerier implements QueryImplementer {
         Connection connection = DBConnectionPool.getInstance().getEntry();
         GetActivityDetailResponseDocument response = null;
         try {
-            response = getActivityDetail(connection,                    getActivityDetailRequest.getGetActivityDetailRequest());
+            response = getActivityDetail(connection, getActivityDetailRequest.getGetActivityDetailRequest());
         } catch (SQLException e) {
             l.error("Error while executing getActivityDetail()", e);
         }
@@ -82,7 +82,15 @@ public class BaseDBQuerier implements QueryImplementer {
     @Override
     public GetEntityDetailResponseDocument getEntityDetail(
             GetEntityDetailRequestDocument getEntityDetailRequest) throws QueryException {
-        return null;
+        Connection connection = DBConnectionPool.getInstance().getEntry();
+        GetEntityDetailResponseDocument response = null;
+        try {
+            response = getEntityDetail(connection,
+                    getEntityDetailRequest.getGetEntityDetailRequest().getEntityIDList());
+        } catch (SQLException e) {
+            l.error("Error while executing getEntityDetail()", e);
+        }
+        return response;
     }
 
     public GetContextWorkflowGraphResponseDocument getContextWorkflowGraph(
@@ -589,7 +597,140 @@ public class BaseDBQuerier implements QueryImplementer {
         l.debug("Response: " + findEntityResponseDocument);
         l.debug("Exiting findEntity() with success.");
         return findEntityResponseDocument;
-    }    
+    }
+
+    public GetEntityDetailResponseDocument getEntityDetail(
+            Connection connection, EntityIDListType entityIDType) 
+            throws QueryException, SQLException {
+        l.debug("Entering getEntityDetail()");
+        assert (connection != null);
+        assert (entityIDType != null);
+
+        PreparedStatement entityDetailStmt = null;
+        PreparedStatement membershipDetailStmt = null;
+        ResultSet res = null;
+        ResultSet membershipRes = null;
+
+        GetEntityDetailResponseDocument getEntityDetailResponseDocument =
+                GetEntityDetailResponseDocument.Factory.newInstance();
+        GetEntityDetailResponseType getEntityDetailResponseType = getEntityDetailResponseDocument
+                .addNewGetEntityDetailResponse();
+        EntityDetailListType entityDetailList = getEntityDetailResponseType
+                .addNewEntityDetailList();
+
+        for (String entityID : entityIDType.getEntityIDArray()) {
+            try {
+                if (entityID.startsWith(QueryConstants.FILE_IDENTIFIER)) {
+                    entityDetailStmt = connection.prepareStatement(PROVSqlQuery.GET_FILE);
+                    entityDetailStmt.setString(1, entityID.replace(QueryConstants.FILE_IDENTIFIER, ""));
+                    l.debug("entityDetailStmt: " + entityDetailStmt);
+
+                    res = entityDetailStmt.executeQuery();
+                    if (res.next()) {
+                        EntityDetail newEntityDetail = entityDetailList.addNewEntityDetail();
+                        newEntityDetail.setId(entityID);
+                        String file_uri = res.getString("file_uri");
+                        String owner_id = res.getString("owner_id");
+                        Timestamp creation_date = res.getTimestamp("creation_date");
+                        long size = res.getLong("size");
+                        String md5 = res.getString("md5_checksum");
+                        String file_name = res.getString("file_name");
+
+                        newEntityDetail.setFileURI(file_uri);
+                        if (owner_id != null)
+                            newEntityDetail.setOwner(owner_id);
+                        if (creation_date != null)
+                            newEntityDetail.setCreationDate(KomaduUtils.getCalendarFromTimeStamp(creation_date));
+                        if (size > 0)
+                            newEntityDetail.setSize(size);
+                        if (md5 != null)
+                            newEntityDetail.setMd5(md5);
+                        if (file_name != null)
+                            newEntityDetail.setFileName(file_name);
+                    }
+                } else if (entityID.startsWith(QueryConstants.BLOCK_IDENTIFIER)) {
+                    entityDetailStmt = connection.prepareStatement(PROVSqlQuery.GET_BLOCK);
+                    entityDetailStmt.setString(1, entityID.replace(QueryConstants.BLOCK_IDENTIFIER, ""));
+                    l.debug("entityDetailStmt: " + entityDetailStmt);
+
+                    res = entityDetailStmt.executeQuery();
+                    if (res.next()) {
+                        EntityDetail newEntityDetail = entityDetailList.addNewEntityDetail();
+                        newEntityDetail.setId(entityID);
+                        String block_content = res.getString("block_content");
+                        long size = res.getLong("size");
+                        String md5 = res.getString("md5_checksum");
+
+                        newEntityDetail.setBlockContent(block_content);
+                        if (size > 0)
+                            newEntityDetail.setSize(size);
+                        if (md5 != null)
+                            newEntityDetail.setMd5(md5);
+                    }
+                } else {
+                    entityDetailStmt = connection.prepareStatement(PROVSqlQuery.GET_COLLECTION);
+                    entityDetailStmt.setString(1, entityID.replace(QueryConstants.COLLECTION_IDENTIFIER, ""));
+                    l.debug("entityDetailStmt: " + entityDetailStmt);
+                    res = entityDetailStmt.executeQuery();
+                    if (res.next()) {
+                        EntityDetail newEntityDetail = entityDetailList.addNewEntityDetail();
+                        newEntityDetail.setId(entityID);
+                        String uri = res.getString("collection_uri");
+                        newEntityDetail.setCollectionURI(uri);
+
+                        membershipDetailStmt = connection.prepareStatement(PROVSqlQuery.GET_MEMBERSHIP);
+                        membershipDetailStmt.setString(1, entityID.replace(QueryConstants.COLLECTION_IDENTIFIER, ""));
+                        membershipRes = membershipDetailStmt.executeQuery();
+
+                        while (membershipRes.next()) {
+                            MembershipDetail membership = newEntityDetail.addNewMembership();
+                            membership.setId(membershipRes.getString("member_id"));
+
+                            if (membershipRes.getString("entity_type").equals(EntityEnumType.BLOCK.toString())) {
+                                membership.setEntityType(EntityEnumType.BLOCK);
+                            } else if (membershipRes.getString("entity_type").equals(EntityEnumType.BLOCK.toString())) {
+                                membership.setEntityType(EntityEnumType.FILE);
+                            } else if (membershipRes.getString("entity_type").equals(EntityEnumType.COLLECTION.toString())) {
+                                membership.setEntityType(EntityEnumType.COLLECTION);
+                            } else {
+                                l.error("Unrecognized data object type.");
+                            }
+//                            String instance_of = membershipRes.getString("instance_of");
+//                            if (instance_of != null)
+//                                membership.setInstanceOf(instance_of);
+                        }
+                        membershipRes.close();
+                        membershipDetailStmt.close();
+                    }
+                }
+            } catch (SQLException e) {
+                l.error("Exiting getEntityDetail() with SQL errors.", e);
+                return null;
+            } finally {
+                if (entityDetailStmt != null) {
+                    entityDetailStmt.close();
+                    entityDetailStmt = null;
+                }
+                if (membershipDetailStmt != null) {
+                    membershipDetailStmt.close();
+                    membershipDetailStmt = null;
+                }
+                if (res != null) {
+                    res.close();
+                    res = null;
+                }
+                if (membershipRes != null) {
+                    membershipRes.close();
+                    membershipRes = null;
+                }
+            }
+        }
+
+        l.info("Response: " + getEntityDetailResponseDocument);
+        l.info("Exiting QueryEntityUtil.getEntityDetail() with success.");
+        return getEntityDetailResponseDocument;
+
+    }
 
     private void populateActivityDetails(ResultSet res, ActivityDetail activityDetail) throws SQLException {
         String activityType = res.getString("activity_type");
