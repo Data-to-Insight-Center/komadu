@@ -293,6 +293,30 @@ public class KomaduTests {
         }
     }
 
+    @Test
+    public void testFindEntity() {
+        try {
+            System.out.println("\n\n Find Entity \n\n");
+            FindEntityRequestDocument findEntityRequest = FindEntityRequestDocument.Factory.newInstance();
+            FindEntityRequestType findEntityRequestType = FindEntityRequestType.Factory.newInstance();
+            findEntityRequestType.setFileSize(500);
+            findEntityRequestType.setFileName(getFileName(entityGraphURI));
+            findEntityRequestType.setFileOwnerID("jerry112");
+            findEntityRequest.setFindEntityRequest(findEntityRequestType);
+            FindEntityResponseDocument responseDocument = stub.findEntity(findEntityRequest);
+            UniqueFileListType fileList = responseDocument.getFindEntityResponse().getUniqueFileURIList();
+            for (FileURIDetailsType uriDetail : fileList.getFileURIDetailsTypeArray()) {
+                System.out.println("Found File Entity");
+                System.out.println("File URI : " + uriDetail.getFileURI());
+                System.out.println("File ID : " + uriDetail.getFileID());
+                System.out.println("File Creation Date : " + uriDetail.getCreationDate());
+            }
+        } catch (RemoteException e) {
+            e.printStackTrace();
+            Assert.fail();
+        }
+    }
+
     private static int generateID() {
         Random num = new Random();
         return num.nextInt(10000);

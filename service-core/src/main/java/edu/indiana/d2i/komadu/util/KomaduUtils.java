@@ -239,4 +239,16 @@ public class KomaduUtils {
         return new Timestamp(time.getTimeInMillis());
     }
 
+    /*
+	 * This function converts a Timestamp object to a Calendar object.
+	 *
+	 * @param - Timestamp t
+	 * @return - Calendar : calendar object which represents the input timestamp.
+	 */
+    public static Calendar getCalendarFromTimeStamp(Timestamp t) {
+        Calendar c = Calendar.getInstance();
+        c.setTimeInMillis(t.getTime());
+        return c;
+    }
+
 }

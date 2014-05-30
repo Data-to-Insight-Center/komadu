@@ -22,12 +22,14 @@ import edu.indiana.d2i.komadu.ingest.db.DBConnectionPool;
 import edu.indiana.d2i.komadu.query.*;
 import edu.indiana.d2i.komadu.query.graph.*;
 import edu.indiana.d2i.komadu.service.AttributesType;
+import edu.indiana.d2i.komadu.util.KomaduUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.xmlbeans.XmlString;
 import org.w3.www.ns.prov.Document;
 
 import java.sql.*;
+import java.util.Calendar;
 
 
 public class BaseDBQuerier implements QueryImplementer {
@@ -54,7 +56,14 @@ public class BaseDBQuerier implements QueryImplementer {
     @Override
     public FindEntityResponseDocument findEntity(FindEntityRequestDocument findEntityRequest)
             throws QueryException {
-        return null;
+        Connection connection = DBConnectionPool.getInstance().getEntry();
+        FindEntityResponseDocument response = null;
+        try {
+            response = findEntity(connection, findEntityRequest.getFindEntityRequest());
+        } catch (SQLException e) {
+            l.error("Error while executing findEntity()", e);
+        }
+        return response;
     }
 
     @Override
@@ -463,6 +472,124 @@ public class BaseDBQuerier implements QueryImplementer {
         l.debug("Exiting getActivityDetail() with success.");
         return getActivityDetailResponseDocument;
     }
+
+    public FindEntityResponseDocument findEntity(Connection connection,
+            FindEntityRequestType findEntityRequestType) throws QueryException, SQLException {
+        l.debug("Entering findEntity()");
+        assert (connection != null);
+        assert (findEntityRequestType != null);
+
+        PreparedStatement findEntityStmt = null;
+        ResultSet resultSet = null;
+
+        FindEntityResponseDocument findEntityResponseDocument = FindEntityResponseDocument.Factory.newInstance();
+        FindEntityResponseType findEntityResponseType = findEntityResponseDocument
+                .addNewFindEntityResponse();
+        // block related properties
+        String blockName = findEntityRequestType.getBlockName();
+        String blockContent = findEntityRequestType.getBlockContent();
+        long blockSize = findEntityRequestType.getBlockSize();
+        String blockMD5 = findEntityRequestType.getBlockMD5Checksum();
+        // file related properties
+        Calendar creationDate = findEntityRequestType.getFileCreationDate();
+        String fileName = findEntityRequestType.getFileName();
+        String fileURI = findEntityRequestType.getFileURI();
+        String ownerID = findEntityRequestType.getFileOwnerID();
+        long fileSize = findEntityRequestType.getFileSize();
+        String fileMD5 = findEntityRequestType.getFileMD5Checksum();
+
+        StringBuilder queryString = new StringBuilder("SELECT * FROM exe_entity e ");
+        boolean isBlock = false, isFile = false;
+        if (findEntityRequestType.isSetBlockName()
+                || findEntityRequestType.isSetBlockContent()
+                || findEntityRequestType.isSetBlockMD5Checksum()
+                || findEntityRequestType.isSetBlockSize()) {
+            isBlock = true;
+            queryString.append(", exe_block b ");
+            queryString.append("WHERE e.entity_id = b.block_id AND e.entity_type = 'BLOCK'");
+
+            if (findEntityRequestType.isSetBlockName())
+                queryString.append(" AND b.block_id = '").append(blockName
+                        .replace(QueryConstants.BLOCK_IDENTIFIER, "")).append("'");
+            if (findEntityRequestType.isSetBlockContent())
+                queryString.append(" AND b.block_content LIKE '%").append(blockContent).append("%'");
+            if (findEntityRequestType.isSetBlockMD5Checksum())
+                queryString.append(" AND b.md5_checksum = '").append(blockMD5).append("'");
+            if (findEntityRequestType.isSetBlockSize())
+                queryString.append(" AND b.size = '").append(blockSize).append("'");
+
+        } else if (findEntityRequestType.isSetFileName()
+                || findEntityRequestType.isSetFileURI()
+                || findEntityRequestType.isSetFileOwnerID()
+                || findEntityRequestType.isSetFileCreationDate()
+                || findEntityRequestType.isSetFileMD5Checksum()
+                || findEntityRequestType.isSetFileSize()) {
+            isFile = true;
+            queryString.append(", exe_file f ");
+            if (findEntityRequestType.isSetFileOwnerID())
+                queryString.append(", reg_agent ag ");
+
+            queryString.append("WHERE e.entity_id = f.file_id AND e.entity_type = 'FILE'");
+
+            if (findEntityRequestType.isSetFileName())
+                queryString.append(" AND f.file_name LIKE '%").append(fileName).append("%'");
+            if (findEntityRequestType.isSetFileURI())
+                queryString.append(" AND f.file_uri LIKE '%").append(fileURI).append("%'");
+            if (findEntityRequestType.isSetFileOwnerID())
+                queryString.append(" AND f.owner_id = ag.agent_id AND ag.agent_uri LIKE '%").append(ownerID).append("%'");
+            if (findEntityRequestType.isSetFileCreationDate())
+                queryString.append(" AND f.creation_date = '").append(creationDate).append("'");
+            if (findEntityRequestType.isSetFileMD5Checksum())
+                queryString.append(" AND f.md5_checksum = '").append(fileMD5).append("'");
+            if (findEntityRequestType.isSetFileSize())
+                queryString.append(" AND f.size = '").append(fileSize).append("'");
+        }
+
+        try {
+            l.debug("findEntityStmt: " + queryString.toString());
+            findEntityStmt = connection.prepareStatement(queryString.toString());
+            resultSet = findEntityStmt.executeQuery();
+
+            if (isBlock) {
+                UniqueIDListType uniqueBlockIDList = findEntityResponseType.addNewUniqueBlockIDList();
+                while (resultSet.next()) {
+                    uniqueBlockIDList.addUniqueID(QueryConstants.BLOCK_IDENTIFIER +
+                            resultSet.getString("block_id"));
+                }
+            } else if (isFile) {
+                UniqueFileListType uniqueFileURIList = findEntityResponseType.addNewUniqueFileURIList();
+                while (resultSet.next()) {
+                    FileURIDetailsType fileURIDetailsType = uniqueFileURIList.addNewFileURIDetailsType();
+                    fileURIDetailsType.setFileURI(resultSet.getString("file_uri"));
+                    fileURIDetailsType.setFileID(QueryConstants.FILE_IDENTIFIER +
+                            resultSet.getString("file_id"));
+                    Timestamp creation_date = resultSet.getTimestamp("creation_date");
+                    if (creation_date != null)
+                        fileURIDetailsType.setCreationDate(KomaduUtils.getCalendarFromTimeStamp(creation_date));
+                }
+            } else {
+                l.error("Block specific or file specific attributes not found");
+            }
+
+            resultSet.close();
+            findEntityStmt.close();
+
+        } catch (SQLException e) {
+            l.error("Exiting findEntity() with SQL errors.", e);
+            return null;
+        } finally {
+            if (findEntityStmt != null) {
+                findEntityStmt.close();
+            }
+            if (resultSet != null) {
+                resultSet.close();
+            }
+        }
+
+        l.debug("Response: " + findEntityResponseDocument);
+        l.debug("Exiting findEntity() with success.");
+        return findEntityResponseDocument;
+    }    
 
     private void populateActivityDetails(ResultSet res, ActivityDetail activityDetail) throws SQLException {
         String activityType = res.getString("activity_type");

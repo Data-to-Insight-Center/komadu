@@ -90,8 +90,6 @@
                     <element minOccurs="0" name="blockContent" type="xsd:string" />
                     <element minOccurs="0" name="blockMD5Checksum" type="xsd:string" />
                     <element minOccurs="0" name="blockSize" type="xsd:long" />
-                    <element minOccurs="0" name="blockIsInstanceOfEntity"
-                             type="xsd:string" />
                 </sequence>
                 <sequence>
                     <element minOccurs="0" name="fileName" type="xsd:string" />
@@ -100,8 +98,6 @@
                     <element minOccurs="0" name="fileCreationDate" type="xsd:dateTime" />
                     <element minOccurs="0" name="fileMD5Checksum" type="xsd:string" />
                     <element minOccurs="0" name="fileSize" type="xsd:long" />
-                    <element minOccurs="0" name="fileIsInstanceOfEntity"
-                             type="xsd:string" />
                 </sequence>
             </choice>
         </sequence>
