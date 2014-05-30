@@ -1,0 +1,4 @@
+<quer:findActivityRequest xmlns:quer="http://komadu.d2i.indiana.edu/query">
+  <quer:name>workflow1</quer:name>
+  <quer:nextActivityID>service1_58</quer:nextActivityID>
+</quer:findActivityRequest>

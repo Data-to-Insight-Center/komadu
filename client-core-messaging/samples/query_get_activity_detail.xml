@@ -1,0 +1,5 @@
+<quer:getActivityDetailRequest xmlns:quer="http://komadu.d2i.indiana.edu/query">
+  <quer:uniqueURIList>
+    <quer:uniqueURI>workflow1_58</quer:uniqueURI>
+  </quer:uniqueURIList>
+</quer:getActivityDetailRequest>

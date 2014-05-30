@@ -1,0 +1,5 @@
+<quer:getEntityDetailRequest xmlns:quer="http://komadu.d2i.indiana.edu/query">
+  <quer:entityIDList>
+    <quer:entityID>File_2</quer:entityID>
+  </quer:entityIDList>
+</quer:getEntityDetailRequest>
