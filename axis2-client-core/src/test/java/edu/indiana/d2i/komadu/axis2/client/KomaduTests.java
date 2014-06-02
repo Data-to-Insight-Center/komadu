@@ -414,7 +414,7 @@ public class KomaduTests {
     private static void testAttribution(KomaduServiceStub stub, AgentType agent, EntityType entity,
                                         String agentId, String entityId) throws Exception {
         AddAgentEntityRelationshipDocument activityEntity = AddAgentEntityRelationshipDocument.Factory.newInstance();
-        AgentEntityType activityEntityType = AgentEntityType.Factory.newInstance();
+        AgentEntityType agentEntityType = AgentEntityType.Factory.newInstance();
 
         AttributionType attribution = AttributionType.Factory.newInstance();
         attribution.setAgentID(agentId);
@@ -429,10 +429,10 @@ public class KomaduTests {
         attributes.setAttributeArray(attributesArr);
         attribution.setAttributes(attributes);
 
-        activityEntityType.setAgent(agent);
-        activityEntityType.setEntity(entity);
-        activityEntityType.setAttribution(attribution);
-        activityEntity.setAddAgentEntityRelationship(activityEntityType);
+        agentEntityType.setAgent(agent);
+        agentEntityType.setEntity(entity);
+        agentEntityType.setAttribution(attribution);
+        activityEntity.setAddAgentEntityRelationship(agentEntityType);
         // invoke
         stub.addAgentEntityRelationship(activityEntity);
     }

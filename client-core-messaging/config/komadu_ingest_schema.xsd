@@ -189,7 +189,7 @@
         <sequence>
             <element name="collectionURI" type="anyURI"/>
             <!--this is one way of adding a member to a collection, other way is to use the 'membership' relationship-->
-            <element name="members" type="komadu:membersType" />
+            <element name="members" type="komadu:membersType" minOccurs="0" />
         </sequence>
     </complexType>
 
