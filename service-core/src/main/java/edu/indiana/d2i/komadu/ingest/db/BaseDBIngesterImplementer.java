@@ -524,7 +524,6 @@ public class BaseDBIngesterImplementer implements IngesterImplementer<Long, Stri
                 } catch (SQLException e) {
                     log.warn("Unable to close statement", e);
                 }
-                statement = null;
             }
             connectionPool.releaseEntry(connection);
         }
@@ -578,7 +577,7 @@ public class BaseDBIngesterImplementer implements IngesterImplementer<Long, Stri
             throws SQLException, IngestException {
 
         Connection connection = null;
-        List<StoredRawNotification<Long, String>> workList = null;
+        List<StoredRawNotification<Long, String>> workList;
         PreparedStatement statement = null;
         ResultSet resultSet = null;
         PreparedStatement updateStatement = null;
@@ -882,13 +881,16 @@ public class BaseDBIngesterImplementer implements IngesterImplementer<Long, Stri
         FileType file = entityInfo.getFile();
 
         // handle owner agent of the entity, we have to insert the agent if it doesn't already exists
-        AgentType ownerAgent = AgentType.Factory.newInstance();
-        // create a user agent using the DN
-        UserAgentType user = UserAgentType.Factory.newInstance();
-        user.setAgentID(file.getOwnerDN());
-        ownerAgent.setUserAgent(user);
-        ownerAgent.setType(AgentEnumType.OTHER);
-        IngestionResult ownerResult = addNewAgent(ownerAgent, connection);
+        IngestionResult ownerResult = null;
+        if (file.getOwnerDN() != null) {
+            AgentType ownerAgent = AgentType.Factory.newInstance();
+            // create a user agent using the DN
+            UserAgentType user = UserAgentType.Factory.newInstance();
+            user.setAgentID(file.getOwnerDN());
+            ownerAgent.setUserAgent(user);
+            ownerAgent.setType(AgentEnumType.OTHER);
+            ownerResult = addNewAgent(ownerAgent, connection);
+        }
 
         IngestionResult ingestionResult = null;
         // acquire lock before ingest
@@ -901,7 +903,8 @@ public class BaseDBIngesterImplementer implements IngesterImplementer<Long, Stri
             TupleData tuple = new TupleData();
             tuple.addAttribute("file_id", baseEntityId, TableAttributeData.DataType.LONG);
             tuple.addAttribute("file_uri", file.getFileURI(), TableAttributeData.DataType.STRING);
-            tuple.addAttribute("owner_id", ownerResult.getDbId(), TableAttributeData.DataType.LONG);
+            if (ownerResult != null)
+                tuple.addAttribute("owner_id", ownerResult.getDbId(), TableAttributeData.DataType.LONG);
             tuple.addAttribute("creation_date", KomaduUtils.getTimestamp(file.getCreateDate()),
                     TableAttributeData.DataType.TIMESTAMP);
             tuple.addAttribute("size", file.getSize(), TableAttributeData.DataType.LONG);
