@@ -122,7 +122,7 @@ public abstract class NonContextGraphGenerator extends GraphGenerator {
             ByteArrayInputStream is = new ByteArrayInputStream(os.toByteArray());
             provGraph = org.w3.www.ns.prov.Document.Factory.parse(is);
         } catch (Exception e) {
-            l.error("Exiting getProvGraph() with SQL errors", e);
+            l.error("Error while serializing the prov-toolbox graph..", e);
         }
         return provGraph;
     }

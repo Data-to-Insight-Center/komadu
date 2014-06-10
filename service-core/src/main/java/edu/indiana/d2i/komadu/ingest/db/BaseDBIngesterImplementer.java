@@ -905,8 +905,9 @@ public class BaseDBIngesterImplementer implements IngesterImplementer<Long, Stri
             tuple.addAttribute("file_uri", file.getFileURI(), TableAttributeData.DataType.STRING);
             if (ownerResult != null)
                 tuple.addAttribute("owner_id", ownerResult.getDbId(), TableAttributeData.DataType.LONG);
-            tuple.addAttribute("creation_date", KomaduUtils.getTimestamp(file.getCreateDate()),
-                    TableAttributeData.DataType.TIMESTAMP);
+            if (file.isSetCreateDate())
+                tuple.addAttribute("creation_date", KomaduUtils.getTimestamp(file.getCreateDate()),
+                        TableAttributeData.DataType.TIMESTAMP);
             tuple.addAttribute("size", file.getSize(), TableAttributeData.DataType.LONG);
             tuple.addAttribute("md5_checksum", file.getMd5Sum(), TableAttributeData.DataType.STRING);
             tuple.addAttribute("file_name", file.getFileName(), TableAttributeData.DataType.STRING);
@@ -1039,8 +1040,11 @@ public class BaseDBIngesterImplementer implements IngesterImplementer<Long, Stri
         TupleData tuple = new TupleData();
         tuple.addAttribute("activity_id", activityId, TableAttributeData.DataType.LONG);
         tuple.addAttribute("entity_id", entityId, TableAttributeData.DataType.LONG);
-        tuple.addAttribute("location", generation.getLocation(), TableAttributeData.DataType.STRING);
-        tuple.addAttribute("generation_time", KomaduUtils.getTimestamp(generation.getTimestamp()), TableAttributeData.DataType.TIMESTAMP);
+        if (generation.isSetLocation())
+            tuple.addAttribute("location", generation.getLocation(), TableAttributeData.DataType.STRING);
+        if (generation.isSetTimestamp())
+            tuple.addAttribute("generation_time", KomaduUtils.getTimestamp(generation.getTimestamp()),
+                    TableAttributeData.DataType.TIMESTAMP);
         // Insert generation tuple
         Long generationId = insertTuple("exe_generation", tuple, "addNewGeneration", connection);
         // Insert generation attributes

@@ -314,15 +314,22 @@ public abstract class GraphGenerator {
                     entity = newEntity(QueryConstants.FILE_IDENTIFIER + entityId,
                             fileURI, QueryConstants.ENTITY_FILE);
                     // add size as an additional attribute
-                    Other sizeAtt = pFactory.newOther(getKomaduAttQName("size"), size, Name.QNAME_XSD_STRING);
-                    pFactory.addAttribute(entity, sizeAtt);
-                    Other dateAtt = pFactory.newOther(getKomaduAttQName("creation-date"), creationDate, Name.QNAME_XSD_STRING);
-                    pFactory.addAttribute(entity, dateAtt);
-                    Other nameAtt = pFactory.newOther(getKomaduAttQName("file-name"), fileName, Name.QNAME_XSD_STRING);
-                    pFactory.addAttribute(entity, nameAtt);
-                    Other md5Att = pFactory.newOther(getKomaduAttQName("md5_checksum"), md5, Name.QNAME_XSD_STRING);
-                    pFactory.addAttribute(entity, md5Att);
-
+                    if (size != null) {
+                        Other sizeAtt = pFactory.newOther(getKomaduAttQName("size"), size, Name.QNAME_XSD_STRING);
+                        pFactory.addAttribute(entity, sizeAtt);
+                    }
+                    if (creationDate != null) {
+                        Other dateAtt = pFactory.newOther(getKomaduAttQName("creation-date"), creationDate, Name.QNAME_XSD_STRING);
+                        pFactory.addAttribute(entity, dateAtt);
+                    }
+                    if (fileName != null) {
+                        Other nameAtt = pFactory.newOther(getKomaduAttQName("file-name"), fileName, Name.QNAME_XSD_STRING);
+                        pFactory.addAttribute(entity, nameAtt);
+                    }
+                    if (md5 != null) {
+                        Other md5Att = pFactory.newOther(getKomaduAttQName("md5_checksum"), md5, Name.QNAME_XSD_STRING);
+                        pFactory.addAttribute(entity, md5Att);
+                    }
                     addCustomAttributes(PROVSqlQuery.GET_EXE_ENTITY_ATTRIBUTES_BY_ID,
                             entityId, entity, connection);
                 }
@@ -347,12 +354,18 @@ public abstract class GraphGenerator {
                     entity = newEntity(QueryConstants.BLOCK_IDENTIFIER + entityId,
                             blockUri, QueryConstants.ENTITY_BLOCK);
                     // add size as an additional attribute
-                    Other sizeAtt = pFactory.newOther(getKomaduAttQName("size"), size, Name.QNAME_XSD_STRING);
-                    pFactory.addAttribute(entity, sizeAtt);
-                    Other contentAtt = pFactory.newOther(getKomaduAttQName("content"), blockContent, Name.QNAME_XSD_STRING);
-                    pFactory.addAttribute(entity, contentAtt);
-                    Other md5Att = pFactory.newOther(getKomaduAttQName("md5_checksum"), md5, Name.QNAME_XSD_STRING);
-                    pFactory.addAttribute(entity, md5Att);
+                    if (size != null) {
+                        Other sizeAtt = pFactory.newOther(getKomaduAttQName("size"), size, Name.QNAME_XSD_STRING);
+                        pFactory.addAttribute(entity, sizeAtt);
+                    }
+                    if (blockContent != null) {
+                        Other contentAtt = pFactory.newOther(getKomaduAttQName("content"), blockContent, Name.QNAME_XSD_STRING);
+                        pFactory.addAttribute(entity, contentAtt);
+                    }
+                    if (md5 != null) {
+                        Other md5Att = pFactory.newOther(getKomaduAttQName("md5_checksum"), md5, Name.QNAME_XSD_STRING);
+                        pFactory.addAttribute(entity, md5Att);
+                    }
 
                     addCustomAttributes(PROVSqlQuery.GET_EXE_ENTITY_ATTRIBUTES_BY_ID,
                             entityId, entity, connection);
