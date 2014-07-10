@@ -726,8 +726,8 @@ public class BaseDBQuerier implements QueryImplementer {
             }
         }
 
-        l.info("Response: " + getEntityDetailResponseDocument);
-        l.info("Exiting QueryEntityUtil.getEntityDetail() with success.");
+        l.debug("Response: " + getEntityDetailResponseDocument);
+        l.debug("Exiting QueryEntityUtil.getEntityDetail() with success.");
         return getEntityDetailResponseDocument;
 
     }
