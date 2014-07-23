@@ -812,9 +812,11 @@ public class BaseDBIngesterImplementer implements IngesterImplementer<Long, Stri
 
             // handle members of collection
             MembersType members = collection.getMembers();
-            for (EntityType member : members.getMemberArray()) {
-                IngestionResult memberResult = addNewEntity(member, connection);
-                addNewMembership(baseEntityId, memberResult.getDbId(), connection);
+            if (members != null) {
+                for (EntityType member : members.getMemberArray()) {
+                    IngestionResult memberResult = addNewEntity(member, connection);
+                    addNewMembership(baseEntityId, memberResult.getDbId(), connection);
+                }
             }
             // finally return collection ids
             ingestionResult = new IngestionResult(collection.getCollectionURI(), baseEntityId);
