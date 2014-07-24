@@ -7,7 +7,7 @@
     <artifactId>komadu-parent</artifactId>
     <packaging>pom</packaging>
     <name>Komadu</name>
-    <version>1.0.0-SNAPSHOT</version>
+    <version>1.0.0</version>
     <description>
         W3C PROV Based Komadu implementation
     </description>
