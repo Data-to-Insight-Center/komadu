@@ -408,7 +408,7 @@ public class BaseDBQuerier implements QueryImplementer {
     public GetActivityDetailResponseDocument getActivityDetail(
             Connection connection, GetActivityDetailRequestType activityDetailRequestType)
             throws QueryException, SQLException {
-        l.info("Entering getActivityDetail()");
+        l.debug("Entering getActivityDetail()");
         assert (connection != null);
         assert (activityDetailRequestType != null);
 
