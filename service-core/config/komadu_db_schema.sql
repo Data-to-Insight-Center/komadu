@@ -600,7 +600,7 @@ CREATE PROCEDURE PR_OBJECT_LOCK
 (IN lockOp INTEGER, IN lockTimeOut INTEGER,
 IN p_object_id VARCHAR(375), OUT status INTEGER)
 object_lock: BEGIN
-DECLARE lockPrefix VARCHAR(6) DEFAULT "komadu.";
+DECLARE lockPrefix VARCHAR(7) DEFAULT "komadu.";
 DECLARE lockName VARCHAR(255) DEFAULT "";
 SET status = 0;
 SET lockName = CONCAT(lockPrefix,RIGHT(p_object_id,100));
