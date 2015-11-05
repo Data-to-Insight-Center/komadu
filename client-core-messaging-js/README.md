@@ -14,9 +14,11 @@ Command line usage requires node module "amqplib" to run.
     npm install amqplib --save
 
     //Sending provenance notifications
+    vi ./bin/sendNotification.js  //update CLIENT_HOME path to your own path
     node ./bin/sendNotification.js <komadu.json> <notification xml>
     
     //Querying provenance graph
+    vi ./bin/query.js   //update CLIENT_HOME path to your own path
     node ./bin/query.js <komadu.json> <query xml> <output path>
 
   One example configuration json file for Komadu messaging client is as below:
