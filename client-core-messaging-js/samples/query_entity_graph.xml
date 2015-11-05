@@ -1,0 +1,5 @@
+<quer:getEntityGraphRequest xmlns:quer="http://komadu.d2i.indiana.edu/query">
+    <quer:informationDetailLevel>FINE</quer:informationDetailLevel>
+    <quer:entityURI>file://foo/bar/data2.txt_58</quer:entityURI>
+    <quer:entityType>FILE</quer:entityType>
+</quer:getEntityGraphRequest>

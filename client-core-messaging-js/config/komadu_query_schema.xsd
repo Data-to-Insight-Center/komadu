@@ -1,0 +1,371 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+#
+# Copyright 2014 The Trustees of Indiana University
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+# http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#
+-->
+<schema xmlns="http://www.w3.org/2001/XMLSchema"
+        xmlns:komadu="http://komadu.d2i.indiana.edu"
+        xmlns:prov="http://www.w3.org/ns/prov#"
+        xmlns:qi="http://komadu.d2i.indiana.edu/query"
+        xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+        attributeFormDefault="unqualified" elementFormDefault="qualified"
+        targetNamespace="http://komadu.d2i.indiana.edu/query"
+        xml:lang="en">
+
+    <annotation>
+        <documentation>
+            Komadu Query Schema API.
+            Author: Isuru Suriarachchi
+        </documentation>
+    </annotation>
+
+    <import namespace="http://komadu.d2i.indiana.edu"
+            schemaLocation="komadu_ingest_schema.xsd"/>
+    <import namespace="http://www.w3.org/ns/prov#"
+            schemaLocation="prov-20130307.xsd" />
+
+    <simpleType name="detailEnumType">
+        <restriction base="xsd:string">
+            <enumeration value="COARSE" />
+            <enumeration value="FINE" />
+        </restriction>
+    </simpleType>
+
+    <simpleType name="entityEnumType">
+        <restriction base="xsd:string">
+            <enumeration value="FILE" />
+            <enumeration value="BLOCK" />
+            <enumeration value="COLLECTION" />
+            <enumeration value="GENERIC" />
+        </restriction>
+    </simpleType>
+
+    <complexType name="getActivityDetailRequestType">
+        <choice>
+            <sequence>
+                <element name="uniqueURIList" type="qi:uniqueURIListType" />
+            </sequence>
+            <sequence>
+                <element name="uniqueIDList" type="qi:uniqueIDListType" />
+            </sequence>
+        </choice>
+    </complexType>
+
+    <complexType name="getActivityDetailResponseType">
+        <sequence>
+            <element name="activityDetailList" type="qi:activityDetailListType" />
+        </sequence>
+    </complexType>
+
+    <complexType name="getEntityDetailRequestType">
+        <sequence>
+            <element name="entityIDList" type="qi:entityIDListType" />
+        </sequence>
+    </complexType>
+    
+    <complexType name="getEntityDetailResponseType">
+        <sequence>
+            <element name="entityDetailList" type="qi:entityDetailListType" />
+        </sequence>
+    </complexType>
+
+    <complexType name="findEntityRequestType">
+        <sequence>
+            <choice>
+                <sequence>
+                    <element minOccurs="0" name="blockName" type="xsd:string" />
+                    <element minOccurs="0" name="blockContent" type="xsd:string" />
+                    <element minOccurs="0" name="blockMD5Checksum" type="xsd:string" />
+                    <element minOccurs="0" name="blockSize" type="xsd:long" />
+                </sequence>
+                <sequence>
+                    <element minOccurs="0" name="fileName" type="xsd:string" />
+                    <element minOccurs="0" name="fileURI" type="xsd:string" />
+                    <element minOccurs="0" name="fileOwnerID" type="xsd:string" />
+                    <element minOccurs="0" name="fileCreationDate" type="xsd:dateTime" />
+                    <element minOccurs="0" name="fileMD5Checksum" type="xsd:string" />
+                    <element minOccurs="0" name="fileSize" type="xsd:long" />
+                </sequence>
+            </choice>
+        </sequence>
+    </complexType>
+
+    <complexType name="findEntityResponseType">
+        <choice>
+            <sequence>
+                <element name="uniqueBlockIDList" type="qi:uniqueIDListType" />
+            </sequence>
+            <sequence>
+                <element name="uniqueFileURIList" type="qi:uniqueFileListType" />
+            </sequence>
+        </choice>
+    </complexType>
+
+    <complexType name="findActivityRequestType">
+        <all>
+            <element minOccurs="0" name="name" type="xsd:string" />
+            <element minOccurs="0" name="hostName" type="xsd:string" />
+            <element minOccurs="0" name="architecture" type="xsd:string" />
+            <!--TODO : Add following attributes later?-->
+            <!--<element minOccurs="0" name="initializationTime" type="xsd:dateTime" />-->
+            <!--<element minOccurs="0" name="terminationTime" type="xsd:dateTime" />-->
+            <!--<element minOccurs="0" name="isSuccess" type="xsd:boolean" />-->
+            <element minOccurs="0" name="workflowID" type="xsd:string" />
+            <element minOccurs="0" name="serviceID" type="xsd:string" />
+            <element minOccurs="0" name="nextActivityID" type="xsd:string" />
+            <element minOccurs="0" name="attributeList" type="komadu:attributesType" />
+        </all>
+    </complexType>
+
+    <complexType name="findActivityResponseType">
+        <choice>
+            <sequence>
+                <element name="uniqueURIList" type="qi:uniqueURIListType" />
+            </sequence>
+            <sequence>
+                <element name="activityIDList" type="qi:activityIDListType" />
+            </sequence>
+        </choice>
+    </complexType>
+
+    <complexType name="getContextWorkflowGraphRequestType">
+        <all>
+            <element name="contextWorkflowURI" type="xsd:string" />
+            <element minOccurs="0" name="informationDetailLevel" type="qi:detailEnumType" />
+        </all>
+    </complexType>
+
+    <complexType name="getContextWorkflowGraphResponseType">
+        <choice>
+            <element ref="prov:document" />
+        </choice>
+    </complexType>
+
+    <complexType name="getActivityGraphRequestType">
+        <all>
+            <element name="activityURI" type="xsd:string" />
+            <element minOccurs="0" name="informationDetailLevel" type="qi:detailEnumType" />
+        </all>
+    </complexType>
+
+    <complexType name="getActivityGraphResponseType">
+        <choice>
+            <element ref="prov:document" />
+        </choice>
+    </complexType>
+
+    <complexType name="getEntityGraphRequestType">
+        <all>
+            <element name="entityURI" type="xsd:string" />
+            <element name="entityType" type="qi:entityEnumType" />
+            <element minOccurs="0" name="informationDetailLevel" type="qi:detailEnumType" />
+        </all>
+    </complexType>
+
+    <complexType name="getEntityGraphResponseType">
+        <choice>
+            <element ref="prov:document" />
+        </choice>
+    </complexType>
+
+    <complexType name="getAgentGraphRequestType">
+        <all>
+            <element name="agentID" type="xsd:string"/>
+            <element minOccurs="0" name="informationDetailLevel" type="qi:detailEnumType" />
+        </all>
+    </complexType>
+
+    <complexType name="getAgentGraphResponseType">
+        <choice>
+            <element ref="prov:document" />
+        </choice>
+    </complexType>
+
+    <complexType name="activityDetailListType">
+        <sequence>
+            <element minOccurs="0" maxOccurs="unbounded" name="activityDetail"
+                     type="qi:activityDetail" />
+        </sequence>
+    </complexType>
+
+    <complexType name="activityDetail">
+        <all>
+            <element name="type" type="xsd:string" />
+            <element minOccurs="0" name="workflowID" type="xsd:string" />
+            <element minOccurs="0" name="serviceID" type="xsd:string" />
+            <element minOccurs="0" name="timestep" type="xsd:int" />
+            <element minOccurs="0" name="workflowNodeID" type="xsd:string" />
+            <element minOccurs="0" name="instanceOf" type="xsd:string" />
+            <!--<element minOccurs="0" name="invocationStartTime" type="xsd:dateTime"/>-->
+            <!--<element minOccurs="0" name="executionEndTime" type="xsd:dateTime"/>-->
+            <!--<element minOccurs="0" name="executionStatus" type="xsd:string"/>-->
+        </all>
+        <attribute name="id" type="xsd:string" use="required"/>
+    </complexType>
+
+    <complexType name="uniqueURIListType">
+        <sequence>
+            <element minOccurs="0" maxOccurs="unbounded" name="uniqueURI" type="xsd:anyURI" />
+        </sequence>
+    </complexType>
+    <complexType name="activityIDListType">
+        <sequence>
+            <element minOccurs="0" maxOccurs="unbounded" name="activityID" type="xsd:string" />
+        </sequence>
+    </complexType>
+    <complexType name="uniqueIDListType">
+        <sequence>
+            <element minOccurs="0" maxOccurs="unbounded" name="uniqueID"
+                     type="xsd:string" />
+        </sequence>
+    </complexType>
+    <complexType name="abstractServiceDetailListType">
+        <sequence>
+            <element minOccurs="0" maxOccurs="unbounded" name="abstractServiceDetail"
+                     type="qi:abstractServiceDetail" />
+        </sequence>
+    </complexType>
+    <complexType name="abstractServiceDetail">
+        <all>
+            <element name="type" type="xsd:string" />
+            <!--<element minOccurs="0" name="subtype" type="xsd:string" />-->
+            <element minOccurs="0" name="name" type="xsd:string" />
+            <element minOccurs="0" name="version" type="xsd:string" />
+            <!--<element minOccurs="0" name="creationTime" type="xsd:string" />-->
+        </all>
+        <attribute name="id" type="xsd:string" use="required"/>
+    </complexType>
+    <complexType name="methodNameListType">
+        <sequence>
+            <element minOccurs="0" maxOccurs="unbounded" name="methodName"
+                     type="xsd:string" />
+        </sequence>
+    </complexType>
+    <complexType name="abstractMethodListType">
+        <sequence>
+            <element minOccurs="0" maxOccurs="unbounded" name="abstractMethod"
+                     type="xsd:string" />
+        </sequence>
+    </complexType>
+    <complexType name="entityNameListType">
+        <sequence>
+            <element maxOccurs="unbounded" name="entityName" type="xsd:string" />
+        </sequence>
+    </complexType>
+    <complexType name="entityTypeListType">
+        <sequence>
+            <element maxOccurs="unbounded" name="entityType" type="qi:entityEnumType" />
+        </sequence>
+    </complexType>
+    <complexType name="entityIDListType">
+        <sequence>
+            <element maxOccurs="unbounded" name="entityID" type="xsd:string" />
+        </sequence>
+    </complexType>
+    <complexType name="abstractEntityListType">
+        <sequence>
+            <element minOccurs="0" maxOccurs="unbounded" name="abstractEntityDetail"
+                     type="qi:abstractEntityDetail" />
+        </sequence>
+    </complexType>
+    <complexType name="abstractEntityDetail">
+        <sequence>
+            <element name="name" type="xsd:string" />
+            <element name="type" type="xsd:string" />
+        </sequence>
+        <attribute name="id" type="xsd:string" use="required"/>
+    </complexType>
+    <complexType name="uniqueFileListType">
+        <sequence>
+            <element minOccurs="0" maxOccurs="unbounded" name="fileURIDetailsType"
+                     type="qi:fileURIDetailsType" />
+        </sequence>
+    </complexType>
+    <complexType name="fileURIDetailsType">
+        <sequence>
+            <element name="fileID" type="xsd:string" />
+            <element name="fileURI" type="xsd:string" />
+            <element minOccurs="0" name="creationDate" type="xsd:dateTime" />
+        </sequence>
+    </complexType>
+    <complexType name="entityDetailListType">
+        <sequence>
+            <element minOccurs="0" maxOccurs="unbounded" name="entityDetail"
+                     type="qi:entityDetail" />
+        </sequence>
+    </complexType>
+    <complexType name="entityDetail">
+        <choice>
+            <sequence>
+                <element name="fileURI" type="xsd:anyURI" />
+                <element minOccurs="0" name="owner" type="xsd:string" />
+                <element minOccurs="0" name="creationDate" type="xsd:dateTime" />
+                <element minOccurs="0" name="size" type="xsd:long" />
+                <element minOccurs="0" name="md5" type="xsd:string" />
+                <element minOccurs="0" name="fileName" type="xsd:string" />
+            </sequence>
+            <sequence>
+                <element name="blockContent" type="xsd:string" />
+                <element minOccurs="0" name="size" type="xsd:long" />
+                <element minOccurs="0" name="md5" type="xsd:string" />
+            </sequence>
+            <sequence>
+                <element name="collectionURI" type="xsd:string" />
+                <sequence>
+                    <element minOccurs="0" maxOccurs="unbounded" name="membership"
+                             type="qi:membershipDetail" />
+                </sequence>
+            </sequence>
+        </choice>
+        <attribute name="id" type="xsd:string" use="required"/>
+    </complexType>
+    <complexType name="membershipDetail">
+        <all>
+            <element name="entityType" type="qi:entityEnumType" />
+            <!--<element minOccurs="0" name="instanceOf" type="xsd:string" />-->
+        </all>
+        <attribute name="id" type="xsd:string" use="required"/>
+    </complexType>
+
+
+    <!-- ======================================================================== -->
+    <!-- ==   GLOBAL ELEMENTS DEFINITION                                       == -->
+    <!-- ======================================================================== -->
+    <element name="findActivityRequest" type="qi:findActivityRequestType" />
+    <element name="findActivityResponse" type="qi:findActivityResponseType" />
+
+    <element name="getActivityDetailRequest" type="qi:getActivityDetailRequestType" />
+    <element name="getActivityDetailResponse" type="qi:getActivityDetailResponseType" />
+
+    <element name="findEntityRequest" type="qi:findEntityRequestType" />
+    <element name="findEntityResponse" type="qi:findEntityResponseType" />
+
+    <element name="getEntityDetailRequest" type="qi:getEntityDetailRequestType" />
+    <element name="getEntityDetailResponse" type="qi:getEntityDetailResponseType" />
+
+    <element name="getContextWorkflowGraphRequest" type="qi:getContextWorkflowGraphRequestType" />
+    <element name="getContextWorkflowGraphResponse" type="qi:getContextWorkflowGraphResponseType" />
+
+    <element name="getActivityGraphRequest" type="qi:getActivityGraphRequestType" />
+    <element name="getActivityGraphResponse" type="qi:getActivityGraphResponseType" />
+
+    <element name="getEntityGraphRequest" type="qi:getEntityGraphRequestType" />
+    <element name="getEntityGraphResponse" type="qi:getEntityGraphResponseType" />
+
+    <element name="getAgentGraphRequest" type="qi:getAgentGraphRequestType" />
+    <element name="getAgentGraphResponse" type="qi:getAgentGraphResponseType" />
+
+</schema>

@@ -1,0 +1,23 @@
+{
+  "name": "client-core-messaging-js",
+  "version": "1.0.1",
+  "description": "Komadu JavaScript messaging client",
+  "main": "index.js",
+  "directories": {
+    "test": "test"
+  },
+  "dependencies": {
+    "amqplib": "^0.4.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "make test"
+  },
+  "keywords": [
+    "\"Komadu\"",
+    "\"amqplib\"",
+    "\"messaging\""
+  ],
+  "author": "Quan Zhou <quzhou@umail.iu.edu>",
+  "license": "ISC"
+}

@@ -1,0 +1,5 @@
+<quer:findEntityRequest xmlns:quer="http://komadu.d2i.indiana.edu/query">
+  <quer:fileName>data1.txt_58</quer:fileName>
+  <quer:fileOwnerID>jerry112</quer:fileOwnerID>
+  <quer:fileSize>500</quer:fileSize>
+</quer:findEntityRequest>

@@ -1,0 +1,482 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+#
+# Copyright 2014 The Trustees of Indiana University
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+# http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#
+-->
+
+<!--
+  * Author: Isuru Suriarachchi
+  *
+  * Version: Komadu (W3C PROV based Provenance implementation)
+  * Date:    June 2013
+  *
+ -->
+
+<schema elementFormDefault="qualified"
+        targetNamespace="http://komadu.d2i.indiana.edu"
+        xmlns:komadu="http://komadu.d2i.indiana.edu"
+        xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+        xmlns="http://www.w3.org/2001/XMLSchema">
+
+
+    <!-- ======================================================================== -->
+    <!-- ==     COMMON TYPES DEFINITION                                        == -->
+    <!-- ======================================================================== -->
+
+    <complexType name="agentType">
+        <sequence>
+            <choice>
+                <!--add userAgent if the agent is a person or an organization-->
+                <element name="userAgent" type="komadu:userAgentType"/>
+                <!--otherwise use genericAgent-->
+                <element name="genericAgent" type="komadu:genericAgentType"/>
+            </choice>
+            <element name="type" type="komadu:agentEnumType"/>
+            <!--For 5.7.2.3 prov:role-->
+            <element name="role" type="string" minOccurs="0"/>
+            <element name="location" type="string" minOccurs="0"/>
+        </sequence>
+    </complexType>
+
+    <complexType name="genericAgentType">
+        <sequence>
+            <element name="agentID" type="anyURI"/>
+            <element name="attributes" type="komadu:attributesType" minOccurs="0"/>
+        </sequence>
+    </complexType>
+
+    <complexType name="userAgentType">
+        <complexContent>
+            <extension base="komadu:genericAgentType">
+                <sequence>
+                    <element name="fullName" type="string" minOccurs="0"/>
+                    <element name="affiliation" type="string" minOccurs="0"/>
+                    <element name="email" type="string" minOccurs="0"/>
+                </sequence>
+            </extension>
+        </complexContent>
+    </complexType>
+
+    <simpleType name="agentEnumType">
+        <restriction base="string">
+            <!--3 special types of agents given in PROV DM 5.3.1-->
+            <enumeration value="PERSON" />
+            <enumeration value="ORGANIZATION"/>
+            <enumeration value="SOFTWARE"/>
+            <!--for any other agent-->
+            <enumeration value="OTHER"/>
+        </restriction>
+    </simpleType>
+
+    <simpleType name="entityEnumType">
+        <restriction base="string">
+            <enumeration value="FILE" />
+            <enumeration value="BLOCK"/>
+            <enumeration value="COLLECTION"/>
+            <enumeration value="GENERIC"/>
+        </restriction>
+    </simpleType>
+
+    <simpleType name="objectEnumType">
+        <restriction base="string">
+            <enumeration value="AGENT" />
+            <enumeration value="ACTIVITY"/>
+            <enumeration value="ENTITY"/>
+        </restriction>
+    </simpleType>
+
+    <complexType name="activityType">
+        <sequence>
+            <!--<element name="activityID" type="anyURI"/>-->
+            <choice>
+                <element name="workflowInformation" type="komadu:workflowInformationType"/>
+                <element name="serviceInformation" type="komadu:serviceInformationType"/>
+                <element name="methodInformation" type="komadu:methodInformationType"/>
+                <!--use generic activityInformation type if the activity is not a workflow, service or method-->
+                <element name="activityInformation" type="komadu:activityInformationType"/>
+            </choice>
+            <element name="location" type="string" minOccurs="0"/>
+        </sequence>
+    </complexType>
+
+    <complexType name="workflowInformationType">
+        <sequence>
+            <element name="workflowID" type="anyURI"/>
+            <element name="workflowNodeID" type="string" minOccurs="0"/>
+            <element name="timestep" type="int" minOccurs="0"/>
+            <element name="attributes" type="komadu:attributesType" minOccurs="0"/>
+            <element name="instanceOf" type="komadu:instanceOfType" minOccurs="0"/>
+        </sequence>
+    </complexType>
+
+    <complexType name="serviceInformationType">
+        <complexContent>
+            <extension base="komadu:workflowInformationType">
+                <sequence>
+                    <element name="serviceID" type="anyURI"/>
+                </sequence>
+            </extension>
+        </complexContent>
+    </complexType>
+
+    <complexType name="methodInformationType">
+        <complexContent>
+            <extension base="komadu:serviceInformationType">
+                <sequence>
+                    <element name="methodID" type="anyURI"/>
+                </sequence>
+            </extension>
+        </complexContent>
+    </complexType>
+
+    <complexType name="instanceOfType">
+        <sequence>
+            <element name="instanceOfID" type="string"/>
+            <element name="version" type="string" minOccurs="0"/>
+            <element name="creationTime" type="dateTime" minOccurs="0"/>
+        </sequence>
+    </complexType>
+
+    <complexType name="entityType">
+        <sequence>
+            <!--our entity (data) can either be a file,a block or a generic entity-->
+            <choice>
+                <element name="file" type="komadu:fileType" minOccurs="0"/>
+                <element name="block" type="komadu:blockType" minOccurs="0"/>
+                <element name="collection" type="komadu:collectionType" minOccurs="0"/>
+                <element name="genericEntity" type="komadu:genericEntityType" minOccurs="0"/>
+            </choice>
+
+            <element name="attributes" type="komadu:attributesType" minOccurs="0"/>
+            <!--For 5.7.2.3 prov:role-->
+            <element name="role" type="string" minOccurs="0"/>
+            <element name="location" type="string" minOccurs="0"/>
+        </sequence>
+    </complexType>
+
+    <complexType name="fileType">
+        <sequence>
+            <element name="fileURI" type="anyURI" />
+            <element name="ownerDN" type="string" minOccurs="0"/>
+            <element name="createDate" type="dateTime" minOccurs="0"/>
+            <element name="size" type="long" minOccurs="0" />
+            <element name="md5sum" type="string" minOccurs="0" />
+            <element name="fileName" type="string" minOccurs="0" />
+        </sequence>
+    </complexType>
+
+    <complexType name="blockType">
+        <sequence>
+            <element name="blockURI" type="anyURI"/>
+            <element name="blockContent" type="string"/>
+        </sequence>
+    </complexType>
+
+    <complexType name="collectionType">
+        <sequence>
+            <element name="collectionURI" type="anyURI"/>
+            <!--this is one way of adding a member to a collection, other way is to use the 'membership' relationship-->
+            <element name="members" type="komadu:membersType" minOccurs="0" />
+        </sequence>
+    </complexType>
+
+    <complexType name="genericEntityType">
+        <sequence>
+            <element name="entityURI" type="anyURI"/>
+        </sequence>
+    </complexType>
+
+    <complexType name="generationType">
+        <sequence>
+            <element name="activityID" type="anyURI"/>
+            <element name="entityID" type="anyURI"/>
+            <element name="timestamp" type="dateTime" minOccurs="0"/>
+            <element name="attributes" type="komadu:attributesType" minOccurs="0"/>
+            <element name="location" type="string" minOccurs="0"/>
+        </sequence>
+    </complexType>
+
+    <complexType name="usageType">
+        <sequence>
+            <element name="activityID" type="anyURI"/>
+            <element name="entityID" type="anyURI"/>
+            <element name="timestamp" type="dateTime" minOccurs="0"/>
+            <element name="attributes" type="komadu:attributesType" minOccurs="0"/>
+            <element name="location" type="string" minOccurs="0"/>
+        </sequence>
+    </complexType>
+
+    <complexType name="startType">
+        <sequence>
+            <element name="activityID" type="anyURI"/>
+            <element name="triggerID" type="anyURI"/>
+            <!--<element name="starterID" type="anyURI" minOccurs="0"/>-->
+            <element name="timestamp" type="dateTime" minOccurs="0"/>
+            <element name="attributes" type="komadu:attributesType" minOccurs="0"/>
+            <element name="location" type="string" minOccurs="0"/>
+        </sequence>
+    </complexType>
+
+    <complexType name="endType">
+        <sequence>
+            <element name="activityID" type="anyURI"/>
+            <element name="triggerID" type="anyURI" minOccurs="0"/>
+            <!--<element name="enderID" type="anyURI" minOccurs="0"/>-->
+            <element name="timestamp" type="dateTime" minOccurs="0"/>
+            <element name="attributes" type="komadu:attributesType" minOccurs="0"/>
+            <element name="location" type="string" minOccurs="0"/>
+        </sequence>
+    </complexType>
+
+    <complexType name="invalidationType">
+        <sequence>
+            <element name="activityID" type="anyURI" minOccurs="0"/>
+            <element name="entityID" type="anyURI"/>
+            <element name="timestamp" type="dateTime" minOccurs="0"/>
+            <element name="attributes" type="komadu:attributesType" minOccurs="0"/>
+            <element name="location" type="string" minOccurs="0"/>
+        </sequence>
+    </complexType>
+
+    <!--Assume this is the invocation case-->
+    <complexType name="communicationType">
+        <sequence>
+            <element name="informedActivityID" type="anyURI"/>
+            <element name="informantActivityID" type="anyURI"/>
+            <element name="attributes" type="komadu:attributesType" minOccurs="0"/>
+        </sequence>
+    </complexType>
+
+    <complexType name="derivationType">
+        <sequence>
+            <element name="usedEntityID" type="anyURI"/>
+            <element name="generatedEntityID" type="anyURI"/>
+            <!--generation and usage should be sent as separate notifications-->
+            <element name="attributes" type="komadu:attributesType" minOccurs="0"/>
+        </sequence>
+    </complexType>
+
+    <complexType name="revisionType">
+        <complexContent>
+            <extension base="komadu:derivationType">
+            </extension>
+        </complexContent>
+    </complexType>
+
+    <complexType name="quotationType">
+        <complexContent>
+            <extension base="komadu:derivationType">
+            </extension>
+        </complexContent>
+    </complexType>
+
+    <complexType name="planType">
+        <complexContent>
+            <extension base="komadu:entityType">
+            </extension>
+        </complexContent>
+    </complexType>
+
+    <complexType name="bundleType">
+        <complexContent>
+            <extension base="komadu:entityType">
+            </extension>
+        </complexContent>
+    </complexType>
+
+    <complexType name="primarySourceType">
+        <complexContent>
+            <extension base="komadu:derivationType">
+            </extension>
+        </complexContent>
+    </complexType>
+
+    <!--used with entity/entity-->
+    <complexType name="alternateType">
+        <sequence>
+            <element name="alternate1ID" type="anyURI"/>
+            <element name="alternate2ID" type="anyURI"/>
+        </sequence>
+    </complexType>
+
+    <complexType name="specializationType">
+        <sequence>
+            <element name="specificEntityID" type="anyURI"/>
+            <element name="generalEntityID" type="anyURI"/>
+        </sequence>
+    </complexType>
+
+    <complexType name="attributionType">
+        <sequence>
+            <element name="entityID" type="anyURI"/>
+            <element name="agentID" type="anyURI"/>
+            <element name="attributes" type="komadu:attributesType" minOccurs="0"/>
+        </sequence>
+    </complexType>
+
+    <complexType name="associationType">
+        <sequence>
+            <element name="activityID" type="anyURI"/>
+            <element name="agentID" type="anyURI"/>
+            <element name="planID" type="anyURI" minOccurs="0"/>
+            <element name="attributes" type="komadu:attributesType" minOccurs="0"/>
+        </sequence>
+    </complexType>
+
+    <complexType name="delegationType">
+        <sequence>
+            <element name="delegateAgentID" type="anyURI"/>
+            <element name="responsibleAgentID" type="anyURI"/>
+            <element name="activity" type="komadu:activityType" minOccurs="0"/>
+            <element name="attributes" type="komadu:attributesType" minOccurs="0"/>
+        </sequence>
+    </complexType>
+
+    <complexType name="membershipType">
+        <sequence>
+            <element name="collectionID" type="anyURI"/>
+            <element name="entityID" type="anyURI"/>
+        </sequence>
+    </complexType>
+
+    <complexType name="activityInformationType">
+        <sequence>
+            <element name="activityID" type="anyURI"/>
+            <!--TODO : startTime, endTime can't be added here-->
+            <!--<element name="startTime" type="dateTime" minOccurs="0"/>-->
+            <!--<element name="endTime" type="dateTime" minOccurs="0"/>-->
+            <element name="attributes" type="komadu:attributesType" minOccurs="0"/>
+        </sequence>
+    </complexType>
+
+    <complexType name="attributesType">
+        <sequence>
+            <element name="attribute" type="komadu:attributeType" minOccurs="0" maxOccurs="unbounded"/>
+        </sequence>
+    </complexType>
+
+    <complexType name="membersType">
+        <sequence>
+            <element name="member" type="komadu:entityType" minOccurs="1" maxOccurs="unbounded"/>
+        </sequence>
+    </complexType>
+
+    <!--<simpleType name="agentEnumType">-->
+        <!--<restriction base="string">-->
+            <!--<enumeration value="USER"/>-->
+            <!--<enumeration value="ACTIVITY"/>-->
+        <!--</restriction>-->
+    <!--</simpleType>-->
+
+    <complexType name="attributeType">
+        <sequence>
+            <element name="property" type="anyURI"/>
+            <element name="value" type="string"/>
+        </sequence>
+    </complexType>
+
+    <complexType name="agentActivityType">
+        <sequence>
+            <element name="agent" type="komadu:agentType"/>
+            <element name="activity" type="komadu:activityType"/>
+            <element name="association" type="komadu:associationType"/>
+        </sequence>
+    </complexType>
+
+    <complexType name="agentEntityType">
+        <sequence>
+            <element name="agent" type="komadu:agentType"/>
+            <element name="entity" type="komadu:entityType"/>
+            <element name="attribution" type="komadu:attributionType"/>
+        </sequence>
+    </complexType>
+
+    <complexType name="activityEntityType">
+        <sequence>
+            <element name="activity" type="komadu:activityType"/>
+            <element name="entity" type="komadu:entityType"/>
+            <choice>
+                <element name="usage" type="komadu:usageType"/>
+                <element name="generation" type="komadu:generationType"/>
+                <element name="start" type="komadu:startType"/>
+                <element name="end" type="komadu:endType"/>
+                <element name="invalidation" type="komadu:invalidationType"/>
+            </choice>
+            <element name="attributes" type="komadu:attributesType" minOccurs="0"/>
+        </sequence>
+    </complexType>
+
+    <complexType name="agentAgentType">
+        <sequence>
+            <element name="delegateAgent" type="komadu:agentType"/>
+            <element name="responsibleAgent" type="komadu:agentType"/>
+            <element name="delegation" type="komadu:delegationType"/>
+            <!--<element name="attributes" type="komadu:attributesType" minOccurs="0"/>-->
+        </sequence>
+    </complexType>
+
+    <complexType name="activityActivityType">
+        <sequence>
+            <element name="activity1" type="komadu:activityType"/>
+            <element name="activity2" type="komadu:activityType"/>
+            <element name="communication" type="komadu:communicationType"/>
+            <!--<element name="attributes" type="komadu:attributesType" minOccurs="0"/>-->
+        </sequence>
+    </complexType>
+
+    <complexType name="entityEntityType">
+        <sequence>
+            <element name="entity1" type="komadu:entityType"/>
+            <element name="entity2" type="komadu:entityType"/>
+            <choice>
+                <element name="derivation" type="komadu:derivationType"/>
+                <element name="revision" type="komadu:revisionType"/>
+                <element name="quotation" type="komadu:quotationType"/>
+                <element name="primarySource" type="komadu:primarySourceType"/>
+                <element name="alternate" type="komadu:alternateType"/>
+                <element name="specialization" type="komadu:specializationType"/>
+                <element name="membership" type="komadu:membershipType"/>
+            </choice>
+        </sequence>
+    </complexType>
+
+    <complexType name="addAttributesType">
+        <sequence>
+            <element name="objectType" type="komadu:objectEnumType"/>
+            <element name="objectID" type="anyURI"/>
+            <!--if the object type is 'Entity', then use this to specify the type of entity-->
+            <element name="entityType" type="komadu:entityEnumType" minOccurs="0"/>
+            <element name="attributes" type="komadu:attributesType"/>
+            <element name="addAttributeTimestamp" type="dateTime" minOccurs="0"/>
+            <element name="notificationTimestamp" type="dateTime"/>
+        </sequence>
+    </complexType>
+
+    <!-- ======================================================================== -->
+    <!-- ==   GLOBAL ELEMENTS DEFINITION                                       == -->
+    <!-- ======================================================================== -->
+
+    <element name="addAgentActivityRelationship" type="komadu:agentActivityType"/>
+    <element name="addAgentEntityRelationship" type="komadu:agentEntityType"/>
+    <element name="addActivityEntityRelationship" type="komadu:activityEntityType"/>
+    <element name="addAgentAgentRelationship" type="komadu:agentAgentType"/>
+    <element name="addActivityActivityRelationship" type="komadu:activityActivityType"/>
+    <element name="addEntityEntityRelationship" type="komadu:entityEntityType"/>
+    <element name="addAttributes" type="komadu:addAttributesType"/>
+
+</schema>
+
+

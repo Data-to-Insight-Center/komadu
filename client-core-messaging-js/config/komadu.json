@@ -1,0 +1,18 @@
+{
+     "messaging":
+     {
+  	"username":"guest",
+  	"password":"guest",
+	"hostname":"localhost",
+	"hostport":"5672",
+	"virtualhost":"/",
+	"exchangename":"KomaduExchange",
+	"queuename":"KomaduQueue",
+	"routingkey":"KomaduKey"
+     },
+     "schema":
+     {
+	"ingest":"/Users/quzhou/Komadu/komadu/client-core-messaging-js/config/komadu_ingest_schema.xsd",
+	"query":"/Users/quzhou/Komadu/komadu/client-core-messaging-js/config/komadu_query_schema.xsd"
+     }
+}
