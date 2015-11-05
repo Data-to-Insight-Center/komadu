@@ -3,6 +3,13 @@ Komadu JavaScript messaging client
 
 A lightweight javascript messaging client for Komadu Provenance Toolset. This client supports sending provenance notifications and querying provenance graph. It provides command line usage and easy-to-use npm module usage which can be integrated into web UIs or other infrastructure. Please refer to github Komadu repository https://github.com/Data-to-Insight-Center/komadu or find this module on http://npmjs.org website with module name "client-core-messaging-js".
 
+## Prerequirements
+
+Setup Komadu Standalone Server: https://github.com/Data-to-Insight-Center/komadu
+
+Specific guide can be found at: https://github.com/Data-to-Insight-Center/komadu/blob/master/docs/KomaduUserGuide.pdf
+
+
 ## Installation
 
     npm install client-core-messaging-js --save
