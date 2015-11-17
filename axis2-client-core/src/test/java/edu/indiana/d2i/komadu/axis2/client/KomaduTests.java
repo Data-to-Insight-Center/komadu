@@ -605,7 +605,7 @@ public class KomaduTests {
 
     private static void testDerivation(KomaduServiceStub stub, EntityType usedEntity, EntityType generatedEntity,
                                        String usedId, String generatedId) throws Exception {
-        AddEntityEntityRelationshipDocument activityEntity = AddEntityEntityRelationshipDocument.Factory.newInstance();
+        AddEntityEntityRelationshipDocument entityEntity = AddEntityEntityRelationshipDocument.Factory.newInstance();
         EntityEntityType entityEntityType = EntityEntityType.Factory.newInstance();
 
         DerivationType derivation = DerivationType.Factory.newInstance();
@@ -624,9 +624,9 @@ public class KomaduTests {
         entityEntityType.setEntity1(usedEntity);
         entityEntityType.setEntity2(generatedEntity);
         entityEntityType.setDerivation(derivation);
-        activityEntity.setAddEntityEntityRelationship(entityEntityType);
+        entityEntity.setAddEntityEntityRelationship(entityEntityType);
         // invoke
-        stub.addEntityEntityRelationship(activityEntity);
+        stub.addEntityEntityRelationship(entityEntity);
     }
 
     private static void testRevision(KomaduServiceStub stub, EntityType usedEntity, EntityType generatedEntity,
