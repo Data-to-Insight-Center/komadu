@@ -840,8 +840,8 @@ public class BaseDBIngesterImplementer implements IngesterImplementer<Long, Stri
             tuple.addAttribute("generic_entity_uri", genericEntity.getEntityURI(), TableAttributeData.DataType.STRING);
 
             // finally insert the tuple
-            Long genericId = insertTuple("exe_generic_entity", tuple, "addNewGenericEntity", connection);
-            ingestionResult = new IngestionResult(genericEntity.getEntityURI(), genericId);
+            insertTuple("exe_generic_entity", tuple, "addNewGenericEntity", connection);
+            ingestionResult = new IngestionResult(genericEntity.getEntityURI(), baseEntityId);
             KomaduUtils.manageDBLock(DBLockConstants.LOCK_RELEASE, genericEntity.getEntityURI(), connection);
         }
         return ingestionResult;
@@ -871,8 +871,8 @@ public class BaseDBIngesterImplementer implements IngesterImplementer<Long, Stri
             tuple.addAttribute("block_content", content, TableAttributeData.DataType.STRING);
 
             // finally insert the tuple
-            Long blockId = insertTuple("exe_block", tuple, "addNewBlockEntity", connection);
-            ingestionResult = new IngestionResult(block.getBlockURI(), blockId);
+            insertTuple("exe_block", tuple, "addNewBlockEntity", connection);
+            ingestionResult = new IngestionResult(block.getBlockURI(), baseEntityId);
             KomaduUtils.manageDBLock(DBLockConstants.LOCK_RELEASE, block.getBlockURI(), connection);
         }
         return ingestionResult;
@@ -915,8 +915,8 @@ public class BaseDBIngesterImplementer implements IngesterImplementer<Long, Stri
             tuple.addAttribute("file_name", file.getFileName(), TableAttributeData.DataType.STRING);
 
             // finally insert the tuple
-            Long fileId = insertTuple("exe_file", tuple, "addNewFileEntity", connection);
-            ingestionResult = new IngestionResult(file.getFileURI(), fileId);
+            insertTuple("exe_file", tuple, "addNewFileEntity", connection);
+            ingestionResult = new IngestionResult(file.getFileURI(), baseEntityId);
             KomaduUtils.manageDBLock(DBLockConstants.LOCK_RELEASE, file.getFileURI(), connection);
         }
         return ingestionResult;

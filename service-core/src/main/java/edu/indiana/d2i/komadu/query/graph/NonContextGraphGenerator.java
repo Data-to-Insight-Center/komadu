@@ -235,7 +235,7 @@ public abstract class NonContextGraphGenerator extends GraphGenerator {
                     // node id
                     if (contextWfNodeIdToken != null) {
                         pFactory.addAttribute(activity, pFactory.newOther(getKomaduAttQName("workflowNodeID"),
-                                timestep, Name.QNAME_XSD_STRING));
+                                contextWfNodeIdToken, Name.QNAME_XSD_STRING));
                     }
                     // add external attributes too
                     addCustomAttributes(PROVSqlQuery.GET_EXE_ACTIVITY_ATTRIBUTES_BY_ID,
