@@ -15,17 +15,11 @@ import java.util.concurrent.Executors;
 
 public class KomaduClient {
 
-    private static final int THREAD_POOL_SIZE = 5;
     private final KomaduServiceStub stub;
     private final ExecutorService executor;
 
     public KomaduClient() throws Exception {
-        // Initialize the thread pool to be used to send messages to Komadu
-        // server. This makes sure that the application thread is not blocked
-        // when doing provenance related activities.
-        executor = Executors.newFixedThreadPool(THREAD_POOL_SIZE);
-
-        // read the service URL from client properties file
+        // read properties from client properties file
         Properties prop = new Properties();
         ClassLoader loader = Thread.currentThread().getContextClassLoader();
         InputStream stream = loader.getResourceAsStream("komadu.client.properties");
@@ -33,6 +27,12 @@ public class KomaduClient {
         String komaduURL = prop.getProperty("komadu.service.url");
         // create stub
         stub = new KomaduServiceStub(komaduURL);
+
+        // Initialize the thread pool to be used to send messages to Komadu
+        // server. This makes sure that the application thread is not blocked
+        // when doing provenance related activities.
+        int threadpoolSize = Integer.parseInt(prop.getProperty("komadu.client.threadpool.size"));
+        executor = Executors.newFixedThreadPool(threadpoolSize);
     }
 
     public void shutdown() throws InterruptedException {
