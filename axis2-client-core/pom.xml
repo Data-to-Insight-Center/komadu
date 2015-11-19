@@ -184,6 +184,7 @@
                 <configuration>
                     <includes>
                         <include>**/KomaduTests.java</include>
+                        <include>**/KomaduClientAPITests.java</include>
                     </includes>
                     <junitArtifactName>junit:junit</junitArtifactName>
                     <additionalClasspathElements>

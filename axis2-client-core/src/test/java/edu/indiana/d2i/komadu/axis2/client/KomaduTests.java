@@ -341,7 +341,7 @@ public class KomaduTests {
         }
     }
 
-    private static int generateID() {
+    public static int generateID() {
         Random num = new Random();
         return num.nextInt(10000);
     }

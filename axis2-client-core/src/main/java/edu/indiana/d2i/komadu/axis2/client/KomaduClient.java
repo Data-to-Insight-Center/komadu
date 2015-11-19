@@ -1,8 +1,13 @@
 package edu.indiana.d2i.komadu.axis2.client;
 
 import edu.indiana.d2i.komadu.axis2.client.handler.*;
+import edu.indiana.d2i.komadu.query.DetailEnumType;
+import edu.indiana.d2i.komadu.query.GetActivityGraphRequestDocument;
+import edu.indiana.d2i.komadu.query.GetActivityGraphRequestType;
+import edu.indiana.d2i.komadu.query.GetActivityGraphResponseDocument;
 
 import java.io.InputStream;
+import java.rmi.RemoteException;
 import java.util.Map;
 import java.util.Properties;
 import java.util.concurrent.ExecutorService;
@@ -151,6 +156,18 @@ public class KomaduClient {
                                   Map<String, String> generalAttributes) {
         Runnable handler = new SpecializationHandler(stub, specificAttributes, generalAttributes);
         executor.execute(handler);
+    }
+
+    public String queryActivityGraph(String activityId) throws RemoteException {
+        GetActivityGraphRequestDocument activityGraphRequest =
+                GetActivityGraphRequestDocument.Factory.newInstance();
+        GetActivityGraphRequestType actRequestType =
+                GetActivityGraphRequestType.Factory.newInstance();
+        actRequestType.setInformationDetailLevel(DetailEnumType.FINE);
+        actRequestType.setActivityURI(activityId);
+        activityGraphRequest.setGetActivityGraphRequest(actRequestType);
+        GetActivityGraphResponseDocument actResponse = stub.getActivityGraph(activityGraphRequest);
+        return actResponse.getGetActivityGraphResponse().getDocument().toString();
     }
 
 }

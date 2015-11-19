@@ -266,6 +266,7 @@ public class KomaduClientUtils {
         }
         userAgent.setAttributes(createAttributes(agentAttributes, knownAttributes));
         AgentType agent = AgentType.Factory.newInstance();
+        agent.setType(AgentEnumType.PERSON);
         agent.setUserAgent(userAgent);
         result.setAgent(agent);
         return result;
