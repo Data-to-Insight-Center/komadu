@@ -405,8 +405,8 @@ public abstract class GraphGenerator {
                 resultSet = stmt.executeQuery();
                 while (resultSet.next()) {
                     String genericEntityUri = resultSet.getString("generic_entity_uri");
-                    entity = newEntity(QueryConstants.FILE_IDENTIFIER + entityId,
-                            genericEntityUri, QueryConstants.ENTITY_BLOCK);
+                    entity = newEntity(QueryConstants.ENTITY_IDENTIFIER + entityId,
+                            genericEntityUri, QueryConstants.ENTITY_GENERIC);
                     addCustomAttributes(PROVSqlQuery.GET_EXE_ENTITY_ATTRIBUTES_BY_ID,
                             entityId, entity, connection);
                 }
