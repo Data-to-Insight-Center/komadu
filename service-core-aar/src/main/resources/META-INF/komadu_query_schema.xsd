@@ -365,6 +365,12 @@
     <element name="getEntityGraphRequest" type="qi:getEntityGraphRequestType" />
     <element name="getEntityGraphResponse" type="qi:getEntityGraphResponseType" />
 
+    <element name="getEntityForwardGraphRequest" type="qi:getEntityGraphRequestType" />
+    <element name="getEntityForwardGraphResponse" type="qi:getEntityGraphResponseType" />
+
+    <element name="getEntityBackwardGraphRequest" type="qi:getEntityGraphRequestType" />
+    <element name="getEntityBackwardGraphResponse" type="qi:getEntityGraphResponseType" />
+
     <element name="getAgentGraphRequest" type="qi:getAgentGraphRequestType" />
     <element name="getAgentGraphResponse" type="qi:getAgentGraphResponseType" />
 

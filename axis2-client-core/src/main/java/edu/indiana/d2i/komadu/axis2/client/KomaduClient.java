@@ -1,10 +1,8 @@
 package edu.indiana.d2i.komadu.axis2.client;
 
 import edu.indiana.d2i.komadu.axis2.client.handler.*;
-import edu.indiana.d2i.komadu.query.DetailEnumType;
-import edu.indiana.d2i.komadu.query.GetActivityGraphRequestDocument;
-import edu.indiana.d2i.komadu.query.GetActivityGraphRequestType;
-import edu.indiana.d2i.komadu.query.GetActivityGraphResponseDocument;
+import edu.indiana.d2i.komadu.query.*;
+import edu.indiana.d2i.komadu.query.EntityEnumType;
 
 import java.io.InputStream;
 import java.rmi.RemoteException;
@@ -168,6 +166,39 @@ public class KomaduClient {
         activityGraphRequest.setGetActivityGraphRequest(actRequestType);
         GetActivityGraphResponseDocument actResponse = stub.getActivityGraph(activityGraphRequest);
         return actResponse.getGetActivityGraphResponse().getDocument().toString();
+    }
+
+    public String queryEntityGraph(String entityGraphURI, EntityEnumType.Enum type) throws RemoteException {
+        GetEntityGraphRequestDocument entityGraphRequest = GetEntityGraphRequestDocument.Factory.newInstance();
+        GetEntityGraphRequestType entityRequestType = GetEntityGraphRequestType.Factory.newInstance();
+        entityRequestType.setInformationDetailLevel(DetailEnumType.FINE);
+        entityRequestType.setEntityURI(entityGraphURI);
+        entityRequestType.setEntityType(type);
+        entityGraphRequest.setGetEntityGraphRequest(entityRequestType);
+        GetEntityGraphResponseDocument entityResponse = stub.getEntityGraph(entityGraphRequest);
+        return entityResponse.getGetEntityGraphResponse().getDocument().toString();
+    }
+
+    public String queryEntityForwardGraph(String entityGraphURI, EntityEnumType.Enum type) throws RemoteException {
+        GetEntityForwardGraphRequestDocument entityGraphRequest = GetEntityForwardGraphRequestDocument.Factory.newInstance();
+        GetEntityGraphRequestType entityRequestType = GetEntityGraphRequestType.Factory.newInstance();
+        entityRequestType.setInformationDetailLevel(DetailEnumType.FINE);
+        entityRequestType.setEntityURI(entityGraphURI);
+        entityRequestType.setEntityType(type);
+        entityGraphRequest.setGetEntityForwardGraphRequest(entityRequestType);
+        GetEntityForwardGraphResponseDocument entityResponse = stub.getEntityForwardGraph(entityGraphRequest);
+        return entityResponse.getGetEntityForwardGraphResponse().getDocument().toString();
+    }
+
+    public String queryEntityBackwardGraph(String entityGraphURI, EntityEnumType.Enum type) throws RemoteException {
+        GetEntityBackwardGraphRequestDocument entityGraphRequest = GetEntityBackwardGraphRequestDocument.Factory.newInstance();
+        GetEntityGraphRequestType entityRequestType = GetEntityGraphRequestType.Factory.newInstance();
+        entityRequestType.setInformationDetailLevel(DetailEnumType.FINE);
+        entityRequestType.setEntityURI(entityGraphURI);
+        entityRequestType.setEntityType(type);
+        entityGraphRequest.setGetEntityBackwardGraphRequest(entityRequestType);
+        GetEntityBackwardGraphResponseDocument entityResponse = stub.getEntityBackwardGraph(entityGraphRequest);
+        return entityResponse.getGetEntityBackwardGraphResponse().getDocument().toString();
     }
 
 }

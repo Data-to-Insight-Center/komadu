@@ -351,6 +351,40 @@ public class KomaduServiceSkeleton implements KomaduServiceSkeletonInterface, Li
     }
 
     @Override
+    public GetEntityForwardGraphResponseDocument getEntityForwardGraph(
+            GetEntityForwardGraphRequestDocument getEntityForwardGraphRequest) {
+        if (log.isDebugEnabled())
+            log.debug(getEntityForwardGraphRequest);
+
+        GetEntityForwardGraphResponseDocument getEntityForwardGraphResponseDocument = null;
+
+        try {
+            getEntityForwardGraphResponseDocument = querier.getEntityForwardGraph(getEntityForwardGraphRequest);
+        } catch (QueryException qe) {
+            log.error("Failed to query getEntityGraph");
+        }
+
+        return getEntityForwardGraphResponseDocument;
+    }
+
+    @Override
+    public GetEntityBackwardGraphResponseDocument getEntityBackwardGraph(
+            GetEntityBackwardGraphRequestDocument getEntityBackwardGraphRequest) {
+        if (log.isDebugEnabled())
+            log.debug(getEntityBackwardGraphRequest);
+
+        GetEntityBackwardGraphResponseDocument getEntityBackwardGraphResponseDocument = null;
+
+        try {
+            getEntityBackwardGraphResponseDocument = querier.getEntityBackwardGraph(getEntityBackwardGraphRequest);
+        } catch (QueryException qe) {
+            log.error("Failed to query getEntityGraph");
+        }
+
+        return getEntityBackwardGraphResponseDocument;
+    }
+
+    @Override
     public GetAgentGraphResponseDocument getAgentGraph(
             GetAgentGraphRequestDocument getAgentGraphRequest) {
         if (log.isDebugEnabled())

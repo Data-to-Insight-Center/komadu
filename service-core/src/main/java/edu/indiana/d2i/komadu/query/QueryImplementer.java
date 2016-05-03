@@ -44,6 +44,14 @@ public interface QueryImplementer {
             GetEntityGraphRequestDocument getEntityGraphRequest) 
             throws QueryException;
 
+    public GetEntityForwardGraphResponseDocument getEntityForwardGraph(
+            GetEntityForwardGraphRequestDocument getEntityGraphRequest)
+            throws QueryException;
+
+    public GetEntityBackwardGraphResponseDocument getEntityBackwardGraph(
+            GetEntityBackwardGraphRequestDocument getEntityBackwardGraphRequest)
+            throws QueryException;
+
     public GetActivityGraphResponseDocument getActivityGraph(
             GetActivityGraphRequestDocument getActivityGraphRequest)
             throws QueryException;

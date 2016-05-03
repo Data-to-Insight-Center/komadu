@@ -113,6 +113,22 @@
         <wsdl:part name="parameters" element="qi:getEntityGraphResponse" />
     </wsdl:message>
 
+    <wsdl:message name="getEntityForwardGraphRequest">
+        <wsdl:part name="parameters" element="qi:getEntityForwardGraphRequest" />
+    </wsdl:message>
+
+    <wsdl:message name="getEntityForwardGraphResponse">
+        <wsdl:part name="parameters" element="qi:getEntityForwardGraphResponse" />
+    </wsdl:message>
+
+    <wsdl:message name="getEntityBackwardGraphRequest">
+        <wsdl:part name="parameters" element="qi:getEntityBackwardGraphRequest" />
+    </wsdl:message>
+
+    <wsdl:message name="getEntityBackwardGraphResponse">
+        <wsdl:part name="parameters" element="qi:getEntityBackwardGraphResponse" />
+    </wsdl:message>
+
     <wsdl:message name="getAgentGraphRequest">
         <wsdl:part name="parameters" element="qi:getAgentGraphRequest" />
     </wsdl:message>
@@ -184,6 +200,16 @@
         <wsdl:operation name="getEntityGraph">
             <wsdl:input message="tns:getEntityGraphRequest" />
             <wsdl:output message="tns:getEntityGraphResponse" />
+        </wsdl:operation>
+
+        <wsdl:operation name="getEntityForwardGraph">
+            <wsdl:input message="tns:getEntityForwardGraphRequest" />
+            <wsdl:output message="tns:getEntityForwardGraphResponse" />
+        </wsdl:operation>
+
+        <wsdl:operation name="getEntityBackwardGraph">
+            <wsdl:input message="tns:getEntityBackwardGraphRequest" />
+            <wsdl:output message="tns:getEntityBackwardGraphResponse" />
         </wsdl:operation>
 
         <wsdl:operation name="getAgentGraph">
@@ -307,6 +333,26 @@
 
         <wsdl:operation name="getEntityGraph">
             <soap:operation soapAction="http://komadu.d2i.indiana.edu/getEntityGraph" />
+            <wsdl:input>
+                <soap:body use="literal" />
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal" />
+            </wsdl:output>
+        </wsdl:operation>
+
+        <wsdl:operation name="getEntityForwardGraph">
+            <soap:operation soapAction="http://komadu.d2i.indiana.edu/getEntityForwardGraph" />
+            <wsdl:input>
+                <soap:body use="literal" />
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal" />
+            </wsdl:output>
+        </wsdl:operation>
+
+        <wsdl:operation name="getEntityBackwardGraph">
+            <soap:operation soapAction="http://komadu.d2i.indiana.edu/getEntityBackwardGraph" />
             <wsdl:input>
                 <soap:body use="literal" />
             </wsdl:input>

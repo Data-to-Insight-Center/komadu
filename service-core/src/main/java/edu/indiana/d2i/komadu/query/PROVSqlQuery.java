@@ -210,10 +210,23 @@ public class PROVSqlQuery {
     public static final String GET_ASSOCIATIONS_BY_AGENT_ID = "SELECT * FROM exe_association WHERE agent_id = ?";
 
     public static final String GET_COMMUNICATIONS_BY_ACTIVITY_ID = "SELECT * FROM exe_communication WHERE (informed_id = ? OR informant_id = ?)";
+    public static final String GET_COMMUNICATIONS_BY_INFORMED_ACTIVITY_ID = "SELECT * FROM exe_communication WHERE (informed_id = ?)";
+    public static final String GET_COMMUNICATIONS_BY_INFORMANT_ACTIVITY_ID = "SELECT * FROM exe_communication WHERE (informant_id = ?)";
+
     public static final String GET_COMMUNICATIONS_BY_ENTITY_NO_CONTEXT = "SELECT g.activity_id as gen_id, u.activity_id as used_id "
             + "FROM exe_generation g, exe_usage u "
             + "WHERE g.entity_id = u.entity_id AND "
             + "(g.activity_id = ? OR u.activity_id = ?)";
+
+    public static final String GET_COMMUNICATIONS_BY_ENTITY_BY_INFORMED_NO_CONTEXT = "SELECT g.activity_id as gen_id, u.activity_id as used_id "
+            + "FROM exe_generation g, exe_usage u "
+            + "WHERE g.entity_id = u.entity_id AND "
+            + "(u.activity_id = ?)";
+
+    public static final String GET_COMMUNICATIONS_BY_ENTITY_BY_INFORMANT_NO_CONTEXT = "SELECT g.activity_id as gen_id, u.activity_id as used_id "
+            + "FROM exe_generation g, exe_usage u "
+            + "WHERE g.entity_id = u.entity_id AND "
+            + "(g.activity_id = ?)";
 
     public static final String GET_USAGES_BY_ACTIVITY_ID = "SELECT * FROM exe_usage WHERE activity_id = ?";
     public static final String GET_USAGES_BY_ENTITY_ID = "SELECT * FROM exe_usage WHERE entity_id = ?";
@@ -236,16 +249,34 @@ public class PROVSqlQuery {
     public static final String GET_DELEGATIONS_BY_AGENT_ID = "SELECT * FROM exe_delegation WHERE (del_agent_id = ? OR res_agent_id = ?)";
 
     public static final String GET_ALTERNATES_BY_ENTITY_ID = "SELECT * FROM exe_alternate WHERE (alternate1_id = ? OR alternate2_id = ?)";
+    public static final String GET_ALTERNATES_BY_ALT1_ENTITY_ID = "SELECT * FROM exe_alternate WHERE (alternate1_id = ?)";
+    public static final String GET_ALTERNATES_BY_ALT2_ENTITY_ID = "SELECT * FROM exe_alternate WHERE (alternate2_id = ?)";
 
     public static final String GET_SPECIALIZATIONS_BY_ENTITY_ID = "SELECT * FROM exe_specialization WHERE (specific_id = ? OR general_id = ?)";
+    public static final String GET_SPECIALIZATIONS_BY_SPECIFIC_ENTITY_ID = "SELECT * FROM exe_specialization WHERE (specific_id = ?)";
+    public static final String GET_SPECIALIZATIONS_BY_GENERAL_ENTITY_ID = "SELECT * FROM exe_specialization WHERE (general_id = ?)";
 
     public static final String GET_MEMBERSHIPS_BY_COLLECTION_ID = "SELECT * FROM exe_collection_membership WHERE collection_id = ?";
+    public static final String GET_MEMBERSHIPS_BY_MEMBER_ID = "SELECT * FROM exe_collection_membership WHERE member_id = ?";
 
     public static final String GET_DERIVATIONS_BY_ENTITY_ID = "SELECT * FROM exe_derivation WHERE (used_id = ? OR generated_id = ?)";
+    public static final String GET_DERIVATIONS_BY_GENERATED_ENTITY_ID = "SELECT * FROM exe_derivation WHERE (generated_id = ?)";
+    public static final String GET_DERIVATIONS_BY_USED_ENTITY_ID = "SELECT * FROM exe_derivation WHERE (used_id = ?)";
+
     public static final String GET_DERIVATIONS_BY_ACTIVITY_NO_CONTEXT = "SELECT g.entity_id as gen_id, u.entity_id as used_id "
             + "FROM exe_generation g, exe_usage u "
             + "WHERE g.activity_id = u.activity_id AND "
             + "(g.entity_id = ? OR u.entity_id = ?)";
+
+    public static final String GET_DERIVATIONS_BY_ACTIVITY_BY_GEN_ENTITY_NO_CONTEXT = "SELECT g.entity_id as gen_id, u.entity_id as used_id "
+            + "FROM exe_generation g, exe_usage u "
+            + "WHERE g.activity_id = u.activity_id AND "
+            + "(g.entity_id = ?)";
+
+    public static final String GET_DERIVATIONS_BY_ACTIVITY_BY_USED_ENTITY_NO_CONTEXT = "SELECT g.entity_id as gen_id, u.entity_id as used_id "
+            + "FROM exe_generation g, exe_usage u "
+            + "WHERE g.activity_id = u.activity_id AND "
+            + "(u.entity_id = ?)";
 
     public static final String GET_FILE_BY_URI = "SELECT * FROM exe_file WHERE file_uri = ? ";
     public static final String GET_BLOCK_BY_URI = "SELECT * FROM exe_block WHERE block_uri = ? ";

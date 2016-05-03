@@ -36,6 +36,14 @@
             <actionMapping>http://komadu.d2i.indiana.edu/getEntityGraph</actionMapping>
             <outputActionMapping>http://komadu.d2i.indiana.edu/KomaduService/getEntityGraphResponse</outputActionMapping>
         </operation>
+        <operation name="getEntityForwardGraph" mep="http://www.w3.org/ns/wsdl/in-out" namespace="http://komadu.d2i.indiana.edu">
+            <actionMapping>http://komadu.d2i.indiana.edu/getEntityForwardGraph</actionMapping>
+            <outputActionMapping>http://komadu.d2i.indiana.edu/KomaduService/getEntityForwardGraphResponse</outputActionMapping>
+        </operation>
+        <operation name="getEntityBackwardGraph" mep="http://www.w3.org/ns/wsdl/in-out" namespace="http://komadu.d2i.indiana.edu">
+            <actionMapping>http://komadu.d2i.indiana.edu/getEntityBackwardGraph</actionMapping>
+            <outputActionMapping>http://komadu.d2i.indiana.edu/KomaduService/getEntityBackwardGraphResponse</outputActionMapping>
+        </operation>
         <operation name="getAgentGraph" mep="http://www.w3.org/ns/wsdl/in-out" namespace="http://komadu.d2i.indiana.edu">
             <actionMapping>http://komadu.d2i.indiana.edu/getAgentGraph</actionMapping>
             <outputActionMapping>http://komadu.d2i.indiana.edu/KomaduService/getAgentGraphResponse</outputActionMapping>

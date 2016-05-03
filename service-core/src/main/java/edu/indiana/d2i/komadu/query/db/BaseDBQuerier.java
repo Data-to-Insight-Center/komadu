@@ -183,6 +183,90 @@ public class BaseDBQuerier implements QueryImplementer {
     }
 
     @Override
+    public GetEntityForwardGraphResponseDocument getEntityForwardGraph(
+            GetEntityForwardGraphRequestDocument getEntityForwardGraphRequest) throws QueryException {
+        l.debug("Entering getEntityForwardGraph()");
+        Connection connection = null;
+
+        GetEntityGraphRequestType entityGraphRequest = getEntityForwardGraphRequest
+                .getGetEntityForwardGraphRequest();
+        String entityURI = entityGraphRequest.getEntityURI();
+        DetailEnumType.Enum informationDetailLevel;
+
+        GetEntityForwardGraphResponseDocument getEntityForwardGraphResponseDocument =
+                GetEntityForwardGraphResponseDocument.Factory.newInstance();
+        GetEntityGraphResponseType getEntityGraphResponseType =
+                getEntityForwardGraphResponseDocument.addNewGetEntityForwardGraphResponse();
+
+        if (!entityGraphRequest.isSetInformationDetailLevel()) {
+            informationDetailLevel = DetailEnumType.COARSE;
+        } else {
+            informationDetailLevel = entityGraphRequest.getInformationDetailLevel();
+        }
+
+        try {
+            connection = DBConnectionPool.getInstance().getEntry();
+            GraphGenerator generator = new EntityForwardProvGenerator(entityGraphRequest.getEntityType());
+            Document graph = generator.getProvGraph(connection, entityURI, informationDetailLevel,
+                    QueryConstants.ENTITY_GRAPH_CACHE_PREFIX, cacheExpiration);
+            getEntityGraphResponseType.setDocument(graph);
+
+            l.debug("Completed getEntityForwardGraph()");
+        } catch (Exception e) {
+            l.error("Failed to query getEntityForwardGraph()", e);
+
+        } finally {
+            if (connection != null) {
+                DBConnectionPool.getInstance().releaseEntry(connection);
+            }
+        }
+
+        return getEntityForwardGraphResponseDocument;
+    }
+
+    @Override
+    public GetEntityBackwardGraphResponseDocument getEntityBackwardGraph(
+            GetEntityBackwardGraphRequestDocument getEntityBackwardGraphRequest) throws QueryException {
+        l.debug("Entering getEntityBackwardGraph()");
+        Connection connection = null;
+
+        GetEntityGraphRequestType entityGraphRequest = getEntityBackwardGraphRequest
+                .getGetEntityBackwardGraphRequest();
+        String entityURI = entityGraphRequest.getEntityURI();
+        DetailEnumType.Enum informationDetailLevel;
+
+        GetEntityBackwardGraphResponseDocument getEntityBackwardGraphResponseDocument =
+                GetEntityBackwardGraphResponseDocument.Factory.newInstance();
+        GetEntityGraphResponseType getEntityGraphResponseType =
+                getEntityBackwardGraphResponseDocument.addNewGetEntityBackwardGraphResponse();
+
+        if (!entityGraphRequest.isSetInformationDetailLevel()) {
+            informationDetailLevel = DetailEnumType.COARSE;
+        } else {
+            informationDetailLevel = entityGraphRequest.getInformationDetailLevel();
+        }
+
+        try {
+            connection = DBConnectionPool.getInstance().getEntry();
+            GraphGenerator generator = new EntityBackwardProvGenerator(entityGraphRequest.getEntityType());
+            Document graph = generator.getProvGraph(connection, entityURI, informationDetailLevel,
+                    QueryConstants.ENTITY_GRAPH_CACHE_PREFIX, cacheExpiration);
+            getEntityGraphResponseType.setDocument(graph);
+
+            l.debug("Completed getEntityBackwardGraph()");
+        } catch (Exception e) {
+            l.error("Failed to query getEntityBackwardGraph()", e);
+
+        } finally {
+            if (connection != null) {
+                DBConnectionPool.getInstance().releaseEntry(connection);
+            }
+        }
+
+        return getEntityBackwardGraphResponseDocument;
+    }
+
+    @Override
     public GetActivityGraphResponseDocument getActivityGraph(
             GetActivityGraphRequestDocument getActivityGraphRequest) throws QueryException {
         l.debug("Entering getActivityGraph()");

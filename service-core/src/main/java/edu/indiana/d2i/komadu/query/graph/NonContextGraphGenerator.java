@@ -58,7 +58,7 @@ public abstract class NonContextGraphGenerator extends GraphGenerator {
     protected Stack<GraphNode> unexpandedNodes;
 
     // info detail level
-    private DetailEnumType.Enum infoDetailLevel;
+    protected DetailEnumType.Enum infoDetailLevel;
 
     protected abstract void populateRoot(Connection connection, String graphURI)
             throws QueryException, SQLException;
@@ -328,7 +328,7 @@ public abstract class NonContextGraphGenerator extends GraphGenerator {
         return agentID;
     }
 
-    private void addAssociations(Connection connection, String query, int param)
+    protected void addAssociations(Connection connection, String query, int param)
             throws SQLException, QueryException {
         assert (connection != null);
         assert (query != null);
@@ -403,7 +403,7 @@ public abstract class NonContextGraphGenerator extends GraphGenerator {
         }
     }
 
-    private void addCommunications(Connection connection,
+    protected void addCommunications(Connection connection,
                                    int activityID) throws SQLException, QueryException {
         assert (connection != null);
         assert (activityID != -1);
@@ -530,7 +530,7 @@ public abstract class NonContextGraphGenerator extends GraphGenerator {
         }
     }
 
-    private void addUsages(Connection connection, String query, int param)
+    protected void addUsages(Connection connection, String query, int param)
             throws SQLException, QueryException {
         assert (connection != null);
         assert (query != null);
@@ -609,7 +609,7 @@ public abstract class NonContextGraphGenerator extends GraphGenerator {
         }
     }
 
-    private void addGenerations(Connection connection, String query, int param)
+    protected void addGenerations(Connection connection, String query, int param)
             throws SQLException, QueryException {
         assert (connection != null);
         assert (query != null);
@@ -689,7 +689,7 @@ public abstract class NonContextGraphGenerator extends GraphGenerator {
         }
     }
 
-    private void addStarts(Connection connection, String query, int param)
+    protected void addStarts(Connection connection, String query, int param)
             throws SQLException, QueryException {
         assert (connection != null);
         assert (query != null);
@@ -769,7 +769,7 @@ public abstract class NonContextGraphGenerator extends GraphGenerator {
         }
     }
 
-    private void addEnds(Connection connection, String query, int param)
+    protected void addEnds(Connection connection, String query, int param)
             throws SQLException, QueryException {
         assert (connection != null);
         assert (query != null);
@@ -849,7 +849,7 @@ public abstract class NonContextGraphGenerator extends GraphGenerator {
         }
     }
 
-    private void addInvalidations(Connection connection, String query, int param)
+    protected void addInvalidations(Connection connection, String query, int param)
             throws SQLException, QueryException {
         assert (connection != null);
         assert (query != null);
@@ -929,7 +929,7 @@ public abstract class NonContextGraphGenerator extends GraphGenerator {
         }
     }
 
-    private void addAttributions(Connection connection, String query, int param)
+    protected void addAttributions(Connection connection, String query, int param)
             throws SQLException, QueryException {
         assert (connection != null);
         assert (query != null);
@@ -999,7 +999,7 @@ public abstract class NonContextGraphGenerator extends GraphGenerator {
         }
     }
 
-    private void addDelegations(Connection connection, int agentID)
+    protected void addDelegations(Connection connection, int agentID)
             throws SQLException, QueryException {
         assert (connection != null);
         assert (agentID != -1);
@@ -1071,7 +1071,7 @@ public abstract class NonContextGraphGenerator extends GraphGenerator {
         }
     }
 
-    private void addDerivations(Connection connection, int entityID)
+    protected void addDerivations(Connection connection, int entityID)
             throws SQLException, QueryException {
         assert (connection != null);
         assert (entityID != -1);
@@ -1203,7 +1203,7 @@ public abstract class NonContextGraphGenerator extends GraphGenerator {
         }
     }
 
-    private void addAlternates(Connection connection, int entityID)
+    protected void addAlternates(Connection connection, int entityID)
             throws SQLException, QueryException {
         assert (connection != null);
         assert (entityID != -1);
@@ -1265,7 +1265,7 @@ public abstract class NonContextGraphGenerator extends GraphGenerator {
 
     }
 
-    private void addSpecializations(Connection connection, int entityID)
+    protected void addSpecializations(Connection connection, int entityID)
             throws SQLException, QueryException {
         assert (connection != null);
         assert (entityID != -1);
@@ -1328,7 +1328,7 @@ public abstract class NonContextGraphGenerator extends GraphGenerator {
 
     }
 
-    private void addMemberships(Connection connection, int entityID)
+    protected void addMemberships(Connection connection, int entityID)
             throws SQLException, QueryException {
         assert (connection != null);
         assert (entityID != -1);
@@ -1388,30 +1388,30 @@ public abstract class NonContextGraphGenerator extends GraphGenerator {
     /**
      * These util methods create unique identifiers for relationships that we create
      */
-    private String getActivityAgentId(int activityID, int agentID) {
+    protected String getActivityAgentId(int activityID, int agentID) {
         return QueryConstants.ACTIVITY_IDENTIFIER + activityID + "_" +
                 QueryConstants.AGENT_IDENTIFIER + agentID;
     }
 
-    private String getActivityEntityId(int activityID, int entityID) {
+    protected String getActivityEntityId(int activityID, int entityID) {
         return QueryConstants.ACTIVITY_IDENTIFIER + activityID + "_" +
                 QueryConstants.ENTITY_IDENTIFIER + entityID;
     }
 
-    private String getEntityAgentId(int entityID, int agentID) {
+    protected String getEntityAgentId(int entityID, int agentID) {
         return QueryConstants.ENTITY_IDENTIFIER + entityID + "_" +
                 QueryConstants.AGENT_IDENTIFIER + agentID;
     }
 
-    private String getActivityActivityId(int activity1ID, int activity2ID) {
+    protected String getActivityActivityId(int activity1ID, int activity2ID) {
         return getSameElementId(activity1ID, activity2ID, QueryConstants.ACTIVITY_IDENTIFIER);
     }
 
-    private String getAgentAgentId(int agent1ID, int agent2ID) {
+    protected String getAgentAgentId(int agent1ID, int agent2ID) {
         return getSameElementId(agent1ID, agent2ID, QueryConstants.AGENT_IDENTIFIER);
     }
 
-    private String getEntityEntityId(int entity1ID, int entity2ID) {
+    protected String getEntityEntityId(int entity1ID, int entity2ID) {
         return  getSameElementId(entity1ID, entity2ID, QueryConstants.ENTITY_IDENTIFIER);
     }
 
@@ -1420,7 +1420,7 @@ public abstract class NonContextGraphGenerator extends GraphGenerator {
      * always the lesser id will be added first. This is because we use the created id to check
      * duplicates.
      */
-    private String getSameElementId(int id1, int id2, String prefix) {
+    protected String getSameElementId(int id1, int id2, String prefix) {
         int elem1, elem2;
         if (id1 <= id2) {
             elem1 = id1;
