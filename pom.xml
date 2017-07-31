@@ -166,21 +166,25 @@
                 <enabled>false</enabled>
             </snapshots>
         </repository>
+        <repository>
+            <id>openprovenance</id>
+            <url>http://openprovenance.org/java/maven-releases</url>
+        </repository>
     </repositories>
 
-    <distributionManagement>
-        <snapshotRepository>
-            <id>sead-repo-snapshot</id>
-            <name>sead-repo-snapshot</name>
-            <url>http://seadva-test.d2i.indiana.edu:8081/artifactory/ext-snapshot-local</url>
-        </snapshotRepository>
+    <!--<distributionManagement>-->
+        <!--<snapshotRepository>-->
+            <!--<id>sead-repo-snapshot</id>-->
+            <!--<name>sead-repo-snapshot</name>-->
+            <!--<url>http://seadva-test.d2i.indiana.edu:8081/artifactory/ext-snapshot-local</url>-->
+        <!--</snapshotRepository>-->
 
-        <repository>
-            <id>sead-repo-release</id>
-            <name>sead-repo-release</name>
-            <url>http://seadva-test.d2i.indiana.edu:8081/artifactory/ext-release-local</url>
-        </repository>
-    </distributionManagement>
+        <!--<repository>-->
+            <!--<id>sead-repo-release</id>-->
+            <!--<name>sead-repo-release</name>-->
+            <!--<url>http://seadva-test.d2i.indiana.edu:8081/artifactory/ext-release-local</url>-->
+        <!--</repository>-->
+    <!--</distributionManagement>-->
 
     <properties>
         <axis2.version>1.6.2</axis2.version>
