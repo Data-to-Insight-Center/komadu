@@ -15,6 +15,7 @@ import sys
 import cmd
 import uuid
 import os
+import time
 from docopt import docopt
 from lxml import etree
 
@@ -52,7 +53,10 @@ def execute_command(notify, file):
 def callback(ch, method, properties, body):
 	xmlContent = etree.fromstring(body)
 	tree = etree.ElementTree(xmlContent)
-	tree.write('output.xml', pretty_print=True, xml_declaration=True)
+	root = tree.getroot()
+	content = etree.ElementTree(root[0][0])
+	content.write('output.xml', pretty_print=True, xml_declaration=True)
+	time.sleep(3)
 	os.system(SAXON_COMMAND)
 	quit()
 

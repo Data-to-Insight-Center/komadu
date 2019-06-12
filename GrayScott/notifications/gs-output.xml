@@ -2,7 +2,7 @@
   <kom:activity>
     <kom:serviceInformation>
       <kom:workflowID>grayscott_workflow-1</kom:workflowID>
-      <kom:workflowNodeID>grayscott</kom:workflowNodeID>
+      <kom:workflowNodeID>grayscott-1</kom:workflowNodeID>
       <kom:timestep>1</kom:timestep>
       <kom:instanceOf>
         <kom:instanceOfID>grayscott-workflow</kom:instanceOfID>
@@ -21,8 +21,8 @@
      <kom:fileName>gs.bp</kom:fileName>
    </kom:file>
  </kom:entity>
- <kom:usage>
-   <kom:activityID>grayscott-1</kom:activityID>
+ <kom:generation>
+   <kom:activityID>grayscott_workflow-1</kom:activityID>
    <kom:entityID>file://adios/grayscott_workflow-1/gs.bp</kom:entityID>
    <kom:timestamp>2019-06-12T14:30:14.706-04:00</kom:timestamp>
    <kom:attributes>
@@ -32,5 +32,5 @@
      </kom:attribute>
    </kom:attributes>
    <kom:location>Summit/sachith/codar/campaigns</kom:location>
- </kom:usage>
+ </kom:generation>
 </kom:addActivityEntityRelationship>

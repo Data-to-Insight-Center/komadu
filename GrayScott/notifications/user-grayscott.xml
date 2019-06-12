@@ -14,6 +14,16 @@
      <kom:workflowID>grayscott_workflow-1</kom:workflowID>
      <kom:workflowNodeID>grayscott</kom:workflowNodeID>
      <kom:timestep>1</kom:timestep>
+     <kom:attributes>
+         <kom:attribute>
+             <kom:property>U</kom:property>
+             <kom:value>2</kom:value>
+         </kom:attribute>
+         <kom:attribute>
+             <kom:property>L</kom:property>
+             <kom:value>4</kom:value>
+         </kom:attribute>
+     </kom:attributes>
      <kom:instanceOf>
        <kom:instanceOfID>grayscott-workflow</kom:instanceOfID>
        <kom:version>1.0.0</kom:version>
