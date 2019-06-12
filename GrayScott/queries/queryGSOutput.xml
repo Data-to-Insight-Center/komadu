@@ -1,0 +1,5 @@
+<quer:getEntityGraphRequest xmlns:quer="http://komadu.d2i.indiana.edu/query">
+    <quer:informationDetailLevel>FINE</quer:informationDetailLevel>
+    <quer:entityURI>file://adios/grayscott_workflow-1/gs.bp</quer:entityURI>
+    <quer:entityType>FILE</quer:entityType>
+</quer:getEntityGraphRequest>

@@ -1,0 +1,30 @@
+<kom:addAgentActivityRelationship xmlns:kom="http://komadu.d2i.indiana.edu">
+ <kom:agent>
+   <kom:userAgent>
+     <kom:agentID>sdw</kom:agentID>
+     <kom:fullName>Sachith Withana</kom:fullName>
+     <kom:affiliation>ornl</kom:affiliation>
+     <kom:email>sachith@savetheworld.uni</kom:email>
+   </kom:userAgent>
+   <kom:type>PERSON</kom:type>
+ </kom:agent>
+
+ <kom:activity>
+   <kom:workflowInformation>
+     <kom:workflowID>grayscott_workflow-1</kom:workflowID>
+     <kom:workflowNodeID>grayscott</kom:workflowNodeID>
+     <kom:timestep>1</kom:timestep>
+     <kom:instanceOf>
+       <kom:instanceOfID>grayscott-workflow</kom:instanceOfID>
+       <kom:version>1.0.0</kom:version>
+       <kom:creationTime>2019-06-12T13:30:14.706-04:00</kom:creationTime>
+     </kom:instanceOf>
+   </kom:workflowInformation>
+   <kom:location>Summit</kom:location>
+ </kom:activity>
+
+ <kom:association>
+   <kom:activityID>grayscott_workflow-1</kom:activityID>
+   <kom:agentID>sdw</kom:agentID>
+ </kom:association>
+</kom:addAgentActivityRelationship>
