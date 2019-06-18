@@ -1,4 +1,4 @@
 <quer:getActivityGraphRequest xmlns:quer="http://komadu.d2i.indiana.edu/query">
     <quer:informationDetailLevel>COARSE</quer:informationDetailLevel>
-    <quer:activityURI>grayscott_workflow-10</quer:activityURI>
+    <quer:activityURI>grayscott-2</quer:activityURI>
 </quer:getActivityGraphRequest>

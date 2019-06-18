@@ -179,7 +179,7 @@ public class PROVSqlQuery {
     public static String FIND_ACTIVITY_ATTRIBUTE_COMM = "SELECT distinct(a.activity_uri) FROM exe_activity a, exe_communication c, exe_activity_attribute an WHERE "
             + "a.activity_id = an.activity_id AND a.activity_id = c.informant_id ";
 
-    public static final String ATTRIBUTE_COMPARISON = "OR an.attribute_value LIKE ? ";
+    public static final String ATTRIBUTE_COMPARISON = " OR (an.attribute_name = ? AND an.attribute_value LIKE ?)";
     public static final String GET_ACTIVITY_BY_URI = "SELECT * FROM exe_activity WHERE activity_uri = ? ";
     public static final String GET_ACTIVITY_BY_ID = "SELECT * FROM exe_activity WHERE activity_id = ? ";
 

@@ -1,0 +1,13 @@
+<quer:findActivityRequest xmlns:quer="http://komadu.d2i.indiana.edu/query" xmlns:komadu="http://komadu.d2i.indiana.edu">
+  <quer:name>grayscott</quer:name>
+  <quer:attributeList>
+    <komadu:attribute>
+      <komadu:property>U</komadu:property>
+      <komadu:value>10</komadu:value>
+    </komadu:attribute>
+    <komadu:attribute>
+      <komadu:property>L</komadu:property>
+      <komadu:value>4</komadu:value>
+    </komadu:attribute>
+  </quer:attributeList>
+</quer:findActivityRequest>
