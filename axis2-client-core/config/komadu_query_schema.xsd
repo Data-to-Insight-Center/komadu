@@ -75,7 +75,7 @@
             <element name="entityIDList" type="qi:entityIDListType" />
         </sequence>
     </complexType>
-    
+
     <complexType name="getEntityDetailResponseType">
         <sequence>
             <element name="entityDetailList" type="qi:entityDetailListType" />
@@ -209,6 +209,7 @@
             <element minOccurs="0" name="timestep" type="xsd:int" />
             <element minOccurs="0" name="workflowNodeID" type="xsd:string" />
             <element minOccurs="0" name="instanceOf" type="xsd:string" />
+            <element minOccurs="0" name="attributes" type="komadu:attributesType" />
             <!--<element minOccurs="0" name="invocationStartTime" type="xsd:dateTime"/>-->
             <!--<element minOccurs="0" name="executionEndTime" type="xsd:dateTime"/>-->
             <!--<element minOccurs="0" name="executionStatus" type="xsd:string"/>-->

@@ -21,7 +21,9 @@ package edu.indiana.d2i.komadu.query.db;
 import edu.indiana.d2i.komadu.ingest.db.DBConnectionPool;
 import edu.indiana.d2i.komadu.query.*;
 import edu.indiana.d2i.komadu.query.graph.*;
+import edu.indiana.d2i.komadu.service.AttributeType;
 import edu.indiana.d2i.komadu.service.AttributesType;
+import edu.indiana.d2i.komadu.service.impl.AttributesTypeImpl;
 import edu.indiana.d2i.komadu.util.KomaduUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -509,7 +511,7 @@ public class BaseDBQuerier implements QueryImplementer {
         if (activityDetailRequestType.getUniqueURIList() != null) {
             for (String uri : activityDetailRequestType.getUniqueURIList().getUniqueURIArray()) {
                 try {
-                    activityDetailStmt = connection.prepareStatement(PROVSqlQuery.GET_ACTIVITY_DETAIL_BY_URI);
+                    activityDetailStmt = connection.prepareStatement(PROVSqlQuery.GET_ACTIVITY_DETAIL_BY_URI_WITH_ATTRIBUTES);
                     activityDetailStmt.setString(1, uri);
                     res = activityDetailStmt.executeQuery();
                     if (res.next()) {
@@ -823,6 +825,9 @@ public class BaseDBQuerier implements QueryImplementer {
         int timestep = res.getInt("timestep");
         String context_wf_node_id_token = res.getString("context_wf_node_id_token");
         String instance_of = res.getString("instance_of");
+        String attributeName = res.getString("attribute_name");
+        String attributeValue = res.getString("attribute_value");
+        AttributesType attributes = activityDetail.addNewAttributes();
 
         if (activityType != null)
             activityDetail.setType(activityType);
@@ -836,6 +841,20 @@ public class BaseDBQuerier implements QueryImplementer {
             activityDetail.setWorkflowNodeID(context_wf_node_id_token);
         if (instance_of != null)
             activityDetail.setInstanceOf(instance_of);
+        if (attributeName != null) {
+            AttributeType attributeType = attributes.addNewAttribute();
+            attributeType.setProperty(attributeName);
+            attributeType.setValue(attributeValue);
+        }
+        // join query returns all the attributes for the given id,
+        // hence iterating through the result rows to capture all attributes
+        while (res.next()) {
+            attributeName = res.getString("attribute_name");
+            attributeValue = res.getString("attribute_value");
+            AttributeType attributeType = attributes.addNewAttribute();
+            attributeType.setProperty(attributeName);
+            attributeType.setValue(attributeValue);
+        }
+        activityDetail.setAttributes(attributes);
     }
-
 }
