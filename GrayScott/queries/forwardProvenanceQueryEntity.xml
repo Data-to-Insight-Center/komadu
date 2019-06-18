@@ -1,0 +1,4 @@
+<quer:getEntityGraphRequest xmlns:quer="http://komadu.d2i.indiana.edu/query" xmlns:komadu="http://komadu.d2i.indiana.edu">
+  <quer:entityType>FILE</quer:entityType>
+  <quer:entityURI>file://adios/grayscott_workflow-1/settings.json</quer:entityURI>
+</quer:getEntityGraphRequest>

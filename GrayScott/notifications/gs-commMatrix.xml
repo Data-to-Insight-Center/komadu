@@ -15,15 +15,21 @@
   </kom:activity>
  <kom:entity>
    <kom:file>
-     <kom:fileURI>file://adios/grayscott_workflow-1/gs.bp</kom:fileURI>
-     <kom:createDate>2019-06-12T14:30:14.706-04:00</kom:createDate>
-     <kom:size>500</kom:size>
-     <kom:fileName>gs.bp</kom:fileName>
+     <kom:fileURI>grayscott_workflow-1/comm_matrix</kom:fileURI>
    </kom:file>
+   <kom:attributes>
+     <kom:attribute>
+       <kom:property>comm_matrix</kom:property>
+       <kom:value>1.081600000000000000e+07,1.843200000000000000e+07,1.996800000000000000e+07,0.000000000000000000e+00 \n
+         1.843200000000000000e+07,1.081600000000000000e+07,0.000000000000000000e+00,1.996800000000000000e+07 \n
+         1.996800000000000000e+07,0.000000000000000000e+00,1.081600000000000000e+07,1.843200000000000000e+07 \n
+         0.000000000000000000e+00,1.996800000000000000e+07,1.843200000000000000e+07,1.081600000000000000e+07</kom:value>
+     </kom:attribute>
+   </kom:attributes>
  </kom:entity>
  <kom:generation>
    <kom:activityID>grayscott-1</kom:activityID>
-   <kom:entityID>file://adios/grayscott_workflow-1/gs.bp</kom:entityID>
+   <kom:entityID>grayscott_workflow-1/comm_matrix</kom:entityID>
    <kom:timestamp>2019-06-12T14:30:14.706-04:00</kom:timestamp>
    <kom:attributes>
      <kom:attribute>

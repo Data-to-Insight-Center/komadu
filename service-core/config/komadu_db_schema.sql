@@ -384,11 +384,11 @@ CREATE TABLE exe_activity_attribute (
 
 DROP TABLE IF EXISTS exe_entity_attribute;
 CREATE TABLE exe_entity_attribute (
-  attribute_id                 BIGINT NOT NULL AUTO_INCREMENT,                    -- internal ID
-  entity_id                    BIGINT NOT NULL,                                   -- foreign key to exe_entity.entity_id
-  attribute_name               VARCHAR(127) NOT NULL,                             -- name part of the name-value pair, could be a URI per OPM v1.1
-  attribute_value              VARCHAR(127) NOT NULL,                                     -- value part of the name-value pair.
-  attribute_type               VARCHAR(31) NOT NULL,                              -- indicates what type of attribute this is, e.g. PROV_ATTRIBUTE, KOMADU_ATTRIBUTE, EXTERNAL_SOURCE
+  attribute_id                 BIGINT NOT NULL AUTO_INCREMENT,
+  entity_id                    BIGINT NOT NULL,
+  attribute_name               VARCHAR(127) NOT NULL,
+  attribute_value              LONGTEXT NOT NULL,
+  attribute_type               VARCHAR(31) NOT NULL,
 
   PRIMARY KEY (attribute_id),
   FOREIGN KEY (entity_id) REFERENCES exe_entity(entity_id),
