@@ -171,13 +171,13 @@ public class PROVSqlQuery {
     public static final String FIND_ACTIVITY = "SELECT distinct(a.activity_uri) FROM exe_activity a WHERE ";
 
     public static String FIND_ACTIVITY_ATTRIBUTE = "SELECT distinct(a.activity_uri) FROM exe_activity a, exe_activity_attribute an WHERE "
-            + "AND a.activity_id = an.activity_id ";
+            + "a.activity_id = an.activity_id ";
 
     public static final String FIND_ACTIVITY_COMM = "SELECT distinct(a.activity_uri) FROM exe_activity a, exe_communication c WHERE "
             + "a.activity_id = c.informant_id ";
 
     public static String FIND_ACTIVITY_ATTRIBUTE_COMM = "SELECT distinct(a.activity_uri) FROM exe_activity a, exe_communication c, exe_activity_attribute an WHERE "
-            + "AND a.activity_id = an.activity_id AND a.activity_id = c.informant_id ";
+            + "a.activity_id = an.activity_id AND a.activity_id = c.informant_id ";
 
     public static final String ATTRIBUTE_COMPARISON = "OR an.attribute_value LIKE ? ";
     public static final String GET_ACTIVITY_BY_URI = "SELECT * FROM exe_activity WHERE activity_uri = ? ";

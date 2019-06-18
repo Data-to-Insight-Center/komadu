@@ -460,9 +460,8 @@ public class BaseDBQuerier implements QueryImplementer {
             l.debug("findActivityStmt: " + findActivityStmt);
 
             if (findActivityRequestType.isSetAttributeList()) {
-                for (int i = 1; i <= attributeList.sizeOfAttributeArray(); i++) {
-                    findActivityStmt.setString(i, '%' + findActivityRequestType
-                            .getAttributeList().getAttributeArray(i).getValue() + '%');
+                for (int i = 0; i < attributeList.sizeOfAttributeArray(); i++) {
+                    findActivityStmt.setString(i + 1, '%' + findActivityRequestType.getAttributeList().getAttributeArray(i).getValue() + '%');
                 }
             }
             res = findActivityStmt.executeQuery();
