@@ -48,6 +48,9 @@ echo
 
 CP=:$CLASSPATH:$CLASSES:.
 java -classpath $CP  edu.indiana.d2i.komadu.util.ServiceLauncher $1
+
+# For debugging
+#java -classpath $CP  -Xdebug -Xrunjdwp:transport=dt_socket,address=5005,server=y,suspend=y edu.indiana.d2i.komadu.util.ServiceLauncher $1
 ' >> ./bin/KomaduServer.sh
 chmod 755 ./bin/KomaduServer.sh
 
