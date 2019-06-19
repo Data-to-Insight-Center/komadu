@@ -24,7 +24,7 @@ BASE_EXCHANGE = "KomaduExchange"
 BASE_ROUTINGKEY = "KomaduKey"
 BASE_QUEUENAME = "KomaduQueue"
 CLIENT_ID = "test1"
-SAXON_COMMAND = "java -jar visualization/saxon9he.jar -s:output.xml -xsl:visualization/xslt/pipeline_xml2csv.xsl"
+SAXON_COMMAND = "java -jar ../visualization/saxon9he.jar -s:output.xml -xsl:visualization/xslt/pipeline_xml2csv.xsl"
 
 
 def execute_command(notify, file):
