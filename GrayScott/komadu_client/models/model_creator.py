@@ -1,5 +1,6 @@
-from komdu_python_client.models.ingest_models import entityType, fileType, activityType, serviceInformationType, instanceOfType,\
-    usageType, activityEntityType
+from komadu_client.models.ingest_models import entityType, fileType, activityType, serviceInformationType, instanceOfType,\
+    usageType, activityEntityType, generationType
+from komadu_client.util.association_enums import AssociationEnum
 
 
 class ModelCreator:
@@ -44,16 +45,28 @@ class ModelCreator:
         activity.serviceInformation = service_info
         return activity
 
-    def addActivityEntity(self, activity, entity, timestamp, activity_id, entity_id):
+    def add_activity_entity(self, activity, entity, timestamp, activity_id, entity_id, type=AssociationEnum.USAGE,
+                            attributes=None):
 
         relationship = activityEntityType()
         relationship.activity = activity
         relationship.entity = entity
 
-        usage = usageType()
-        usage.activityID = activity_id
-        usage.entityID = entity_id
-        usage.timestamp = timestamp
+        if type is AssociationEnum.GENERATION:
+            generation = generationType()
+            self.__populate_relation(activity_id, entity_id, generation, timestamp, attributes)
+            relationship.generation = generation
+        elif type is AssociationEnum.USAGE:
+            usage = usageType()
+            self.__populate_relation(activity_id, entity_id, usage, timestamp, attributes)
+            relationship.usage = usage
 
-        relationship.usage = usage
         return relationship
+
+    def __populate_relation(self, activity_id, entity_id, relation, timestamp, attributes=None):
+        relation.activityID = activity_id
+        relation.entityID = entity_id
+        relation.timestamp = timestamp
+        if attributes is not None:
+            relation.attributes = attributes
+

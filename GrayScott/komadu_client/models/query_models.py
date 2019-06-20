@@ -28,8 +28,8 @@ _module_typeBindings = pyxb.utils.utility.Object()
 
 # Import bindings for namespaces imported into schema
 import pyxb.binding.datatypes
-import komdu_python_client.models._komadu as _ImportedBinding__komadu
-import komdu_python_client.models._prov as _ImportedBinding__prov
+import komadu_client.models._komadu as _ImportedBinding__komadu
+import komadu_client.models._prov as _ImportedBinding__prov
 
 # NOTE: All namespace declarations are reserved within the binding
 Namespace = pyxb.namespace.NamespaceForURI('http://komadu.d2i.indiana.edu/query', create_if_missing=True)
