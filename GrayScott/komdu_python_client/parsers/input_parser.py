@@ -5,7 +5,7 @@ ex:
 settings.json -> Komadu attributes
 """
 import json
-from komdu_python_client.models.models import attributeType, attributesType
+from komdu_python_client.models.ingest_models import attributeType, attributesType
 
 
 class InputParser:

@@ -1,4 +1,4 @@
-from komdu_python_client.models.models import entityType, fileType, activityType, serviceInformationType, instanceOfType,\
+from komdu_python_client.models.ingest_models import entityType, fileType, activityType, serviceInformationType, instanceOfType,\
     usageType, activityEntityType
 
 

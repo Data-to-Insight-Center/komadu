@@ -1,4 +1,4 @@
-# ./models.py
+# ./ingest_models.py
 # -*- coding: utf-8 -*-
 # PyXB bindings for NM:de1c4da9fc36045550ca5feec2f59288315d6785
 # Generated 2019-06-19 11:02:20.022655 by PyXB version 1.2.6 using Python 3.7.0.final.0
