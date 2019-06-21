@@ -1,17 +1,69 @@
-from datetime import datetime
-from komadu_client.models.model_creator import ModelCreator
-from komadu_client.parsers.input_parser import InputParser
-from komadu_client.util.association_enums import AssociationEnum
+import sys
+import time
+import logging
+from watchdog.observers import Observer
+from watchdog.events import FileSystemEventHandler
+import threading
+import queue
 
-modeler = ModelCreator()
-parser = InputParser()
+
+class ExperimentEventHandler(FileSystemEventHandler):
+    """
+    Handler class for detecting and processing the new files created in the polling directory.
+    """
+
+    def __init__(self, event_queue):
+        self.event_queue = event_queue
+
+    def on_created(self, event):
+        file = event.is_directory
+        if not file:
+            self.event_queue.put(event)
 
 
-activity = modeler.create_workflow_activity("grayscott_workflow-2", "grayscott-2","grayscott-2", "grayscott_workflow", "1.0.0", datetime.now(), "summit")
-result = parser.parse("/Users/swithana/git/komadu/GrayScott/komdu_python_client/samples/input/settings.json", "grayscott")
-entity = modeler.create_file_entity("settings.json", "summit/sachith/adios2/settings.json", attributes=result)
-relay = modeler.add_activity_entity(activity, entity, datetime.now(), activity.serviceInformation.serviceID, entity.file.fileURI, AssociationEnum.GENERATION)
+class EventProcessor(threading.Thread):
+    def __init__(self,  event_queue):
+        super(EventProcessor, self).__init__()
+        self.event_queue = event_queue
+        logging.info("Event processor initialized!")
+        return
 
-# todo: can we remove the ns1? and add that automatically?
-print(relay.toxml("utf-8", element_name='ns1:addActivityEntityRelationship').decode('utf-8'))
+    def run(self):
+        while True:
+            item = self.event_queue.get()
+            self.process_file_event(item)
+        return
 
+    def process_file_event(self, event):
+        file_path = event.src_path
+        event_content = file_path.split("/")
+        file_name = event_content[-1]
+        username = event_content[4]
+        workflow_type = event_content[3]
+        log_event = "Processing file: {} from user: {} for the workflow type: {} filepath: {}"
+        logging.debug(log_event.format(file_name, username, workflow_type, event_content))
+
+
+if __name__ == "__main__":
+    logging.basicConfig(level=logging.DEBUG,
+                        format='%(asctime)s - %(message)s',
+                        datefmt='%Y-%m-%d %H:%M:%S')
+
+    data_queue = queue.Queue()
+
+    path = sys.argv[1] if len(sys.argv) > 1 else '.'
+    event_handler = ExperimentEventHandler(data_queue)
+
+    logging.debug("Starting file polling service!")
+    observer = Observer()
+    observer.schedule(event_handler, path, recursive=True)
+    observer.start()
+
+    event_processor = EventProcessor(data_queue)
+    event_processor.start()
+    try:
+        while True:
+            time.sleep(1)
+    except KeyboardInterrupt:
+        observer.stop()
+    observer.join()
