@@ -6,7 +6,7 @@ settings.json -> Komadu attributes
 """
 import json
 from komadu_client.models.ingest_models import attributeType, attributesType
-
+from komadu_client.util.constants import GRAYSCOTT_WORKFLOW_NAME
 
 class InputParser:
 
@@ -17,7 +17,7 @@ class InputParser:
         :param file_type: name of the input file (ex: grayscott)
         :return: list of attributeType
         """
-        if file_type.lower() == "grayscott":
+        if file_type.lower() == GRAYSCOTT_WORKFLOW_NAME:
             return self.gray_scott_input_parser(file)
         elif file_type.lower() == "adiosConfig":
             return self.adios_config_parser(file)

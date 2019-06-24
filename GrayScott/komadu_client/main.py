@@ -1,10 +1,14 @@
 import sys
+import os
 import time
 import logging
 from watchdog.observers import Observer
 from watchdog.events import FileSystemEventHandler
 import threading
 import queue
+from komadu_client.util.constants import GRAYSCOTT_WORKFLOW
+from komadu_client.pubsub.komadu_connection import KomaduClient
+from komadu_client.processors.gray_scott_event_processor import GrayScottEventProcessor
 
 
 class ExperimentEventHandler(FileSystemEventHandler):
@@ -26,6 +30,8 @@ class EventProcessor(threading.Thread):
         super(EventProcessor, self).__init__()
         self.event_queue = event_queue
         logging.info("Event processor initialized!")
+        self.komadu_conn = KomaduClient()
+        self.grayscott_processor = GrayScottEventProcessor(self.komadu_conn)
         return
 
     def run(self):
@@ -37,15 +43,21 @@ class EventProcessor(threading.Thread):
     def process_file_event(self, event):
         file_path = event.src_path
         event_content = file_path.split("/")
-        file_name = event_content[-1]
+        filename = event_content[-1]
+        file_extension = os.path.splitext(filename)[1]
         username = event_content[4]
         workflow_type = event_content[3]
+        # todo get the location
+        location = "summit"
         log_event = "Processing file: {} from user: {} for the workflow type: {} filepath: {}"
-        logging.debug(log_event.format(file_name, username, workflow_type, event_content))
+        logging.debug(log_event.format(filename, username, workflow_type, event_content))
+
+        if workflow_type.lower() == GRAYSCOTT_WORKFLOW:
+            self.grayscott_processor.process_event(username, filename, file_extension, file_path, location)
 
 
 if __name__ == "__main__":
-    logging.basicConfig(level=logging.DEBUG,
+    logging.basicConfig(level=logging.INFO,
                         format='%(asctime)s - %(message)s',
                         datefmt='%Y-%m-%d %H:%M:%S')
 

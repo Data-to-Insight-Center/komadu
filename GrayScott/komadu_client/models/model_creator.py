@@ -45,7 +45,7 @@ class ModelCreator:
         activity.serviceInformation = service_info
         return activity
 
-    def add_activity_entity(self, activity, entity, timestamp, activity_id, entity_id, type=AssociationEnum.USAGE,
+    def get_activity_entity(self, activity, entity, timestamp, activity_id, entity_id, type=AssociationEnum.USAGE,
                             attributes=None):
 
         relationship = activityEntityType()
