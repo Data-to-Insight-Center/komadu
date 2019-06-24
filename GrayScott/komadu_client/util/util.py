@@ -1,5 +1,5 @@
 import os
-
+from komadu_client.models.ingest_models import attributesType, attributeType
 
 def get_experiment_name(file_path):
     dirname = os.path.dirname(file_path)
@@ -11,3 +11,14 @@ def get_experiment_name(file_path):
         experiment_name = run_name
 
     return experiment_name
+
+
+def get_attributes(dict_values):
+    attributes = attributesType()
+    for key in dict_values:
+        attribute = attributeType()
+        attribute.property_ = key
+        attribute.value_ = (str(dict_values[key]))
+        attributes.append(attribute)
+
+    return attributes
