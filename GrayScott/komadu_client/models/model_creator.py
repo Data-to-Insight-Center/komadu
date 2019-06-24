@@ -9,7 +9,7 @@ class ModelCreator:
         entity = entityType()
         file = fileType()
         file.fileName = filename
-        file.fileURI = file_uri
+        file.fileURI = "file: " + str(file_uri)
         if created_date is not None:
             file.createDate = created_date
         if owner is not None:

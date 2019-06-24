@@ -13,10 +13,11 @@ Options:
 import pika
 import os
 import time
+import logging
 from docopt import docopt
 from lxml import etree
 from komadu_client.util.constants import BASE_EXCHANGE, BASE_QUEUENAME, BASE_ROUTINGKEY, SAXON_COMMAND, CLIENT_ID
-import logging
+from komadu_client.util.constants import RABBITMQ_USERNAME, RABBITMQ_HOST, RABBITMQ_PORT, RABBITMQ_PWD, RABBITMQ_PATH
 
 
 class KomaduClient:
@@ -26,11 +27,8 @@ class KomaduClient:
     _LOG = logging.getLogger(__name__)
 
     def __init__(self):
-        self.credentials = pika.PlainCredentials('guest', 'guest')
-        self.parameters = pika.ConnectionParameters('localhost',
-                                                    5672,
-                                                    '/',
-                                                    self.credentials)
+        self.credentials = pika.PlainCredentials(RABBITMQ_USERNAME, RABBITMQ_PWD)
+        self.parameters = pika.ConnectionParameters(RABBITMQ_HOST, RABBITMQ_PORT, RABBITMQ_PATH, self.credentials)
         self.connection = pika.BlockingConnection(self.parameters)
         self.channel = self.connection.channel()
 

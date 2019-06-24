@@ -61,11 +61,11 @@ class EventProcessor(threading.Thread):
 
         # todo get the location
         location = "summit"
-        log_event = "Processing file: {} filepath: {}"
+        log_event = "Processing file: {} filepath: {} workflow_type {}"
         # log_event = "Processing file: {} from user: {} for the workflow type: {} filepath: {}"
-        logger.info(log_event.format(filename, file_path))
+        logger.info(log_event.format(filename, file_path, workflow_type))
 
-        if workflow_type.lower() == GRAYSCOTT_WORKFLOW:
+        if GRAYSCOTT_WORKFLOW in file_path:
             self.grayscott_processor.process_event(username, filename, file_extension, file_path, location)
 
 

@@ -36,24 +36,26 @@ class GrayScottEventProcessor(AbstractEventProcessor):
 
     def process_event(self, username, filename, file_extension, file_path, location):
         workflow_id = get_experiment_name(file_path)
-        logger.INFO("processing file: " + str(file_path))
 
         if filename.lower() == GRAYSCOTT_INPUT_PARAMS_FILE:
-            self._process_input_file(filename, file_path, location, workflow_id)
+            self._process_input_file(filename, file_path, location, workflow_id, username)
 
-    def _process_input_file(self, filename, file_path, location, workflow_id):
+    def _process_input_file(self, filename, file_path, location, workflow_id, username):
+        """
+        When the settings.json file is detected. Create the complete workflow in Komadu (User-GS-PDF).
+        """
         workflow_node_id = workflow_id + "-" + GRAYSCOTT_NODE1_NAME
         input_params = self.parser.parse(file_path, GRAYSCOTT_WORKFLOW_NAME)
         activity = self.modeler.create_workflow_activity(workflow_id, workflow_node_id, workflow_node_id,
                                                          GRAYSCOTT_WORKFLOW_NAME, GRAYSCOTT_WORKFLOW_VERSION,
                                                          datetime.now(), location)
-        entity = self.modeler.create_file_entity(filename, location, attributes=input_params)
+        entity = self.modeler.create_file_entity(filename, file_path, location=location, attributes=input_params)
         result = self.modeler.get_activity_entity(activity, entity, datetime.now(),
                                                   activity.serviceInformation.serviceID,
                                                   entity.file.fileURI, AssociationEnum.GENERATION)
         # todo: fix this ns1
         logger.info("Publishing " + file_path + " to Komadu!")
-        print(result.toxml("utf-8", element_name='ns1:addActivityEntityRelationship').decode('utf-8'))
+        logger.debug(result.toxml("utf-8", element_name='ns1:addActivityEntityRelationship').decode('utf-8'))
         self.client.publish_data(
             result.toxml("utf-8", element_name='ns1:addActivityEntityRelationship').decode('utf-8'))
 
