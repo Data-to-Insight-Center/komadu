@@ -9,6 +9,9 @@ import queue
 from komadu_client.util.constants import GRAYSCOTT_WORKFLOW
 from komadu_client.pubsub.komadu_connection import KomaduClient
 from komadu_client.processors.gray_scott_event_processor import GrayScottEventProcessor
+from komadu_client.util.logger import logger
+
+logger = logging.getLogger("codar.komadu.client.Main")
 
 
 class ExperimentEventHandler(FileSystemEventHandler):
@@ -26,10 +29,14 @@ class ExperimentEventHandler(FileSystemEventHandler):
 
 
 class EventProcessor(threading.Thread):
+    """
+    This classes processes all the events and redirects the events to the correct event processor.
+    ex: Grayscott events are processed by GrayScott event processor
+    """
     def __init__(self,  event_queue):
         super(EventProcessor, self).__init__()
         self.event_queue = event_queue
-        logging.info("Event processor initialized!")
+        logger.info("Event processor initialized!")
         self.komadu_conn = KomaduClient()
         self.grayscott_processor = GrayScottEventProcessor(self.komadu_conn)
         return
@@ -47,26 +54,28 @@ class EventProcessor(threading.Thread):
         file_extension = os.path.splitext(filename)[1]
         username = event_content[4]
         workflow_type = event_content[3]
+
+        if str(filename).startswith("."):
+            # ignore files starting with a '.'
+            return
+
         # todo get the location
         location = "summit"
-        log_event = "Processing file: {} from user: {} for the workflow type: {} filepath: {}"
-        logging.debug(log_event.format(filename, username, workflow_type, event_content))
+        log_event = "Processing file: {} filepath: {}"
+        # log_event = "Processing file: {} from user: {} for the workflow type: {} filepath: {}"
+        logger.info(log_event.format(filename, file_path))
 
         if workflow_type.lower() == GRAYSCOTT_WORKFLOW:
             self.grayscott_processor.process_event(username, filename, file_extension, file_path, location)
 
 
 if __name__ == "__main__":
-    logging.basicConfig(level=logging.INFO,
-                        format='%(asctime)s - %(message)s',
-                        datefmt='%Y-%m-%d %H:%M:%S')
-
     data_queue = queue.Queue()
 
     path = sys.argv[1] if len(sys.argv) > 1 else '.'
     event_handler = ExperimentEventHandler(data_queue)
 
-    logging.debug("Starting file polling service!")
+    logger.info("Starting file polling service!")
     observer = Observer()
     observer.schedule(event_handler, path, recursive=True)
     observer.start()

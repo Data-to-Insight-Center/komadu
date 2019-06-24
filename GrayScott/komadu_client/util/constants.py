@@ -9,5 +9,7 @@ SAXON_COMMAND = "java -jar samples/visualization/saxon9he.jar -s:output.xml " \
 
 GRAYSCOTT_WORKFLOW = "grayscott"
 GRAYSCOTT_WORKFLOW_NAME = "grayscott"
+GRAYSCOTT_NODE1_NAME = "grayscott"
+GRAYSCOTT_NODE2_NAME = "analysis"
 GRAYSCOTT_INPUT_PARAMS_FILE = "settings.json"
 GRAYSCOTT_WORKFLOW_VERSION = "1.0.0"
