@@ -11,7 +11,7 @@
 - codar.workflow.stderr.pdf_calc
 - codar.workflow.stdout.pdf_calc
 - codar.workflow.stderr.simulation
-- 
+- codar.workflow.stdout.simulation
 
 
 #### Workflow finishes
@@ -32,3 +32,4 @@ Completed:
 - codar.cheetah.fob.json
 - codar.workflow.walltime.simulation
 - codar.workflow.walltime.pdf_calc
+- codar.workflow.status.json
