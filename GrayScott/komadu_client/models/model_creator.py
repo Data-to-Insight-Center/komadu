@@ -1,8 +1,9 @@
 from komadu_client.models.ingest_models import entityType, fileType, activityType, serviceInformationType, \
     instanceOfType, \
-    usageType, activityEntityType, generationType
+    usageType, activityEntityType, generationType, addAttributesType
 from komadu_client.util.association_enums import AssociationEnum
-
+from komadu_client.util.util import get_node_id, get_attributes
+from datetime import datetime
 
 def create_file_entity(filename, file_uri, attributes=None, location=None, created_date=None, owner=None,
                        size=None):
@@ -71,3 +72,15 @@ def __populate_relation(activity_id, entity_id, relation, timestamp, attributes=
     relation.timestamp = timestamp
     if attributes is not None:
         relation.attributes = attributes
+
+
+def add_attributes_activity(workflow_id, node_id, key, value):
+    workflow_node_id = get_node_id(workflow_id, node_id)
+
+    new_attr_doc = addAttributesType()
+    new_attr_doc.objectID = workflow_node_id
+    new_attr_doc.objectType = "ACTIVITY"
+    new_attr_doc.notificationTimestamp = datetime.now()
+    new_attributes = {key: value}
+    new_attr_doc.attributes = get_attributes(new_attributes)
+    return new_attr_doc

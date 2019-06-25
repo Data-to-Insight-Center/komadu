@@ -26,7 +26,7 @@
         <parameter name="useOriginalwsdl">true</parameter>
         <parameter name="modifyUserWSDLPortAddress">true</parameter>
         <parameter name="komadu.properties.file.path">
-            /home/isuru/software/tomcat/komadu-tomcat/config/komadu.properties
+            /Users/swithana/git/komadu/service-core/config/komadu.properties
         </parameter>
         <!--<operation name="getAbstractEntityDetail" mep="http://www.w3.org/ns/wsdl/in-out" namespace="http://komadu.d2i.indiana.edu">-->
             <!--<actionMapping>http://www.dataandsearch.org/karma/getAbstractEntityDetail</actionMapping>-->

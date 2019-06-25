@@ -1,0 +1,12 @@
+<?xml version='1.0' encoding='utf-8'?>
+<ns1:addAttributes xmlns:ns1='http://komadu.d2i.indiana.edu'>
+	<ns1:objectType>ACTIVITY</ns1:objectType>
+	<ns1:objectID>experimentGroup2-run-000-simulation</ns1:objectID>
+	<ns1:attributes>
+		<ns1:attribute>
+			<ns1:property>completed_time</ns1:property>
+			<ns1:value>0.34343</ns1:value>
+		</ns1:attribute>
+	</ns1:attributes>
+	<ns1:notificationTimestamp>2019-10-30T18:00:00</ns1:notificationTimestamp>
+</ns1:addAttributes>
