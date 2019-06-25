@@ -11,7 +11,7 @@ def create_file_entity(filename, file_uri, attributes=None, location=None, creat
     entity = entityType()
     file = fileType()
     file.fileName = filename
-    file.fileURI = "file: " + str(file_uri)
+    file.fileURI = str(file_uri)
     if created_date is not None:
         file.createDate = created_date
     if owner is not None:

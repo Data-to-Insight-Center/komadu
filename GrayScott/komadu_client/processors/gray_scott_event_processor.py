@@ -61,12 +61,12 @@ class GrayScottEventProcessor(AbstractEventProcessor):
         if filename.lower() == GRAYSCOTT_INPUT_PARAMS_FILE:
             # settings.json file
             self._process_input_file(filename, file_path, location, workflow_id, username)
-
-        elif self.get_file_extension(file_path.lower()) == "txt":
-            # skip .txt files
-            pass
-        elif CHEETAH_WALLTIME in file_path.lower():
-            self.process_experiment_completion(file_path, workflow_id)
+        #
+        # elif self.get_file_extension(file_path.lower()) == "txt":
+        #     # skip .txt files
+        #     pass
+        # elif CHEETAH_WALLTIME in file_path.lower():
+        #     self.process_experiment_completion(file_path, workflow_id)
 
     def _process_input_file(self, filename, file_path, location, workflow_id, username):
         """
@@ -78,7 +78,7 @@ class GrayScottEventProcessor(AbstractEventProcessor):
         activity = create_workflow_activity(workflow_id, workflow_node_id, workflow_node_id,
                                             GRAYSCOTT_WORKFLOW_NAME, GRAYSCOTT_WORKFLOW_VERSION,
                                             datetime.now(), location)
-        entity = create_file_entity(filename, file_path, location=location, attributes=input_params)
+        entity = create_file_entity(filename, workflow_id + "-" + filename, location=file_path, attributes=input_params)
         # create the connection between the activity and the entity
         result = get_activity_entity(activity, entity, datetime.now(),
                                      activity.serviceInformation.serviceID,
