@@ -1,5 +1,5 @@
 import unittest
-from komadu_client.util.util import get_experiment_name, get_attributes
+from komadu_client.util.util import get_experiment_name, get_attributes, get_workflow_name
 
 
 class TestUtil(unittest.TestCase):
@@ -26,6 +26,12 @@ class TestUtil(unittest.TestCase):
                           "</ns1:attribute></attributes>"
 
         self.assertTrue(expected_result, attr_str)
+
+    def test_get_workflow_name(self):
+        example_file = "/Users/swithana/codar/campaigns/gray-scott/swithana/experimentGroup2/run-000/settings.json"
+        workflow_name = get_workflow_name(example_file)
+        self.assertTrue("gray-scott", workflow_name)
+
 
 if __name__ == '__main__':
     unittest.main()

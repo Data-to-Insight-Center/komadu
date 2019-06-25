@@ -1,5 +1,6 @@
 import os
 from komadu_client.models.ingest_models import attributesType, attributeType
+from komadu_client.util.constants import GRAYSCOTT_WORKFLOW
 
 def get_experiment_name(file_path):
     dirname = os.path.dirname(file_path)
@@ -22,3 +23,10 @@ def get_attributes(dict_values):
         attributes.append(attribute)
 
     return attributes
+
+
+def get_workflow_name(filename):
+    if GRAYSCOTT_WORKFLOW in filename:
+        return GRAYSCOTT_WORKFLOW
+    else:
+        return None

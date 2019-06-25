@@ -1,5 +1,5 @@
-from komadu_client.models.model_creator import ModelCreator
 from datetime import datetime
+from komadu_client.models.model_creator import create_workflow_activity, create_file_entity, get_activity_entity
 from komadu_client.util.constants import GRAYSCOTT_WORKFLOW_NAME, GRAYSCOTT_INPUT_PARAMS_FILE, \
     GRAYSCOTT_WORKFLOW_VERSION, GRAYSCOTT_NODE1_NAME
 from komadu_client.parsers.input_parser import InputParser
@@ -8,7 +8,6 @@ from komadu_client.util.logger import logger
 import logging
 from komadu_client.util.util import get_experiment_name
 from abc import ABCMeta, abstractmethod
-
 
 logger = logging.getLogger('codar-komadu-client.GrayScottEventProcessor')
 
@@ -30,7 +29,6 @@ class GrayScottEventProcessor(AbstractEventProcessor):
     """
 
     def __init__(self, komadu_connetion):
-        self.modeler = ModelCreator()
         self.parser = InputParser()
         self.client = komadu_connetion
 
@@ -46,13 +44,13 @@ class GrayScottEventProcessor(AbstractEventProcessor):
         """
         workflow_node_id = workflow_id + "-" + GRAYSCOTT_NODE1_NAME
         input_params = self.parser.parse(file_path, GRAYSCOTT_WORKFLOW_NAME)
-        activity = self.modeler.create_workflow_activity(workflow_id, workflow_node_id, workflow_node_id,
-                                                         GRAYSCOTT_WORKFLOW_NAME, GRAYSCOTT_WORKFLOW_VERSION,
-                                                         datetime.now(), location)
-        entity = self.modeler.create_file_entity(filename, file_path, location=location, attributes=input_params)
-        result = self.modeler.get_activity_entity(activity, entity, datetime.now(),
-                                                  activity.serviceInformation.serviceID,
-                                                  entity.file.fileURI, AssociationEnum.GENERATION)
+        activity = create_workflow_activity(workflow_id, workflow_node_id, workflow_node_id,
+                                            GRAYSCOTT_WORKFLOW_NAME, GRAYSCOTT_WORKFLOW_VERSION,
+                                            datetime.now(), location)
+        entity = create_file_entity(filename, file_path, location=location, attributes=input_params)
+        result = get_activity_entity(activity, entity, datetime.now(),
+                                     activity.serviceInformation.serviceID,
+                                     entity.file.fileURI, AssociationEnum.GENERATION)
         # todo: fix this ns1
         logger.info("Publishing " + file_path + " to Komadu!")
         logger.debug(result.toxml("utf-8", element_name='ns1:addActivityEntityRelationship').decode('utf-8'))
@@ -67,9 +65,9 @@ class GrayScottEventProcessor(AbstractEventProcessor):
         :return:
         """
 
-        return self.modeler.create_workflow_activity(workflow_id, workflow_node_id, workflow_node_id,
-                                                     GRAYSCOTT_WORKFLOW_NAME,
-                                                     GRAYSCOTT_WORKFLOW_VERSION, datetime.now(), location)
+        return create_workflow_activity(workflow_id, workflow_node_id, workflow_node_id,
+                                        GRAYSCOTT_WORKFLOW_NAME,
+                                        GRAYSCOTT_WORKFLOW_VERSION, datetime.now(), location)
 
     def create_file_entity(self, filename, file_uri, attributes=None):
-        return self.modeler.create_file_entity(filename, file_uri, attributes)
+        return create_file_entity(filename, file_uri, attributes)
