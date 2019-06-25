@@ -75,13 +75,16 @@ def __populate_relation(activity_id, entity_id, relation, timestamp, attributes=
         relation.attributes = attributes
 
 
-def add_attributes_activity(workflow_id, node_id, key, value):
+def add_attributes_activity(workflow_id, node_id, key, value, attributes=None):
     workflow_node_id = get_node_id(workflow_id, node_id)
 
     new_attr_doc = addAttributesType()
     new_attr_doc.objectID = workflow_node_id
     new_attr_doc.objectType = "ACTIVITY"
     new_attr_doc.notificationTimestamp = datetime.now()
-    new_attributes = {key: value}
-    new_attr_doc.attributes = get_attributes(new_attributes)
+    if attributes is None:
+        new_attributes = {key: value}
+        new_attr_doc.attributes = get_attributes(new_attributes)
+    else:
+        new_attr_doc.attributes = attributes
     return new_attr_doc

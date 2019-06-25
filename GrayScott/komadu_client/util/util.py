@@ -1,6 +1,8 @@
 import os
 from komadu_client.models.ingest_models import attributesType, attributeType
 from komadu_client.util.constants import GRAYSCOTT_WORKFLOW
+import json
+
 
 def get_experiment_name(file_path):
     dirname = os.path.dirname(file_path)
@@ -21,7 +23,6 @@ def get_attributes(dict_values):
         attribute.property_ = key
         attribute.value_ = (str(dict_values[key]))
         attributes.append(attribute)
-
     return attributes
 
 
@@ -34,3 +35,20 @@ def get_workflow_name(filename):
 
 def get_node_id(workflow_id, node_id):
     return workflow_id + "-" + node_id
+
+
+def parse_json_file(file):
+    with open(file) as f:
+        data = json.load(f)
+    return data
+
+
+def flatten_dict(data, prefix=""):
+    fmap = {}
+    for key in data:
+        if isinstance(data[key], dict):
+            values = flatten_dict(data[key], key + "_")
+            fmap.update(values)
+        else:
+            fmap[prefix + key] = data[key]
+    return fmap
