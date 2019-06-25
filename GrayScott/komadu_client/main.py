@@ -6,9 +6,10 @@ from watchdog.observers import Observer
 from watchdog.events import FileSystemEventHandler
 import threading
 import queue
-from komadu_client.util.constants import GRAYSCOTT_WORKFLOW
+from komadu_client.util.constants import GRAYSCOTT_WORKFLOW, FOBS_FILE
 from komadu_client.pubsub.komadu_connection import KomaduClient
 from komadu_client.processors.gray_scott_event_processor import GrayScottEventProcessor
+from komadu_client.parsers.fobs_parser import parse_fobs_json
 from komadu_client.util.logger import logger
 
 logger = logging.getLogger("codar.komadu.client.Main")
@@ -62,10 +63,15 @@ class EventProcessor(threading.Thread):
         # todo get the location
         location = "summit"
         log_event = "Processing file: {} filepath: {} workflow_type {}"
-        # log_event = "Processing file: {} from user: {} for the workflow type: {} filepath: {}"
-        logger.info(log_event.format(filename, file_path, workflow_type))
+        logger.debug(log_event.format(filename, file_path, workflow_type))
 
-        if GRAYSCOTT_WORKFLOW in file_path:
+        if FOBS_FILE in file_path:
+            logger.info("Processing the fobs file: {}".format(file_path))
+            # init the workflow using the fobs.json file
+            activity_activity = parse_fobs_json(file_path).toxml("utf-8", element_name='ns1:addActivityActivityRelationship').decode('utf-8').replace('"', "'")
+            self.komadu_conn.publish_data(activity_activity)
+
+        elif GRAYSCOTT_WORKFLOW in file_path:
             self.grayscott_processor.process_event(username, filename, file_extension, file_path, location)
 
 

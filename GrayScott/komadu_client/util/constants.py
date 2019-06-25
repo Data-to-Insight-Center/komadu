@@ -23,3 +23,4 @@ GRAYSCOTT_WORKFLOW_VERSION = "1.0.0"
 
 
 CHEETAH_WALLTIME = "walltime"
+FOBS_FILE = "fob.json"

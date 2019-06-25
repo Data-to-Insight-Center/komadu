@@ -42,22 +42,22 @@ class GrayScottEventProcessor(AbstractEventProcessor):
 
     def process_event(self, username, filename, file_extension, file_path, location):
         workflow_id = get_experiment_name(file_path)
+        logger.info("Processing {} !".format(filename))
 
         if filename.lower() == GRAYSCOTT_INPUT_PARAMS_FILE:
             # settings.json file
             self._process_input_file(filename, file_path, location, workflow_id, username)
 
-        elif CHEETAH_WALLTIME in filename.lower():
+        elif CHEETAH_WALLTIME in file_path.lower():
             # process wall times for the workflow
-            logger.info("Processing {} !".format(filename))
-            if GRAYSCOTT_NODE1_NAME in filename.lower:
+            if GRAYSCOTT_NODE1_NAME in self.get_analysis_name_walltime(file_path):
                 add_attributes_type = add_attributes_activity(workflow_id, GRAYSCOTT_NODE1_NAME, "completed_time",
-                                                              self.get_wall_time_from_file(filename))
+                                                              self.get_wall_time_from_file(file_path))
                 self.client.publish_data(
                     add_attributes_type.toxml("utf-8", element_name='ns1:addAttributes').decode('utf-8'))
             else:
-                add_attributes_type = add_attributes_activity(workflow_id, self.get_analysis_name_walltime(filename),
-                                                              "completed_time", self.get_wall_time_from_file(filename))
+                add_attributes_type = add_attributes_activity(workflow_id, self.get_analysis_name_walltime(file_path),
+                                                              "completed_time", self.get_wall_time_from_file(file_path))
                 self.client.publish_data(
                     add_attributes_type.toxml("utf-8", element_name='ns1:addAttributes').decode('utf-8'))
 

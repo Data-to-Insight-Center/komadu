@@ -25,3 +25,10 @@
 - codar.workflow.status.json
 
 Notes:
+
+
+Completed:
+- settings.json
+- codar.cheetah.fob.json
+- codar.workflow.walltime.simulation
+- codar.workflow.walltime.pdf_calc
