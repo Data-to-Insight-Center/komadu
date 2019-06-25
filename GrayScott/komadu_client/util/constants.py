@@ -19,10 +19,10 @@ GRAYSCOTT_WORKFLOW = "gray-scott"
 GRAYSCOTT_WORKFLOW_NAME = "grayscott"
 GRAYSCOTT_INPUT_PARAMS_FILE = "settings.json"
 GRAYSCOTT_WORKFLOW_VERSION = "1.0.0"
-GRAY_SCOTT_SIMULATION_STDOUT = "codar.workflow.stderr.simulation"
-GRAY_SCOTT_SIMULATION_STD_ERR = "codar.workflow.stdout.simulation"
 
-
+# Cheetah constants
+SIMULATION_STDOUT = "codar.workflow.stdout.simulation"
+SIMULATION_STD_ERR = "codar.workflow.stderr.simulation"
 SIMULATION_NODE_NAME = "simulation"
 CHEETAH_WALLTIME = "walltime"
 FOBS_FILE = "fob.json"

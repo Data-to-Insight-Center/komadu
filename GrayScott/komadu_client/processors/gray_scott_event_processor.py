@@ -1,8 +1,9 @@
 from datetime import datetime
 from komadu_client.models.model_creator import create_workflow_activity, create_file_entity, get_activity_entity, \
     add_attributes_activity, get_attributes
-from komadu_client.util.constants import GRAYSCOTT_WORKFLOW_NAME, GRAYSCOTT_INPUT_PARAMS_FILE, \
-    GRAYSCOTT_WORKFLOW_VERSION, SIMULATION_NODE_NAME, CHEETAH_WALLTIME, STATUS_JSON
+from komadu_client.util.constants import GRAYSCOTT_WORKFLOW_NAME, GRAYSCOTT_INPUT_PARAMS_FILE, STATUS_JSON, \
+    GRAYSCOTT_WORKFLOW_VERSION, SIMULATION_NODE_NAME, CHEETAH_WALLTIME, SIMULATION_STD_ERR, \
+    SIMULATION_STDOUT
 from komadu_client.parsers.input_parser import InputParser
 from komadu_client.util.association_enums import AssociationEnum
 from komadu_client.util.logger import logger
@@ -10,6 +11,7 @@ import logging
 from komadu_client.util.util import get_experiment_name, get_node_id, parse_json_file, flatten_dict
 from abc import ABCMeta, abstractmethod
 from os import path, sep
+
 logger = logging.getLogger('codar-komadu-client.GrayScottEventProcessor')
 
 
@@ -21,7 +23,8 @@ class AbstractEventProcessor:
     __metaclass__ = ABCMeta
 
     @abstractmethod
-    def process_event(self, username, filename, file_extension, file_path, location): raise NotImplementedError()
+    def process_event(self, username, filename, file_extension, file_path, location):
+        raise NotImplementedError()
 
     def get_wall_time_from_file(self, filename):
         with open(filename) as file:
@@ -42,7 +45,40 @@ class AbstractEventProcessor:
                                                           "completed_time", self.get_wall_time_from_file(file_path))
             self.client.publish_data(
                 add_attributes_type.toxml("utf-8", element_name='ns1:addAttributes').decode('utf-8'))
+            # process the statuses file
             self.update_statuses(file_path, workflow_id)
+
+    def process_std_out(self, file_path, activity, activity_id):
+        """
+        Processes the standard output and error and sends to Komadu
+        :param file_path:
+        :param activity: in ActivityType
+        :param activity_id: id of the activity
+        :return:
+        """
+        std_out = path.dirname(file_path) + sep + SIMULATION_STDOUT
+        std_err = path.dirname(file_path) + sep + SIMULATION_STD_ERR
+        with open(std_out) as f1:
+            out_file_content = f1.read()
+
+        with open(std_err) as f2:
+            err_file_content = f2.read()
+
+        std_out_attributes = get_attributes({"content": out_file_content})
+        std_err_attributes = get_attributes({"content": err_file_content})
+
+        stdout_entity = create_file_entity("std-out", activity_id + "-stdout", location=str(std_out),
+                                           attributes=std_out_attributes)
+        stderr_entity = create_file_entity("std-err", activity_id + "-stderr", location=str(std_err),
+                                           attributes=std_err_attributes)
+        activity_entity_stdout = get_activity_entity(activity, stdout_entity, datetime.now(), activity_id,
+                                                     stdout_entity.file.fileURI, AssociationEnum.GENERATION)
+        activity_entity_stderr = get_activity_entity(activity, stderr_entity, datetime.now(), activity_id,
+                                                     stderr_entity.file.fileURI, AssociationEnum.GENERATION)
+        self.client.publish_data(
+            activity_entity_stderr.toxml("utf-8", element_name='ns1:addActivityEntityRelationship').decode('utf-8'))
+        self.client.publish_data(
+            activity_entity_stdout.toxml("utf-8", element_name='ns1:addActivityEntityRelationship').decode('utf-8'))
 
 
 class GrayScottEventProcessor(AbstractEventProcessor):
@@ -61,12 +97,17 @@ class GrayScottEventProcessor(AbstractEventProcessor):
         if filename.lower() == GRAYSCOTT_INPUT_PARAMS_FILE:
             # settings.json file
             self._process_input_file(filename, file_path, location, workflow_id, username)
-        #
-        # elif self.get_file_extension(file_path.lower()) == "txt":
-        #     # skip .txt files
-        #     pass
-        # elif CHEETAH_WALLTIME in file_path.lower():
-        #     self.process_experiment_completion(file_path, workflow_id)
+
+        elif self.get_file_extension(file_path.lower()) == "txt":
+            # skip .txt files
+            pass
+        elif CHEETAH_WALLTIME in file_path.lower():
+            self.process_experiment_completion(file_path, workflow_id)
+            workflow_node_id = get_node_id(workflow_id, SIMULATION_NODE_NAME)
+            activity = create_workflow_activity(workflow_id, workflow_node_id, workflow_node_id,
+                                                GRAYSCOTT_WORKFLOW_NAME, GRAYSCOTT_WORKFLOW_VERSION,
+                                                datetime.now(), location)
+            self.process_std_out(file_path, activity, workflow_node_id)
 
     def _process_input_file(self, filename, file_path, location, workflow_id, username):
         """
@@ -98,5 +139,7 @@ class GrayScottEventProcessor(AbstractEventProcessor):
         for run in data:
             if run in workflow_id:
                 attributes = get_attributes(flatten_dict(data[run]))
-                activity_update = add_attributes_activity(workflow_id, SIMULATION_NODE_NAME, None, None, attributes=attributes)
-                self.client.publish_data(activity_update.toxml("utf-8", element_name='ns1:addAttributes').decode('utf-8'))
+                activity_update = add_attributes_activity(workflow_id, SIMULATION_NODE_NAME, None, None,
+                                                          attributes=attributes)
+                self.client.publish_data(
+                    activity_update.toxml("utf-8", element_name='ns1:addAttributes').decode('utf-8'))
