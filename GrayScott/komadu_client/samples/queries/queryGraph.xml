@@ -1,4 +1,4 @@
 <quer:getActivityGraphRequest xmlns:quer="http://komadu.d2i.indiana.edu/query">
     <quer:informationDetailLevel>FINE</quer:informationDetailLevel>
-    <quer:activityURI>grayscott-2</quer:activityURI>
+    <quer:activityURI>experimentGroup2-run-000-simulation</quer:activityURI>
 </quer:getActivityGraphRequest>

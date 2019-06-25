@@ -1,0 +1,63 @@
+{
+  "id": "run-000",
+  "kill_on_partial_failure": true,
+  "launch_mode": "default",
+  "machine_name": "local",
+  "node_layout": [
+    {
+      "simulation": 2
+    },
+    {
+      "pdf_calc": 1
+    }
+  ],
+  "post_process_args": [
+    "/Users/swithana/codar/campaigns/gray-scott/swithana/experimentGroup6/run-000/codar.cheetah.run-params.json"
+  ],
+  "post_process_script": null,
+  "post_process_stop_on_failure": false,
+  "runs": [
+    {
+      "adios_xml_file": "/Users/swithana/git/adios/adiosvm/Tutorial/gray-scott/adios2.xml",
+      "after_rc_done": null,
+      "args": [
+        "settings.json"
+      ],
+      "env": {
+        "OMP_NUM_THREADS": "4",
+        "PROFILEDIR": "/Users/swithana/codar/campaigns/gray-scott/swithana/experimentGroup6/run-000/codar.cheetah.tau-simulation",
+        "TRACEDIR": "/Users/swithana/codar/campaigns/gray-scott/swithana/experimentGroup6/run-000/codar.cheetah.tau-simulation"
+      },
+      "exe": "/Users/swithana/git/adios/adiosvm/Tutorial/gray-scott/build/gray-scott",
+      "hostfile": null,
+      "linked_with_sosflow": false,
+      "name": "simulation",
+      "nprocs": 2,
+      "sleep_after": 0,
+      "timeout": 300,
+      "working_dir": "/Users/swithana/codar/campaigns/gray-scott/swithana/experimentGroup6/run-000"
+    },
+    {
+      "adios_xml_file": "/Users/swithana/git/adios/adiosvm/Tutorial/gray-scott/adios2.xml",
+      "after_rc_done": "simulation",
+      "args": [
+        "gs.bp",
+        "pdf"
+      ],
+      "env": {
+        "PROFILEDIR": "/Users/swithana/codar/campaigns/gray-scott/swithana/experimentGroup6/run-000/codar.cheetah.tau-pdf_calc",
+        "TRACEDIR": "/Users/swithana/codar/campaigns/gray-scott/swithana/experimentGroup6/run-000/codar.cheetah.tau-pdf_calc"
+      },
+      "exe": "/Users/swithana/git/adios/adiosvm/Tutorial/gray-scott/build/pdf_calc",
+      "hostfile": null,
+      "linked_with_sosflow": false,
+      "name": "pdf_calc",
+      "nprocs": 1,
+      "sleep_after": 0,
+      "timeout": 300,
+      "working_dir": "/Users/swithana/codar/campaigns/gray-scott/swithana/experimentGroup6/run-000"
+    }
+  ],
+  "total_nodes": 1,
+  "working_dir": "/Users/swithana/codar/campaigns/gray-scott/swithana/experimentGroup6/run-000"
+}

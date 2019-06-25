@@ -30,3 +30,7 @@ def get_workflow_name(filename):
         return GRAYSCOTT_WORKFLOW
     else:
         return None
+
+
+def get_node_id(workflow_id, node_id):
+    return workflow_id + "-" + node_id
