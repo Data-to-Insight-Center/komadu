@@ -3,7 +3,7 @@
 #### Start of the workflow
 - codar.cheetah.fob.json : All the workflow information
 - codar.cheetah.run-params.json
-
+- adios.xml
 - tau.conf
 - settings.json
 
@@ -33,3 +33,5 @@ Completed:
 - codar.workflow.walltime.simulation
 - codar.workflow.walltime.pdf_calc
 - codar.workflow.status.json
+- codar.workflow.stderr.simulation
+- codar.workflow.stdout.simulation

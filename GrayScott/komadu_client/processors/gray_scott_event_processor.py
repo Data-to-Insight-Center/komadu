@@ -26,6 +26,9 @@ class AbstractEventProcessor:
     def process_event(self, username, filename, file_extension, file_path, location):
         raise NotImplementedError()
 
+    @abstractmethod
+    def update_statuses(self, file_path, workflow_id): raise NotImplementedError()
+
     def get_wall_time_from_file(self, filename):
         with open(filename) as file:
             return file.readline().strip()
@@ -58,19 +61,17 @@ class AbstractEventProcessor:
         """
         std_out = path.dirname(file_path) + sep + SIMULATION_STDOUT
         std_err = path.dirname(file_path) + sep + SIMULATION_STD_ERR
-        with open(std_out) as f1:
-            out_file_content = f1.read()
+        # with open(std_out) as f1:
+        #     out_file_content = f1.read()
+        #
+        # with open(std_err) as f2:
+        #     err_file_content = f2.read()
+        #
+        # std_out_attributes = get_attributes({"content": out_file_content})
+        # std_err_attributes = get_attributes({"content": err_file_content})
 
-        with open(std_err) as f2:
-            err_file_content = f2.read()
-
-        std_out_attributes = get_attributes({"content": out_file_content})
-        std_err_attributes = get_attributes({"content": err_file_content})
-
-        stdout_entity = create_file_entity("std-out", activity_id + "-stdout", location=str(std_out),
-                                           attributes=std_out_attributes)
-        stderr_entity = create_file_entity("std-err", activity_id + "-stderr", location=str(std_err),
-                                           attributes=std_err_attributes)
+        stdout_entity = create_file_entity("std-out", activity_id + "-stdout", location=str(std_out))
+        stderr_entity = create_file_entity("std-err", activity_id + "-stderr", location=str(std_err))
         activity_entity_stdout = get_activity_entity(activity, stdout_entity, datetime.now(), activity_id,
                                                      stdout_entity.file.fileURI, AssociationEnum.GENERATION)
         activity_entity_stderr = get_activity_entity(activity, stderr_entity, datetime.now(), activity_id,
@@ -123,7 +124,7 @@ class GrayScottEventProcessor(AbstractEventProcessor):
         # create the connection between the activity and the entity
         result = get_activity_entity(activity, entity, datetime.now(),
                                      activity.serviceInformation.serviceID,
-                                     entity.file.fileURI, AssociationEnum.GENERATION)
+                                     entity.file.fileURI, AssociationEnum.USAGE)
         # todo: fix this ns1
         logger.info("Publishing " + file_path + " to Komadu!")
         logger.debug(result.toxml("utf-8", element_name='ns1:addActivityEntityRelationship').decode('utf-8'))
