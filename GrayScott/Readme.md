@@ -35,3 +35,4 @@ Completed:
 - codar.workflow.status.json
 - codar.workflow.stderr.simulation
 - codar.workflow.stdout.simulation
+- gs.bp

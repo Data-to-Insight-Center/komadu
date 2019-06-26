@@ -3,7 +3,7 @@ from komadu_client.models.model_creator import create_workflow_activity, create_
     add_attributes_activity, get_attributes
 from komadu_client.util.constants import GRAYSCOTT_WORKFLOW_NAME, GRAYSCOTT_INPUT_PARAMS_FILE, STATUS_JSON, \
     GRAYSCOTT_WORKFLOW_VERSION, SIMULATION_NODE_NAME, CHEETAH_WALLTIME, SIMULATION_STD_ERR, \
-    SIMULATION_STDOUT
+    SIMULATION_STDOUT, GRAYSCOTT_OUTPUT_FILE
 from komadu_client.parsers.input_parser import InputParser
 from komadu_client.util.association_enums import AssociationEnum
 from komadu_client.util.logger import logger
@@ -102,6 +102,9 @@ class GrayScottEventProcessor(AbstractEventProcessor):
         elif self.get_file_extension(file_path.lower()) == "txt":
             # skip .txt files
             pass
+        elif filename.lower() == GRAYSCOTT_OUTPUT_FILE:
+            # gs.bp
+            self._process_output_file(filename, file_path, location, workflow_id, username)
         elif CHEETAH_WALLTIME in file_path.lower():
             self.process_experiment_completion(file_path, workflow_id)
             workflow_node_id = get_node_id(workflow_id, SIMULATION_NODE_NAME)
@@ -112,7 +115,7 @@ class GrayScottEventProcessor(AbstractEventProcessor):
 
     def _process_input_file(self, filename, file_path, location, workflow_id, username):
         """
-        When the settings.json file is detected. Create the complete workflow in Komadu (User-GS-PDF).
+        When the settings.json file is detected add that to the provenance
         """
         workflow_node_id = get_node_id(workflow_id, SIMULATION_NODE_NAME)
         input_params = self.parser.parse(file_path, GRAYSCOTT_WORKFLOW_NAME)
@@ -120,13 +123,34 @@ class GrayScottEventProcessor(AbstractEventProcessor):
         activity = create_workflow_activity(workflow_id, workflow_node_id, workflow_node_id,
                                             GRAYSCOTT_WORKFLOW_NAME, GRAYSCOTT_WORKFLOW_VERSION,
                                             datetime.now(), location)
-        entity = create_file_entity(filename, workflow_id + "-" + filename, location=file_path, attributes=input_params)
+        entity = create_file_entity(filename, workflow_id + "-" + filename, location=file_path, attributes=input_params,
+                                    owner=username)
         # create the connection between the activity and the entity
         result = get_activity_entity(activity, entity, datetime.now(),
                                      activity.serviceInformation.serviceID,
                                      entity.file.fileURI, AssociationEnum.USAGE)
-        # todo: fix this ns1
         logger.info("Publishing " + file_path + " to Komadu!")
+        self._publish_activity_entity_relationship(result)
+
+    def _process_output_file(self, filename, file_path, location, workflow_id, username):
+        """
+        When the gs.bp is detected add that to the workflow (simulation -> gs.bp)
+        """
+        workflow_node_id = get_node_id(workflow_id, SIMULATION_NODE_NAME)
+        # create the activity node and the entity node
+        activity = create_workflow_activity(workflow_id, workflow_node_id, workflow_node_id,
+                                            GRAYSCOTT_WORKFLOW_NAME, GRAYSCOTT_WORKFLOW_VERSION,
+                                            datetime.now(), location)
+        entity = create_file_entity(filename, workflow_id + "-" + filename, location=file_path, owner=username)
+        # create the connection between the activity and the entity
+        result = get_activity_entity(activity, entity, datetime.now(),
+                                     activity.serviceInformation.serviceID,
+                                     entity.file.fileURI, AssociationEnum.GENERATION)
+        logger.info("Publishing " + file_path + " to Komadu!")
+        self._publish_activity_entity_relationship(result)
+
+    def _publish_activity_entity_relationship(self, result):
+        # todo: fix this ns1
         logger.debug(result.toxml("utf-8", element_name='ns1:addActivityEntityRelationship').decode('utf-8'))
         # publish the data to Komadu
         self.client.publish_data(

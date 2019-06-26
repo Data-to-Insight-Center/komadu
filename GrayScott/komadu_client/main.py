@@ -61,6 +61,7 @@ class EventProcessor(threading.Thread):
             return
 
         # todo get the location
+        username = "swithana"
         location = "summit"
         log_event = "Processing file: {} filepath: {} workflow_type {}"
         logger.debug(log_event.format(filename, file_path, workflow_type))
