@@ -6,9 +6,9 @@ from watchdog.observers import Observer
 from watchdog.events import FileSystemEventHandler
 import threading
 import queue
-from komadu_client.util.constants import GRAYSCOTT_WORKFLOW, FOBS_FILE
+from komadu_client.util.constants import GRAYSCOTT_WORKFLOW, FOBS_FILE, BRUSSELATOR_WORKFLOW_NAME
 from komadu_client.pubsub.komadu_connection import KomaduClient
-from komadu_client.processors.gray_scott_event_processor import GrayScottEventProcessor
+from komadu_client.processors.codar_event_processor import GrayScottEventProcessor, BrusselatorEventProcessor
 from komadu_client.parsers.fobs_parser import parse_fobs_json
 from komadu_client.util.logger import logger
 
@@ -34,12 +34,14 @@ class EventProcessor(threading.Thread):
     This classes processes all the events and redirects the events to the correct event processor.
     ex: Grayscott events are processed by GrayScott event processor
     """
-    def __init__(self,  event_queue):
+
+    def __init__(self, event_queue):
         super(EventProcessor, self).__init__()
         self.event_queue = event_queue
         logger.info("Event processor initialized!")
         self.komadu_conn = KomaduClient()
         self.grayscott_processor = GrayScottEventProcessor(self.komadu_conn)
+        self.brusselator_processor = BrusselatorEventProcessor(self.komadu_conn)
         return
 
     def run(self):
@@ -69,10 +71,15 @@ class EventProcessor(threading.Thread):
         if FOBS_FILE in file_path:
             logger.info("Processing the fobs file: {}".format(file_path))
             # init the workflow using the fobs.json file
-            activity_activity = parse_fobs_json(file_path).toxml("utf-8", element_name='ns1:addActivityActivityRelationship').decode('utf-8').replace('"', "'")
+            activity_activity = parse_fobs_json(file_path).toxml("utf-8",
+                                                                 element_name='ns1:addActivityActivityRelationship').decode(
+                'utf-8').replace('"', "'")
             self.komadu_conn.publish_data(activity_activity)
 
         elif GRAYSCOTT_WORKFLOW in file_path:
+            self.grayscott_processor.process_event(username, filename, file_extension, file_path, location)
+
+        elif BRUSSELATOR_WORKFLOW_NAME in file_path:
             self.grayscott_processor.process_event(username, filename, file_extension, file_path, location)
 
 
