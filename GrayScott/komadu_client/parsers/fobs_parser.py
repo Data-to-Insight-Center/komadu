@@ -1,5 +1,6 @@
 import json
-from komadu_client.util.util import get_experiment_name, get_workflow_name, get_attributes, get_node_id
+from komadu_client.util.util import get_experiment_name, get_workflow_name, get_attributes, get_node_id, \
+    get_workflow_version
 from komadu_client.util.constants import GRAYSCOTT_WORKFLOW_VERSION
 from komadu_client.models.model_creator import create_workflow_activity
 from datetime import datetime
@@ -35,16 +36,17 @@ def parse_fobs_json(filename):
         "launch_mode": fobs["launch_mode"]
     }
     simulation_name = simulation["name"]
+    workflow_version = get_workflow_version(workflow_name)
     simulation_node = create_workflow_activity(experiment_id, get_node_id(experiment_id, simulation_name),
                                                get_node_id(experiment_id, simulation_name),
-                                               workflow_name, GRAYSCOTT_WORKFLOW_VERSION, datetime.now(),
+                                               workflow_name, workflow_version, datetime.now(),
                                                machine, attributes=get_attributes(workflow_attributes))
     # todo: support more than two nodes
     analysis = runs[workflow_node_ids[0]]
     analysis_name = analysis["name"]
     analysis_node = create_workflow_activity(experiment_id, get_node_id(experiment_id, analysis_name),
-                                               get_node_id(experiment_id, analysis_name), workflow_name,
-                                               GRAYSCOTT_WORKFLOW_VERSION, datetime.now(), machine)
+                                             get_node_id(experiment_id, analysis_name), workflow_name,
+                                             workflow_version, datetime.now(), machine)
 
     return get_activity_activity_type(simulation_node, analysis_node)
 

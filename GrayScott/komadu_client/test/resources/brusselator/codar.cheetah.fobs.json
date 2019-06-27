@@ -1,0 +1,68 @@
+{
+  "id": "run-000",
+  "kill_on_partial_failure": true,
+  "launch_mode": "default",
+  "machine_name": "local",
+  "node_layout": [
+    {
+      "simulation": 2
+    },
+    {
+      "norm_calc": 1
+    }
+  ],
+  "post_process_args": [
+    "/Users/swithana/codar/campaigns/brusselator/swithana/sg-tmp/run-000/codar.cheetah.run-params.json"
+  ],
+  "post_process_script": null,
+  "post_process_stop_on_failure": false,
+  "runs": [
+    {
+      "adios_xml_file": "/Users/swithana/git/adios/adiosvm/Tutorial/brusselator/src/adios2.xml",
+      "after_rc_done": null,
+      "args": [
+        "bru.bp",
+        "32",
+        "32",
+        "32",
+        "10",
+        "1"
+      ],
+      "env": {
+        "PROFILEDIR": "/Users/swithana/codar/campaigns/brusselator/swithana/sg-tmp/run-000/codar.cheetah.tau-simulation",
+        "TRACEDIR": "/Users/swithana/codar/campaigns/brusselator/swithana/sg-tmp/run-000/codar.cheetah.tau-simulation"
+      },
+      "exe": "/Users/swithana/git/adios/adiosvm/Tutorial/brusselator/src/simulation/Brusselator",
+      "hostfile": null,
+      "linked_with_sosflow": false,
+      "name": "simulation",
+      "nprocs": 1,
+      "sleep_after": null,
+      "timeout": 60,
+      "working_dir": "/Users/swithana/codar/campaigns/brusselator/swithana/sg-tmp/run-000"
+    },
+    {
+      "adios_xml_file": "/Users/swithana/git/adios/adiosvm/Tutorial/brusselator/src/adios2.xml",
+      "after_rc_done": "simulation",
+      "args": [
+        "bru.bp",
+        "norm_calc.out.bp",
+        "1"
+      ],
+      "env": {
+        "PROFILEDIR": "/Users/swithana/codar/campaigns/brusselator/swithana/sg-tmp/run-000/codar.cheetah.tau-norm_calc",
+        "TRACEDIR": "/Users/swithana/codar/campaigns/brusselator/swithana/sg-tmp/run-000/codar.cheetah.tau-norm_calc"
+      },
+      "exe": "/Users/swithana/git/adios/adiosvm/Tutorial/brusselator/src/analysis/norm_calc",
+      "hostfile": null,
+      "linked_with_sosflow": false,
+      "name": "norm_calc",
+      "nprocs": 1,
+      "sleep_after": 0,
+      "timeout": 60,
+      "working_dir": "/Users/swithana/codar/campaigns/brusselator/swithana/sg-tmp/run-000"
+    }
+  ],
+  "total_nodes": 1,
+  "working_dir": "/Users/swithana/codar/campaigns/brusselator/swithana/sg-tmp/run-000"
+}

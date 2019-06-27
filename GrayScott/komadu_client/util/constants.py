@@ -21,6 +21,12 @@ GRAYSCOTT_INPUT_PARAMS_FILE = "settings.json"
 GRAYSCOTT_OUTPUT_FILE = "gs.bp"
 GRAYSCOTT_WORKFLOW_VERSION = "1.0.0"
 
+# Brusselator constants
+BRUSSELATOR_WORKFLOW_NAME = "brusselator"
+BRUSSELATOR_INPUT_PARAMS_FILE = "settings.json"
+BRUSSELATOR_OUTPUT_FILE = "gs.bp"
+BRUSSELATOR_WORKFLOW_VERSION = "1.0.0"
+
 # Cheetah constants
 SIMULATION_STDOUT = "codar.workflow.stdout.simulation"
 SIMULATION_STD_ERR = "codar.workflow.stderr.simulation"

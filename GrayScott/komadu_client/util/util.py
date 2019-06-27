@@ -1,6 +1,7 @@
 import os
 from komadu_client.models.ingest_models import attributesType, attributeType
-from komadu_client.util.constants import GRAYSCOTT_WORKFLOW
+from komadu_client.util.constants import GRAYSCOTT_WORKFLOW, BRUSSELATOR_WORKFLOW_NAME, GRAYSCOTT_WORKFLOW_VERSION,\
+    BRUSSELATOR_WORKFLOW_VERSION
 import json
 
 
@@ -29,6 +30,17 @@ def get_attributes(dict_values):
 def get_workflow_name(filename):
     if GRAYSCOTT_WORKFLOW in filename:
         return GRAYSCOTT_WORKFLOW
+    elif BRUSSELATOR_WORKFLOW_NAME in filename:
+        return BRUSSELATOR_WORKFLOW_NAME
+    else:
+        return None
+
+
+def get_workflow_version(workflow_name):
+    if workflow_name == GRAYSCOTT_WORKFLOW:
+        return GRAYSCOTT_WORKFLOW_VERSION
+    elif workflow_name == BRUSSELATOR_WORKFLOW_VERSION:
+        return BRUSSELATOR_WORKFLOW_NAME
     else:
         return None
 
