@@ -1,7 +1,7 @@
 import os
 from komadu_client.models.ingest_models import attributesType, attributeType
 from komadu_client.util.constants import GRAYSCOTT_WORKFLOW, BRUSSELATOR_WORKFLOW_NAME, GRAYSCOTT_WORKFLOW_VERSION,\
-    BRUSSELATOR_WORKFLOW_VERSION
+    BRUSSELATOR_WORKFLOW_VERSION, WORKFLOW_VERSION_DEFAULT
 import json
 
 
@@ -39,10 +39,10 @@ def get_workflow_name(filename):
 def get_workflow_version(workflow_name):
     if workflow_name == GRAYSCOTT_WORKFLOW:
         return GRAYSCOTT_WORKFLOW_VERSION
-    elif workflow_name == BRUSSELATOR_WORKFLOW_VERSION:
-        return BRUSSELATOR_WORKFLOW_NAME
+    elif workflow_name == BRUSSELATOR_WORKFLOW_NAME:
+        return BRUSSELATOR_WORKFLOW_VERSION
     else:
-        return None
+        return WORKFLOW_VERSION_DEFAULT
 
 
 def get_node_id(workflow_id, node_id):
