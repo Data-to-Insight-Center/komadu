@@ -57,11 +57,13 @@ class AbstractEventProcessor:
         """
         # add the completion times for the workflow
         self.process_workflow_completion_times(file_path, workflow_id)
+        logger.info("Processing {} !".format(file_path))
         workflow_node_id = get_node_id(workflow_id, SIMULATION_NODE_NAME)
         activity = create_workflow_activity(workflow_id, workflow_node_id, workflow_node_id,
                                             workflow_name, workflow_version,
                                             datetime.now(), location)
         self.process_std_out(file_path, activity, workflow_node_id)
+        logger.info("Processing std out/error")
 
     def get_wall_time_from_file(self, filename):
         with open(filename) as file:
@@ -128,10 +130,10 @@ class GrayScottEventProcessor(AbstractEventProcessor):
 
     def process_event(self, username, filename, file_extension, file_path, location):
         workflow_id = get_experiment_name(file_path)
-        logger.info("Processing {} !".format(filename))
 
         if filename.lower() == GRAYSCOTT_INPUT_PARAMS_FILE:
             # settings.json file
+            logger.info("Processing {} !".format(filename))
             self._process_input_file(filename, file_path, location, workflow_id, username)
 
         elif self.get_file_extension(file_path.lower()) == "txt":
@@ -139,6 +141,7 @@ class GrayScottEventProcessor(AbstractEventProcessor):
             pass
         elif filename.lower() == GRAYSCOTT_OUTPUT_FILE:
             # gs.bp
+            logger.info("Processing {} !".format(filename))
             self._process_output_file(filename, file_path, location, workflow_id, username)
         elif CHEETAH_WALLTIME in file_path.lower():
             self.process_workflow_completion(file_path, location, workflow_id, GRAYSCOTT_WORKFLOW_NAME,
