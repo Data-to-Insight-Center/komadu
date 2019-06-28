@@ -202,7 +202,6 @@ class BrusselatorEventProcessor(AbstractEventProcessor):
 
     def process_event(self, username, filename, file_extension, file_path, location):
         workflow_id = get_experiment_name(file_path)
-        logger.info("Processing {} !".format(filename))
 
         if self.get_file_extension(file_path.lower()) == "txt":
             # skip .txt files
