@@ -80,7 +80,7 @@ class EventProcessor(threading.Thread):
             self.grayscott_processor.process_event(username, filename, file_extension, file_path, location)
 
         elif BRUSSELATOR_WORKFLOW_NAME in file_path:
-            self.grayscott_processor.process_event(username, filename, file_extension, file_path, location)
+            self.brusselator_processor.process_event(username, filename, file_extension, file_path, location)
 
 
 if __name__ == "__main__":
