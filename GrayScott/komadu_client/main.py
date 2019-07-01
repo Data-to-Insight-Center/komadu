@@ -120,11 +120,12 @@ def process_static(path):
     data_queue = queue.Queue()
     event_processor = EventProcessor(data_queue)
     files = glob.glob(path + os.sep + "**", recursive=True)
+    for file in files:
+        event_processor.process_file_event(file)
 
 
 if __name__ == "__main__":
     arguments = docopt(__doc__, version="1.0")
-    print(arguments)
 
     if not arguments['--polling']:
         process_static(arguments["<location>"])
