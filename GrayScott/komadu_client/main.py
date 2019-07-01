@@ -1,7 +1,22 @@
+#!/usr/bin/env python
+"""
+A standalone Komadu connector that sends the notifications to Komadu via filesystem reading.
+
+Usage:
+  komaduConnect [--polling | --static] <location>
+
+Options:
+  -h --help     Show this screen.
+  --polling     Start the connector in the polling mode (looks for file creations in real-time)
+  --static      Start the connector in static mode (reads the current files and processes them)
+  <location>    Directory of which to observe
+"""
 import sys
 import os
 import time
 import logging
+import glob
+from docopt import docopt
 from watchdog.observers import Observer
 from watchdog.events import FileSystemEventHandler
 import threading
@@ -24,8 +39,8 @@ class ExperimentEventHandler(FileSystemEventHandler):
         self.event_queue = event_queue
 
     def on_created(self, event):
-        file = event.is_directory
-        if not file:
+        dir = event.is_directory
+        if not dir:
             self.event_queue.put(event)
 
 
@@ -47,11 +62,10 @@ class EventProcessor(threading.Thread):
     def run(self):
         while True:
             item = self.event_queue.get()
-            self.process_file_event(item)
+            self.process_file_event(item.src_path)
         return
 
-    def process_file_event(self, event):
-        file_path = event.src_path
+    def process_file_event(self, file_path):
         event_content = file_path.split("/")
         filename = event_content[-1]
         file_extension = os.path.splitext(filename)[1]
@@ -83,10 +97,8 @@ class EventProcessor(threading.Thread):
             self.brusselator_processor.process_event(username, filename, file_extension, file_path, location)
 
 
-if __name__ == "__main__":
+def process_polling(path):
     data_queue = queue.Queue()
-
-    path = sys.argv[1] if len(sys.argv) > 1 else '.'
     event_handler = ExperimentEventHandler(data_queue)
 
     logger.info("Starting file polling service!")
@@ -102,3 +114,19 @@ if __name__ == "__main__":
     except KeyboardInterrupt:
         observer.stop()
     observer.join()
+
+
+def process_static(path):
+    data_queue = queue.Queue()
+    event_processor = EventProcessor(data_queue)
+    files = glob.glob(path + os.sep + "**", recursive=True)
+
+
+if __name__ == "__main__":
+    arguments = docopt(__doc__, version="1.0")
+    print(arguments)
+
+    if not arguments['--polling']:
+        process_static(arguments["<location>"])
+    else:
+        process_polling(arguments["<location>"])

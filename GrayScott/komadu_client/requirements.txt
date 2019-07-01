@@ -19,6 +19,7 @@ future==0.17.1
 generateDS==2.32.0
 gitdb2==2.0.4
 GitPython==2.1.11
+glob3==0.0.1
 idna==2.7
 intervaltree==2.1.0
 itsdangerous==1.1.0
