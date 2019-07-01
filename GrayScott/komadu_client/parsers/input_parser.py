@@ -19,8 +19,6 @@ class InputParser:
         """
         if file_type.lower() == GRAYSCOTT_WORKFLOW_NAME:
             return self.gray_scott_input_parser(file)
-        elif file_type.lower() == "adiosConfig":
-            return self.adios_config_parser(file)
         else:
             return None
 
@@ -41,7 +39,3 @@ class InputParser:
             attributes.append(attribute)
 
         return attributes
-
-    def adios_config_parser(self, input_file):
-        # todo: implement this
-        return None
