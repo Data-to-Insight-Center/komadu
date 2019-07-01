@@ -1,3 +1,7 @@
+### Configurations
+- GrayScott/komadu_client/scripts/provenance_collector_savanna.sh
+- GrayScott/komadu_client/util/constants.py
+
 ### File Descriptions:
 
 #### Start of the workflow
