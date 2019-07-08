@@ -171,6 +171,30 @@
                 </executions>
             </plugin>
 
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-shade-plugin</artifactId>
+                <version>3.2.0</version>
+                <executions>
+                    <execution>
+                        <id>master</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>shade</goal>
+                        </goals>
+                        <configuration>
+                            <transformers>
+                                <transformer
+                                        implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
+                                    <mainClass>edu.indiana.d2i.komadu.util.ServiceLauncher</mainClass>
+                                </transformer>
+                            </transformers>
+                            <outputFile>bin/komadu-server.jar</outputFile>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
             <!--<plugin>-->
                 <!--<groupId>org.apache.axis2</groupId>-->
                 <!--<artifactId>axis2-aar-maven-plugin</artifactId>-->
