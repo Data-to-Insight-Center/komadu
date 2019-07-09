@@ -3,7 +3,18 @@
 BASE_DIR=/ccs/home/swithana/komadu_system
 ERLANG_HOME=/ccs/home/swithana/programs/erlang
 VENV_ENV=/ccs/home/swithana/venv-sachith
+DATA_PATH=
 export PYTHONPATH=$PYTHONPATH:/ccs/home/swithana/komadu_system/GrayScott
+
+
+if [ -z "$1" ]
+  then
+    DATA_PATH=$PWD
+  else
+    DATA_PATH=$1
+fi
+
+echo "Provenance extraction data path:" $DATA_PATH
 
 # ========== Starting the services ================
 
