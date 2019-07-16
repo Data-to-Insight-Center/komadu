@@ -108,7 +108,7 @@ class AbstractEventProcessor:
         #     err_file_content = f2.read()
         #
         std_out_attributes = get_attributes({"location": str(std_out)})
-        std_err_attributes = get_attributes({"location": str(std_out)})
+        std_err_attributes = get_attributes({"location": str(std_err)})
 
         stdout_entity = create_file_entity("std-out", activity_id + "-stdout", location=str(std_out), attributes=std_out_attributes)
         stderr_entity = create_file_entity("std-err", activity_id + "-stderr", location=str(std_err), attributes=std_err_attributes)
