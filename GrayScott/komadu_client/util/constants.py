@@ -36,3 +36,6 @@ FOBS_FILE = "codar.cheetah.fob.json"
 STATUS_JSON = "codar.workflow.status.json"
 WORKFLOW_VERSION_DEFAULT = "1.0.0"
 ADIOS_CONFIG_FILE="adios2"
+
+# Tau extraction variables
+TAU_EXTRACT_STRING="MetaData:0:0:Hostname,counter 1"
