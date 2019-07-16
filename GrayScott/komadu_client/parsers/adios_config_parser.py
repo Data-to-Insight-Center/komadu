@@ -12,6 +12,10 @@ def parse_adios2xml(file):
         c_parent.remove(comment)
 
     attributes = get_attributes(flatten_xml_file(root))
+    attribute = attributeType()
+    attribute.property_ = "location"
+    attribute.value_ = str(file)
+    attributes.append(attribute)
     return attributes
 
 

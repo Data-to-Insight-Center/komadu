@@ -107,11 +107,11 @@ class AbstractEventProcessor:
         # with open(std_err) as f2:
         #     err_file_content = f2.read()
         #
-        # std_out_attributes = get_attributes({"content": out_file_content})
-        # std_err_attributes = get_attributes({"content": err_file_content})
+        std_out_attributes = get_attributes({"location": str(std_out)})
+        std_err_attributes = get_attributes({"location": str(std_out)})
 
-        stdout_entity = create_file_entity("std-out", activity_id + "-stdout", location=str(std_out))
-        stderr_entity = create_file_entity("std-err", activity_id + "-stderr", location=str(std_err))
+        stdout_entity = create_file_entity("std-out", activity_id + "-stdout", location=str(std_out), attributes=std_out_attributes)
+        stderr_entity = create_file_entity("std-err", activity_id + "-stderr", location=str(std_err), attributes=std_err_attributes)
         activity_entity_stdout = get_activity_entity(activity, stdout_entity, datetime.now(), activity_id,
                                                      stdout_entity.file.fileURI, AssociationEnum.GENERATION)
         activity_entity_stderr = get_activity_entity(activity, stderr_entity, datetime.now(), activity_id,

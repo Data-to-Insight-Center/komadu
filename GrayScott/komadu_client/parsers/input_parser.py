@@ -28,8 +28,8 @@ class InputParser:
         :param input_file: settings.json file
         :return: list of attributeType
         """
-        with open(input_file) as input_file:
-            input_content = json.load(input_file)
+        with open(input_file) as in_file:
+            input_content = json.load(in_file)
 
         attributes = attributesType()
         for key in input_content:
@@ -37,5 +37,11 @@ class InputParser:
             attribute.property_ = key
             attribute.value_ = (str(input_content[key]))
             attributes.append(attribute)
+
+        # adding the location
+        attribute = attributeType()
+        attribute.property_ = "location"
+        attribute.value_ = str(input_file)
+        attributes.append(attribute)
 
         return attributes
