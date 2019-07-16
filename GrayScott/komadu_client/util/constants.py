@@ -13,7 +13,6 @@ RABBITMQ_HOST = "localhost"
 RABBITMQ_PORT = 5672
 RABBITMQ_PATH = "/"
 
-
 # Grayscott constants
 GRAYSCOTT_WORKFLOW = "gray-scott"
 GRAYSCOTT_WORKFLOW_NAME = "grayscott"
@@ -35,7 +34,8 @@ CHEETAH_WALLTIME = "walltime"
 FOBS_FILE = "codar.cheetah.fob.json"
 STATUS_JSON = "codar.workflow.status.json"
 WORKFLOW_VERSION_DEFAULT = "1.0.0"
-ADIOS_CONFIG_FILE="adios2"
+ADIOS_CONFIG_FILE = "adios2"
 
-# Tau extraction variables
-TAU_EXTRACT_STRING="MetaData:0:0:Hostname,counter 1"
+# Tau extraction
+TAU_FILE_NAME = "tau-metrics.bp"
+TAU_EXTRACT_STRING = "MetaData:0:0:Hostname,counter 1"

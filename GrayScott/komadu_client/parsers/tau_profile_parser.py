@@ -19,6 +19,7 @@ def parse_tau_file(file):
             for key in tau_string_attrs:
                 # removing the "Metadata" from the key name
                 refactored_key = key if "MetaData" not in key else key.split(':')[-1].lower()
+                refactored_key.replace(' ', '_')
                 attributes[refactored_key] = fstep.read_attribute_string(key)[0]
             # inspect variables in current step
             step_vars = fstep.available_variables()
