@@ -6,13 +6,12 @@ Usage:
   komaduConnect [--polling | --static] --workflow_type=<workflow_name> <location>
 
 Options:
-  -h --help     Show this screen.
-  --polling     Start the connector in the polling mode (looks for file creations in real-time)
-  --static      Start the connector in static mode (reads the current files and processes them)
-  --workflow_type Type of the workflow (ex: gray-scott)
-  <location>    Directory of which to extract the data from
+  -h --help             Show this screen.
+  --polling             Start the connector in the polling mode (looks for file creations in real-time)
+  --static              Start the connector in static mode (reads the current files and processes them)
+  --workflow_type=<workflow_name>     Type of the workflow (ex: gray-scott)
+  <location>            Directory of which to extract the data from
 """
-import sys
 import os
 import time
 import logging
