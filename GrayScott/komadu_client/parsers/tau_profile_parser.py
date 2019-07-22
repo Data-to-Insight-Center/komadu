@@ -33,4 +33,6 @@ def parse_tau_file(file):
             #
             # # print(fstep.read("comm_rank_count"))
             #print(fstep.read_attribute_string("MetaData:0:0:Hostname"))
+
+    attributes["location"] = str(file)
     return get_attributes(attributes)

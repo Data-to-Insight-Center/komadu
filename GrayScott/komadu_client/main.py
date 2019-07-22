@@ -3,13 +3,15 @@
 A standalone Komadu connector that sends the notifications to Komadu via filesystem reading.
 
 Usage:
-  komaduConnect [--polling | --static] --workflow_type=<workflow_name> <location>
+  komaduConnect [--polling | --static] --workflow_type=<workflow_name> --user=<user_name> --machine=<machine_name> <location>
 
 Options:
   -h --help             Show this screen.
   --polling             Start the connector in the polling mode (looks for file creations in real-time)
   --static              Start the connector in static mode (reads the current files and processes them)
   --workflow_type=<workflow_name>     Type of the workflow (ex: gray-scott)
+  --user=<user_name>    Name of the user running the application
+  --machine=<machine_name> Name of the machine where it's running at
   <location>            Directory of which to extract the data from
 """
 import os
@@ -50,17 +52,19 @@ class EventProcessor(threading.Thread):
     ex: Grayscott events are processed by GrayScott event processor
     """
 
-    def __init__(self, event_queue, workflow_name):
+    def __init__(self, event_queue, workflow_name, machine, username):
         super(EventProcessor, self).__init__()
         self.event_queue = event_queue
         logger.info("Event processor initialized!")
         self.workflow_name = workflow_name
+        self.machine = machine
+        self.username = username
         self.komadu_conn = KomaduClient()
         # setting up the correct workflow processor
         if GRAYSCOTT_WORKFLOW in self.workflow_name:
-            self.processor = GrayScottEventProcessor(self.komadu_conn)
+            self.processor = GrayScottEventProcessor(self.komadu_conn, self.machine, self.username)
         elif BRUSSELATOR_WORKFLOW_NAME in self.workflow_name:
-            self.processor = BrusselatorEventProcessor(self.komadu_conn)
+            self.processor = BrusselatorEventProcessor(self.komadu_conn, self.machine, self.username)
         return
 
     def run(self):
@@ -73,15 +77,12 @@ class EventProcessor(threading.Thread):
         event_content = file_path.split("/")
         filename = event_content[-1]
         file_extension = os.path.splitext(filename)[1]
-        username = event_content[4]
 
         if str(filename).startswith("."):
             # ignore files starting with a '.'
             return
 
-        # todo get the location
-        username = "swithana"
-        location = "summit"
+        # todo get the machine
         log_event = "Processing file: {} filepath: {} workflow_type {}"
         logger.debug(log_event.format(filename, file_path, self.workflow_name))
 
@@ -93,10 +94,10 @@ class EventProcessor(threading.Thread):
                 'utf-8').replace('"', "'")
             self.komadu_conn.publish_data(activity_activity)
 
-        self.processor.process_event(username, filename, file_extension, file_path, location)
+        self.processor.process_event(filename, file_extension, file_path)
 
 
-def process_polling(path, workflow_name):
+def process_polling(path, workflow_name, machine, user):
     data_queue = queue.Queue()
     event_handler = ExperimentEventHandler(data_queue)
 
@@ -105,7 +106,7 @@ def process_polling(path, workflow_name):
     observer.schedule(event_handler, path, recursive=True)
     observer.start()
 
-    event_processor = EventProcessor(data_queue, workflow_name)
+    event_processor = EventProcessor(data_queue, workflow_name, machine, user)
     event_processor.start()
     try:
         while True:
@@ -115,9 +116,9 @@ def process_polling(path, workflow_name):
     observer.join()
 
 
-def process_static(path, workflow_name):
+def process_static(path, workflow_name, machine, user):
     data_queue = queue.Queue()
-    event_processor = EventProcessor(data_queue, workflow_name)
+    event_processor = EventProcessor(data_queue, workflow_name, machine, user)
     files = glob.glob(path + os.sep + "**", recursive=True)
     #
     # fob_json_list = []
@@ -138,8 +139,8 @@ def process_static(path, workflow_name):
 
 if __name__ == "__main__":
     arguments = docopt(__doc__, version="1.0")
-    print(arguments)
+
     if not arguments['--polling']:
-        process_static(arguments["<location>"], arguments["--workflow_type"])
+        process_static(arguments["<location>"], arguments["--workflow_type"], arguments["--machine"], arguments["--user"])
     else:
-        process_polling(arguments["<location>"], arguments["--workflow_type"])
+        process_polling(arguments["<location>"], arguments["--workflow_type"],  arguments["--machine"], arguments["--user"])

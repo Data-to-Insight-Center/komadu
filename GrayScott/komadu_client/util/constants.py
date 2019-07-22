@@ -39,3 +39,4 @@ ADIOS_CONFIG_FILE = "adios2"
 # Tau extraction
 TAU_FILE_NAME = "tau-metrics.bp"
 TAU_EXTRACT_STRING = "MetaData:0:0:Hostname,counter 1"
+TAU_PERF_ENTITY = "TAU_PERF"

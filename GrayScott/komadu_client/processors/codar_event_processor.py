@@ -4,7 +4,7 @@ from komadu_client.models.model_creator import create_workflow_activity, create_
 from komadu_client.util.constants import GRAYSCOTT_WORKFLOW_NAME, GRAYSCOTT_INPUT_PARAMS_FILE, STATUS_JSON, \
     GRAYSCOTT_WORKFLOW_VERSION, SIMULATION_NODE_NAME, CHEETAH_WALLTIME, SIMULATION_STD_ERR, \
     SIMULATION_STDOUT, GRAYSCOTT_OUTPUT_FILE, BRUSSELATOR_WORKFLOW_NAME, BRUSSELATOR_WORKFLOW_VERSION, ADIOS_CONFIG_FILE, \
-    TAU_FILE_NAME
+    TAU_FILE_NAME, TAU_PERF_ENTITY
 from komadu_client.parsers.input_parser import InputParser
 from komadu_client.parsers.adios_config_parser import parse_adios2xml
 from komadu_client.parsers.tau_profile_parser import parse_tau_file
@@ -26,7 +26,7 @@ class AbstractEventProcessor:
     __metaclass__ = ABCMeta
 
     @abstractmethod
-    def process_event(self, username, filename, file_extension, file_path, location):
+    def process_event(self, filename, file_extension, file_path):
         raise NotImplementedError()
 
     def update_statuses(self, file, workflow_id):
@@ -154,9 +154,21 @@ class AbstractEventProcessor:
         :param workflow_id:
         :return:
         """
+        workflow_node_id = get_node_id(workflow_id, SIMULATION_NODE_NAME)
+        # extract the tau information
         tau_attributes = parse_tau_file(tau_file_path)
-        add_attributes_type = add_attributes_activity(workflow_id, SIMULATION_NODE_NAME, None, None, attributes=tau_attributes)
-        self.client.publish_data(add_attributes_type.toxml("utf-8", element_name='ns1:addAttributes').decode('utf-8'))
+
+        entity = create_file_entity(TAU_PERF_ENTITY, workflow_id + "-" + TAU_PERF_ENTITY, location=tau_file_path,
+                                    attributes=tau_attributes, owner=self.username)
+        activity = create_workflow_activity(workflow_id, workflow_node_id, workflow_node_id, self.workflow_name,
+                                            self.workflow_version, datetime.now(), self.location)
+
+        # create the connection between the activity and the entity
+        result = get_activity_entity(activity, entity, datetime.now(),
+                                     activity.serviceInformation.serviceID,
+                                     entity.file.fileURI, AssociationEnum.USAGE)
+        logger.info("Publishing " + tau_file_path + " to Komadu!")
+        self.publish_activity_entity_relationship(result)
 
 
 class GrayScottEventProcessor(AbstractEventProcessor):
@@ -164,29 +176,33 @@ class GrayScottEventProcessor(AbstractEventProcessor):
     Processes events related to the Gray Scott workflow.
     """
 
-    def __init__(self, komadu_connetion):
+    def __init__(self, komadu_connetion, location, username):
         self.parser = InputParser()
         self.client = komadu_connetion
+        self.workflow_name = GRAYSCOTT_WORKFLOW_NAME
+        self.workflow_version = GRAYSCOTT_WORKFLOW_VERSION
+        self.location = location
+        self.username = username
 
-    def process_event(self, username, filename, file_extension, file_path, location):
+    def process_event(self, filename, file_extension, file_path):
         workflow_id = get_experiment_name(file_path)
         if filename.lower() == GRAYSCOTT_INPUT_PARAMS_FILE:
             # settings.json file
             logger.info("Processing {} !".format(filename))
-            self._process_input_file(filename, file_path, location, workflow_id, username)
+            self._process_input_file(filename, file_path, self.location, workflow_id, self.username)
         elif self.get_file_extension(file_path.lower()) == "txt":
             # skip .txt files
             pass
         elif ADIOS_CONFIG_FILE in filename.lower():
             # adios2.xml
             logger.info("Processing {} !".format(filename))
-            self._process_gs_adios2_xml(filename, file_path, location, workflow_id, username)
+            self._process_gs_adios2_xml(filename, file_path, self.location, workflow_id, self.username)
         elif filename.lower() == GRAYSCOTT_OUTPUT_FILE:
             # gs.bp
             logger.info("Processing {} !".format(filename))
-            self._process_output_file(filename, file_path, location, workflow_id, username)
+            self._process_output_file(filename, file_path, self.location, workflow_id, self.username)
         elif CHEETAH_WALLTIME in file_path.lower():
-            self.process_workflow_completion(file_path, location, workflow_id, GRAYSCOTT_WORKFLOW_NAME,
+            self.process_workflow_completion(file_path, self.location, workflow_id, GRAYSCOTT_WORKFLOW_NAME,
                                               GRAYSCOTT_WORKFLOW_VERSION)
         elif TAU_FILE_NAME == filename:
             logger.info("Processing Tau File: {} !".format(filename))
@@ -237,11 +253,15 @@ class BrusselatorEventProcessor(AbstractEventProcessor):
     Processes events related to the Brusselator workflow.
     """
 
-    def __init__(self, komadu_connetion):
+    def __init__(self, komadu_connetion, location, username):
         self.parser = InputParser()
         self.client = komadu_connetion
+        self.workflow_name = BRUSSELATOR_WORKFLOW_NAME
+        self.workflow_version = BRUSSELATOR_WORKFLOW_VERSION
+        self.location = location
+        self.username = username
 
-    def process_event(self, username, filename, file_extension, file_path, location):
+    def process_event(self, filename, file_extension, file_path):
         workflow_id = get_experiment_name(file_path)
 
         if self.get_file_extension(file_path.lower()) == "txt":
@@ -250,14 +270,14 @@ class BrusselatorEventProcessor(AbstractEventProcessor):
         elif ADIOS_CONFIG_FILE in filename.lower():
             # adios2.xml
             logger.info("Processing {} !".format(filename))
-            self._process_brusselator_adios2_xml(filename, file_path, location, workflow_id, username)
+            self._process_brusselator_adios2_xml(filename, file_path, self.location, workflow_id, self.username)
         elif CHEETAH_WALLTIME in file_path.lower():
-            self.process_workflow_completion(file_path, location, workflow_id, BRUSSELATOR_WORKFLOW_NAME,
-                                             BRUSSELATOR_WORKFLOW_VERSION)
+            self.process_workflow_completion(file_path, self.location, workflow_id, self.workflow_name,
+                                             self.workflow_version)
         elif TAU_FILE_NAME == filename:
             logger.info("Processing Tau File: {} !".format(filename))
             self.publish_tau_info(file_path, workflow_id)
 
     def _process_brusselator_adios2_xml(self, filename, file_path, location, workflow_id, username):
-        self.process_adios2_config(filename, file_path, location, workflow_id, username, BRUSSELATOR_WORKFLOW_NAME,
-                                   BRUSSELATOR_WORKFLOW_VERSION)
+        self.process_adios2_config(filename, file_path, location, workflow_id, username, self.workflow_name,
+                                   self.workflow_version)
