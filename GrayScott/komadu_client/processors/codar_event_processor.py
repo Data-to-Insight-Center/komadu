@@ -166,7 +166,7 @@ class AbstractEventProcessor:
         # create the connection between the activity and the entity
         result = get_activity_entity(activity, entity, datetime.now(),
                                      activity.serviceInformation.serviceID,
-                                     entity.file.fileURI, AssociationEnum.USAGE)
+                                     entity.file.fileURI, AssociationEnum.GENERATION)
         logger.info("Publishing " + tau_file_path + " to Komadu!")
         self.publish_activity_entity_relationship(result)
 
