@@ -9,17 +9,20 @@ from komadu_client.util.association_enums import AssociationEnum
 import logging
 
 komadu_conn = KomaduClient()
-logger = logging.getLogger('codar-komadu-client.EventProcessor')
+logger = logging.getLogger('codar-komadu-client.data_ingester')
 
 
 def send_workflow_instance_prov(username, machine, campaign_id, workflow_name, workflow_version, experiment, run, sim_node, analysis_node, workflow_attributes=None):
     workflow_id = get_workflow_id(username, campaign_id, experiment, run)
-
+    print("Publishing workflow instance with id: " + workflow_id)
     # publishing a two node workflow
     send_workflow(machine, workflow_id, workflow_name, workflow_version, sim_node, analysis_node, workflow_attributes)
 
     # publishing input-workflow relationship
-    send_input_file(sim_node, workflow_id, workflow_name, workflow_version, username, machine, filename=None)
+    send_entity(sim_node, workflow_id, workflow_name, workflow_version, username, machine, filename="inputFile", association=AssociationEnum.USAGE)
+
+    # publishing workflow-output relationship
+    send_entity(sim_node, workflow_id, workflow_name, workflow_version, username, machine, filename="outputfile", association=AssociationEnum.GENERATION)
 
 
 def send_workflow(machine, workflow_id, workflow_name, workflow_version, sim_node, analysis_node, workflow_attributes=None):
@@ -44,7 +47,7 @@ def send_workflow(machine, workflow_id, workflow_name, workflow_version, sim_nod
     komadu_conn.publish_data(workflow_graph)
 
 
-def send_input_file(sim_node, workflow_id, workflow_name, workflow_version, username, machine, filename="inputFile"):
+def send_entity(sim_node, workflow_id, workflow_name, workflow_version, username, machine, filename="inputFile", association=AssociationEnum.USAGE):
     """
     Sends the input file attached to the first node (sim node) of the workflow
     :param sim_node:
@@ -63,12 +66,12 @@ def send_input_file(sim_node, workflow_id, workflow_name, workflow_version, user
     activity = create_workflow_activity(workflow_id, workflow_node_id, workflow_node_id,
                                         workflow_name, workflow_version,
                                         datetime.now(), location)
-    entity = create_file_entity(filename, workflow_id + "-input_file", location=location,
+    entity = create_file_entity(filename, workflow_id + "-" + filename, location=location,
                                 owner=username)
     # create the connection between the activity and the entity
     result = get_activity_entity(activity, entity, datetime.now(),
                                  activity.serviceInformation.serviceID,
-                                 entity.file.fileURI, AssociationEnum.USAGE)
+                                 entity.file.fileURI, association)
     logger.info("Publishing " + location + " to Komadu!")
     publish_activity_entity_relationship(result)
 
@@ -88,7 +91,7 @@ def get_input_location(machine, username, workflow_id):
     return machine + "://" + "home/" + username + "/" + workflow_id + "/input_file"
 
 
-def publish_activity_entity_relationship(self, result):
+def publish_activity_entity_relationship(result):
     # publish the data to Komadu
     komadu_conn.publish_data(
         result.toxml("utf-8", element_name='ns1:addActivityEntityRelationship').decode('utf-8'))
@@ -96,3 +99,22 @@ def publish_activity_entity_relationship(self, result):
 
 def get_workflow_id(username, campaign_id, experiment, run):
     return username + "_" + campaign_id + "_" + experiment + "_" + run
+
+
+def main():
+    username = "swithana"
+    machine = "summit"
+    campaign_id = "grayscott-mesh"
+    workflow_name = "grayscott"
+    workflow_version = "1.0.0"
+    experiment = "0332"
+    run = "01"
+    sim_node = "Simulation"
+    analysis_node = "analysis"
+    workflow_attributes = None
+    send_workflow_instance_prov(username, machine, campaign_id, workflow_name, workflow_version, experiment, run,
+                                    sim_node, analysis_node, workflow_attributes=None)
+
+
+if __name__ == "__main__":
+    main()
