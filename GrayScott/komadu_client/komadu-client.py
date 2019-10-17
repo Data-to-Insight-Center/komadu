@@ -42,8 +42,8 @@ def execute_command(notify, file):
                               body=data)
     else:
         queue_name = BASE_QUEUENAME + 'QueryResponse'
-        # channel.exchange_declare(BASE_EXCHANGE + "QueryResponse", "direct")
-        # channel.queue_declare(queue_name)
+        channel.exchange_declare(BASE_EXCHANGE + "QueryResponse", "direct")
+        channel.queue_declare(queue_name)
         channel.queue_bind(exchange=BASE_EXCHANGE + "QueryResponse", queue=queue_name, routing_key=CLIENT_ID)
         channel.basic_publish(exchange=BASE_EXCHANGE + 'QueryRequest', routing_key=BASE_ROUTINGKEY + 'QueryRequest',
                               body=data)
@@ -61,7 +61,7 @@ def callback(ch, method, properties, body):
     content = etree.ElementTree(root[0][0])
     content.write('output.xml', pretty_print=True, xml_declaration=True)
     time.sleep(3)
-    os.system(SAXON_COMMAND)
+    # os.system(SAXON_COMMAND)
     quit()
 
 

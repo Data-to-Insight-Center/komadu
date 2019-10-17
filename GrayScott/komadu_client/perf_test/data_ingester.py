@@ -109,7 +109,7 @@ def main():
     workflow_version = "1.0.0"
     experiment = "0332"
     run = "01"
-    sim_node = "Simulation"
+    sim_node = "simulation"
     analysis_node = "analysis"
     workflow_attributes = None
     send_workflow_instance_prov(username, machine, campaign_id, workflow_name, workflow_version, experiment, run,
