@@ -1,10 +1,11 @@
 import json
 from komadu_client.util.util import get_experiment_name, get_workflow_name, get_attributes, get_node_id, \
-    get_workflow_version
+    get_workflow_version, get_experiment_info, get_cascaded_id
 from komadu_client.util.constants import GRAYSCOTT_WORKFLOW_VERSION
 from komadu_client.models.model_creator import create_workflow_activity
 from datetime import datetime
 from komadu_client.models.ingest_models import activityActivityType, communicationType
+from komadu_client.graphdb.queries import INIT_SWEEP, SINGLE_FOBS_RELATIONSHIP
 
 
 def parse_fobs_json(filename):
@@ -16,18 +17,63 @@ def parse_fobs_json(filename):
     with open(filename) as file:
         fobs = json.load(file)
 
-    experiment_id = get_experiment_name(filename)
+    # extracting the meta information from the filepath
+    campaign_name, username, sweepGroup, sweep, experiment_id = get_experiment_info(filename)
+
     machine = fobs["machine_name"]
     workflow_name = get_workflow_name(filename)
     runs = fobs["runs"]
     workflow_node_ids = list(range(len(runs)))
 
+    # print("Experiment: {}\t Workflow_name: {}\t Machine: {}\t User: {}\t Campaign: {}".format(experiment_id, workflow_name, machine, username, campaign_name))
+
+    # Creating the Komadu provenance graph
+    komadu_activity_activity_type = create_provenance_graph(experiment_id, fobs, machine, runs, workflow_name,
+                                                            workflow_node_ids)
+    # creating the
+    graph_query = create_meta_graph(username, campaign_name, campaign_name, sweepGroup, sweep)
+    print(graph_query)
+
+    return komadu_activity_activity_type, graph_query
+
+
+def create_meta_graph(username, codesign_name, campaign_name, sweepGroup, sweep):
+    """
+    Creates the graph query for the given fobs.json information
+    :param username:
+    :param codesign_name:
+    :param campaign_name:
+    :param sweepGroup:
+    :param sweep:
+    :return:
+    """
+    codesign_id = username + "-" + codesign_name
+    campaign_id = codesign_id + "-" + campaign_name
+    sweep_group_id = campaign_id + "-" + sweepGroup
+    sweep_id = sweep_group_id + "-" + sweep
+
+    # graph_query = "MERGE (user:User{{name:{0} }}) ".format(username)
+    graph_query = INIT_SWEEP.format(username, codesign_id, codesign_id, campaign_id, campaign_name, sweep_group_id, sweepGroup, sweep_id, sweep) + " " + SINGLE_FOBS_RELATIONSHIP
+
+    return graph_query
+
+
+def create_provenance_graph(experiment_id, fobs, machine, runs, workflow_name, workflow_node_ids):
+    """
+    Creates the Komadu activity activity graph for the given sweep
+    :param experiment_id:
+    :param fobs:
+    :param machine:
+    :param runs:
+    :param workflow_name:
+    :param workflow_node_ids:
+    :return:
+    """
     for i in workflow_node_ids:
         if runs[i]["name"] == "simulation":
             simulation_index = i
             workflow_node_ids.remove(i)
             break
-
     simulation = runs[simulation_index]
     workflow_attributes = {
         "node_layout": flatten_node_layout(fobs["node_layout"]),
@@ -47,8 +93,8 @@ def parse_fobs_json(filename):
     analysis_node = create_workflow_activity(experiment_id, get_node_id(experiment_id, analysis_name),
                                              get_node_id(experiment_id, analysis_name), workflow_name,
                                              workflow_version, datetime.now(), machine)
-
-    return get_activity_activity_type(simulation_node, analysis_node)
+    komadu_activity_activity_type = get_activity_activity_type(simulation_node, analysis_node)
+    return komadu_activity_activity_type
 
 
 def flatten_node_layout(node_layout):

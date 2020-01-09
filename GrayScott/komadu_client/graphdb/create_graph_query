@@ -1,0 +1,64 @@
+CREATE CONSTRAINT ON (user:User) ASSERT user.name IS UNIQUE;
+CREATE CONSTRAINT ON (cod:Codesign) ASSERT cod.id IS UNIQUE;
+CREATE CONSTRAINT ON (camp:Campaign) ASSERT camp.id IS UNIQUE;
+CREATE CONSTRAINT ON (sg:SweepGroup) ASSERT sg.id IS UNIQUE;
+CREATE CONSTRAINT ON (sw:Sweep) ASSERT sw.id IS UNIQUE;
+
+
+MERGE (user:User{name:'Dananji Withana', institution: "IU"})
+MERGE (cod:Codesign{id:'cod2d1', name: "emergencyOne"})
+MERGE (camp:Campaign{id:'codcamp2', name: "campOne"})
+MERGE (sg:SweepGroup{id:'sg2232', name: "SG1121"})
+MERGE (sw:Sweep{id:'sw1sg5543', name: "sg5543sw1"})
+MERGE (sr:SweepRun{id:'sr1sg5543', name: "sg5543sr1"})
+
+MERGE (user)-[:Created]->(cod)
+MERGE (cod)-[:Created]->(camp)
+MERGE (camp)-[:Consists]->(sg)
+MERGE (camp)-[:Consists]->(sg2)
+MERGE (sg)-[:Contains]->(sw)
+MERGE (sg)-[:Contains]->(sw2)
+MERGE (sw)-[:Ran]->(sr)
+MERGE (sw)-[:Ran]->(sr2)
+
+
+CREATE
+  (`0` :User {name:"Sachith",location:"Bloomington, IN",ORCID:'0034-232-1234422-221',institution:"Indiana University"}) ,
+  (`1` :Node ) ,
+  (`2` :Codesign {name:"Compression design",workflows:"grayscott"}) ,
+  (`3` :Campaign {name:"campaign_001",machine:"summit",desc:"analysis compression"}) ,
+  (`4` :Campaign {name:"campaign_002",machine:"Titan",desc:': "zchecker"'}) ,
+  (`5` :SweepGroup {name:"sg-003",date:'02/04/2019'}) ,
+  (`6` :SweepGroup {name:"sg-zcheck2",date:'04/25/2019'}) ,
+  (`7` :Sweep {id:'sachith_camp_exp-003-run-003'}) ,
+  (`8` :Sweep {id:'sachith_camp_exp_003-run-001'}) ,
+  (`9` :SweepGroup {name:"sg-002",date:'02/04/2019'}) ,
+  (`10` :Sweep {id:'sachith_camp_exp_002-run-001',design:"grayscott, z, pdf"}) ,
+  (`11` :Sweep {id:'sachith_camp_exp3_run_001',design:"grayscott, zchecker, pdf"}) ,
+  (`12` :User {name:"Lipeng",location:"Knoxville, TN",ORCID:'0034-324-1234-223',institution:"Oak Ridge NL"}) ,
+  (`13` :Codesign {name:"Compression design",workflows:"grayscott"}) ,
+  (`14` :Campaign {name:"Compress_92",date:'02/03/2019',desc:"grayscott zchecker test",machine:"summit"}) ,
+  (`15` :SweepGroup {name:"sg_1",date:'04/04/2019'}) ,
+  (`16` :Sweep {id:'lipeng_compress_92_exp1_run-001',design:"grayscott-zchecker-pdf"}) ,
+  (`17` :Publication {name:"ipds-compress-pub",conference:'ipdps',date:'08/04/2019',accepted:'True'}) ,
+  (`18` :SweepRun {date:'01/23/2019',successful:'True'}) ,
+  (`19` :SweepRun {date:'04/25/2019',successful:'False'}) ,
+  (`0`)-[:`Created` {date:'01/04/2019'}]->(`2`),
+  (`2`)-[:`Created` {date:'01/24/2019'}]->(`3`),
+  (`2`)-[:`Created` {date:'04/20/2019'}]->(`4`),
+  (`3`)-[:`Consists` ]->(`5`),
+  (`4`)-[:`Consists` ]->(`6`),
+  (`5`)-[:`Contains` ]->(`7`),
+  (`5`)-[:`Contains` ]->(`8`),
+  (`3`)-[:`Consists` ]->(`9`),
+  (`9`)-[:`Contains` ]->(`10`),
+  (`6`)-[:`Contains` ]->(`11`),
+  (`12`)-[:`Created` {date:'03/03/2019'}]->(`13`),
+  (`13`)-[:`Created` ]->(`14`),
+  (`14`)-[:`Consists` ]->(`15`),
+  (`15`)-[:`Contains` ]->(`16`),
+  (`12`)-[:`Authored` ]->(`17`),
+  (`17`)-[:`Used` ]->(`11`),
+  (`17`)-[:`Used` ]->(`16`),
+  (`7`)-[:`RELATED_TO` ]->(`18`),
+  (`7`)-[:`RELATED_TO` ]->(`19`)

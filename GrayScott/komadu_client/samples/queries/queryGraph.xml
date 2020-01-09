@@ -1,4 +1,4 @@
 <quer:getActivityGraphRequest xmlns:quer="http://komadu.d2i.indiana.edu/query">
     <quer:informationDetailLevel>FINE</quer:informationDetailLevel>
-    <quer:activityURI>demo-test34-run-0.iteration-0-simulation</quer:activityURI>
+    <quer:activityURI>swithana_grayscott-mesh_0332_01-Simulation</quer:activityURI>
 </quer:getActivityGraphRequest>

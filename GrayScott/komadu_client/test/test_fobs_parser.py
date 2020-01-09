@@ -7,7 +7,7 @@ class TestFobsParser(unittest.TestCase):
 
     def test_fobs_parser_gray_scott(self):
         file_name = "./resources/gray-scott/codar.cheetah.fob.json"
-        parsed_result = parse_fobs_json(file_name)
+        parsed_result, _ = parse_fobs_json(file_name)
 
         parsed_result.activity1.serviceInformation.instanceOf.creationTime = datetime(2019, 10, 30, 18, 00)
         parsed_result.activity2.serviceInformation.instanceOf.creationTime = datetime(2019, 10, 30, 18, 00)
@@ -18,7 +18,7 @@ class TestFobsParser(unittest.TestCase):
 
     def test_fobs_parser_brusselator(self):
         file_name = "./resources/brusselator/codar.cheetah.fobs.json"
-        parsed_result = parse_fobs_json(file_name)
+        parsed_result, _ = parse_fobs_json(file_name)
 
         parsed_result.activity1.serviceInformation.instanceOf.creationTime = datetime(2019, 10, 30, 18, 00)
         parsed_result.activity2.serviceInformation.instanceOf.creationTime = datetime(2019, 10, 30, 18, 00)
