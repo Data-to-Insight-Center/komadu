@@ -44,4 +44,4 @@ class InputParser:
         attribute.value_ = str(input_file)
         attributes.append(attribute)
 
-        return attributes
+        return attributes, input_content

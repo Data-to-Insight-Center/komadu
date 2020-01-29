@@ -23,15 +23,17 @@ def parse_tau_file(file):
                 attributes[refactored_key] = fstep.read_attribute_string(key)[0]
             # inspect variables in current step
             step_vars = fstep.available_variables()
+            print("Fstep value: {}\n".format(fstep))
 
             # # print variables information
-            # for name, info in step_vars.items():
-            #     print("variable_name: " + name)
-            #     for key, value in info.items():
-            #         print("\t" + key + ": " + value)
-            #     print("\n")
-            #
-            # # print(fstep.read("comm_rank_count"))
+            for name, info in step_vars.items():
+                print("variable_name: " + name)
+                for key, value in info.items():
+                    print("\t" + key + ": " + value)
+                print("\n")
+
+            values = fstep.read("counter_values")[0]
+            print(values)
             #print(fstep.read_attribute_string("MetaData:0:0:Hostname"))
 
     attributes["location"] = str(file)

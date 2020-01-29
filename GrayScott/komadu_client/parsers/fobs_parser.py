@@ -1,5 +1,7 @@
-import json
-from komadu_client.util.util import get_experiment_name, get_workflow_name, get_attributes, get_node_id, \
+import json, os
+from datetime import datetime
+
+from komadu_client.util.util import get_experiment_info, get_workflow_name, get_attributes, get_node_id, \
     get_workflow_version, get_experiment_info, get_cascaded_id
 from komadu_client.util.constants import GRAYSCOTT_WORKFLOW_VERSION
 from komadu_client.models.model_creator import create_workflow_activity
@@ -17,27 +19,31 @@ def parse_fobs_json(filename):
     with open(filename) as file:
         fobs = json.load(file)
 
-    # extracting the meta information from the filepath
-    campaign_name, username, sweepGroup, sweep, experiment_id = get_experiment_info(filename)
+    # file timestamp
+    modified_time = datetime.fromtimestamp(os.path.getmtime(filename)).strftime('%Y-%m-%dT%H:%M:%S')
 
+    print("filename: {}\t time: {}".format(filename, modified_time))
+
+    # extracting the meta information from the filepath
+    experiment_id, codesign_name, campaign_name, username, sweepGroup, sweep = get_experiment_info(filename)
+
+    # extracting workflow information
     machine = fobs["machine_name"]
     workflow_name = get_workflow_name(filename)
     runs = fobs["runs"]
     workflow_node_ids = list(range(len(runs)))
 
-    # print("Experiment: {}\t Workflow_name: {}\t Machine: {}\t User: {}\t Campaign: {}".format(experiment_id, workflow_name, machine, username, campaign_name))
-
     # Creating the Komadu provenance graph
     komadu_activity_activity_type = create_provenance_graph(experiment_id, fobs, machine, runs, workflow_name,
                                                             workflow_node_ids)
     # creating the
-    graph_query = create_meta_graph(username, campaign_name, campaign_name, sweepGroup, sweep)
+    graph_query = create_meta_graph(username, campaign_name, campaign_name, sweepGroup, sweep, modified_time)
     print(graph_query)
 
     return komadu_activity_activity_type, graph_query
 
 
-def create_meta_graph(username, codesign_name, campaign_name, sweepGroup, sweep):
+def create_meta_graph(username, codesign_name, campaign_name, sweepGroup, sweep, modified_time):
     """
     Creates the graph query for the given fobs.json information
     :param username:
@@ -53,7 +59,7 @@ def create_meta_graph(username, codesign_name, campaign_name, sweepGroup, sweep)
     sweep_id = sweep_group_id + "-" + sweep
 
     # graph_query = "MERGE (user:User{{name:{0} }}) ".format(username)
-    graph_query = INIT_SWEEP.format(username, codesign_id, codesign_id, campaign_id, campaign_name, sweep_group_id, sweepGroup, sweep_id, sweep) + " " + SINGLE_FOBS_RELATIONSHIP
+    graph_query = INIT_SWEEP.format(username, codesign_id, codesign_id, campaign_id, campaign_name, sweep_group_id, sweepGroup, modified_time, sweep_id, sweep, modified_time) + " " + SINGLE_FOBS_RELATIONSHIP
 
     return graph_query
 

@@ -33,11 +33,12 @@ class EventProcessor(threading.Thread):
 
         self.graphdb = Database(graph_db_uri, graph_db_username, graph_db_password)
         # self.komadu_conn = KomaduClient()
-        # # setting up the correct workflow processor
-        # if GRAYSCOTT_WORKFLOW in self.workflow_name:
-        #     self.processor = GrayScottEventProcessor(self.komadu_conn, self.machine, self.username)
-        # elif BRUSSELATOR_WORKFLOW_NAME in self.workflow_name:
-        #     self.processor = BrusselatorEventProcessor(self.komadu_conn, self.machine, self.username)
+        self.komadu_conn = None
+        # setting up the correct workflow processor
+        if GRAYSCOTT_WORKFLOW in self.workflow_name:
+            self.processor = GrayScottEventProcessor(self.komadu_conn, self.machine, self.username)
+        elif BRUSSELATOR_WORKFLOW_NAME in self.workflow_name:
+            self.processor = BrusselatorEventProcessor(self.komadu_conn, self.machine, self.username)
         return
 
     def run(self):
@@ -63,13 +64,11 @@ class EventProcessor(threading.Thread):
             logger.info("Processing the fobs file: {}".format(file_path))
             # init the workflow using the fobs.json file
             activity_activity, graph_query = parse_fobs_json(file_path)
-            activity_activity = activity_activity.toxml("utf-8",
-                                                                 element_name='ns1:addActivityActivityRelationship').decode(
-                'utf-8').replace('"', "'")
+            # activity_activity = activity_activity.toxml("utf-8", element_name='ns1:addActivityActivityRelationship').decode(
+            #     'utf-8').replace('"', "'")
             # self.komadu_conn.publish_data(activity_activity)
 
             logger.info("Publishing the graph to the database")
             self.graphdb.run_fobs_init_graph_query(graph_query)
 
-        # todo uncomment this
-        # self.processor.process_event(filename, file_extension, file_path)
+        self.processor.process_event(filename, file_extension, file_path)

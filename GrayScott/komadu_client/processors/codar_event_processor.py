@@ -11,7 +11,7 @@ from komadu_client.parsers.tau_profile_parser import parse_tau_file
 from komadu_client.util.association_enums import AssociationEnum
 from komadu_client.util.logger import logger
 import logging
-from komadu_client.util.util import get_experiment_name, get_node_id, parse_json_file, flatten_dict
+from komadu_client.util.util import get_experiment_info, get_node_id, parse_json_file, flatten_dict
 from abc import ABCMeta, abstractmethod
 from os import path, sep
 
@@ -185,35 +185,37 @@ class GrayScottEventProcessor(AbstractEventProcessor):
         self.username = username
 
     def process_event(self, filename, file_extension, file_path):
-        workflow_id = get_experiment_name(file_path)
+        workflow_id = get_experiment_info(file_path)[0]
         if filename.lower() == GRAYSCOTT_INPUT_PARAMS_FILE:
             # settings.json file
             logger.info("Processing {} !".format(filename))
             self._process_input_file(filename, file_path, self.location, workflow_id, self.username)
-        elif self.get_file_extension(file_path.lower()) == "txt":
-            # skip .txt files
-            pass
-        elif ADIOS_CONFIG_FILE in filename.lower():
-            # adios2.xml
-            logger.info("Processing {} !".format(filename))
-            self._process_gs_adios2_xml(filename, file_path, self.location, workflow_id, self.username)
-        elif filename.lower() == GRAYSCOTT_OUTPUT_FILE:
-            # gs.bp
-            logger.info("Processing {} !".format(filename))
-            self._process_output_file(filename, file_path, self.location, workflow_id, self.username)
-        elif CHEETAH_WALLTIME in file_path.lower():
-            self.process_workflow_completion(file_path, self.location, workflow_id, GRAYSCOTT_WORKFLOW_NAME,
-                                              GRAYSCOTT_WORKFLOW_VERSION)
-        elif TAU_FILE_NAME == filename:
-            logger.info("Processing Tau File: {} !".format(filename))
-            self.publish_tau_info(file_path, workflow_id)
+        # elif self.get_file_extension(file_path.lower()) == "txt":
+        #     # skip .txt files
+        #     pass
+        # elif ADIOS_CONFIG_FILE in filename.lower():
+        #     # adios2.xml
+        #     logger.info("Processing {} !".format(filename))
+        #     self._process_gs_adios2_xml(filename, file_path, self.location, workflow_id, self.username)
+        # elif filename.lower() == GRAYSCOTT_OUTPUT_FILE:
+        #     # gs.bp
+        #     logger.info("Processing {} !".format(filename))
+        #     self._process_output_file(filename, file_path, self.location, workflow_id, self.username)
+        # elif CHEETAH_WALLTIME in file_path.lower():
+        #     self.process_workflow_completion(file_path, self.location, workflow_id, GRAYSCOTT_WORKFLOW_NAME,
+        #                                       GRAYSCOTT_WORKFLOW_VERSION)
+        # elif TAU_FILE_NAME == filename:
+        #     logger.info("Processing Tau File: {} !".format(filename))
+        #     self.publish_tau_info(file_path, workflow_id)
 
     def _process_input_file(self, filename, file_path, location, workflow_id, username):
         """
         When the settings.json file is detected add that to the provenance
         """
         workflow_node_id = get_node_id(workflow_id, SIMULATION_NODE_NAME)
-        input_params = self.parser.parse(file_path, GRAYSCOTT_WORKFLOW_NAME)
+        input_params, raw_input = self.parser.parse(file_path, GRAYSCOTT_WORKFLOW_NAME)
+
+        logger.info("filename: {}\t workflow_id:{}\t input params:{}".format(filename, workflow_id, raw_input))
         # create the activity node and the entity node
         activity = create_workflow_activity(workflow_id, workflow_node_id, workflow_node_id,
                                             GRAYSCOTT_WORKFLOW_NAME, GRAYSCOTT_WORKFLOW_VERSION,
@@ -224,8 +226,9 @@ class GrayScottEventProcessor(AbstractEventProcessor):
         result = get_activity_entity(activity, entity, datetime.now(),
                                      activity.serviceInformation.serviceID,
                                      entity.file.fileURI, AssociationEnum.USAGE)
-        logger.info("Publishing " + file_path + " to Komadu!")
-        self.publish_activity_entity_relationship(result)
+        # todo: uncomment these line
+        # logger.info("Publishing " + file_path + " to Komadu!")
+        # self.publish_activity_entity_relationship(result)
 
     def _process_output_file(self, filename, file_path, location, workflow_id, username):
         """
@@ -262,7 +265,7 @@ class BrusselatorEventProcessor(AbstractEventProcessor):
         self.username = username
 
     def process_event(self, filename, file_extension, file_path):
-        workflow_id = get_experiment_name(file_path)
+        workflow_id = get_experiment_info(file_path)[0]
 
         if self.get_file_extension(file_path.lower()) == "txt":
             # skip .txt files

@@ -1,4 +1,4 @@
-from komadu_client.util.util import get_experiment_name, get_workflow_name, get_attributes, get_node_id, \
+from komadu_client.util.util import get_experiment_info, get_workflow_name, get_attributes, get_node_id, \
     get_workflow_version
 from komadu_client.models.model_creator import create_workflow_activity
 from datetime import datetime

@@ -5,23 +5,6 @@ from komadu_client.util.constants import GRAYSCOTT_WORKFLOW, BRUSSELATOR_WORKFLO
 import json
 
 
-def get_experiment_name(file_path):
-    dirname = os.path.dirname(file_path)
-    dirs = dirname.split(os.sep)
-
-    # extracting meta data from the directory structure
-    campaign_name = dirs[-4]
-    username = dirs[-3]
-
-    run_name = dirs[-1]
-    if run_name.startswith("run"):
-        experiment_name = username + "-" + campaign_name + "-" + dirs[-2] + "-" + run_name
-    else:
-        experiment_name = run_name
-
-    return experiment_name
-
-
 def get_experiment_info(file_path):
     """
     Returns the extracted campaign info based on the filepath
@@ -33,17 +16,19 @@ def get_experiment_info(file_path):
 
     # extracting meta data from the directory structure
     campaign_name = dirs[-4]
+    # todo: change this
+    codesign_name = campaign_name
     username = dirs[-3]
     sweepGroup = dirs[-2]
     sweep = dirs[-1]
 
     run_name = dirs[-1]
     if run_name.startswith("run"):
-        experiment_name = username + "-" + campaign_name + "-" + dirs[-2] + "-" + run_name
+        experiment_name = username + "-" +codesign_name + "-" + campaign_name + "-" + dirs[-2] + "-" + run_name
     else:
         experiment_name = run_name
 
-    return campaign_name, username, sweepGroup, sweep, experiment_name
+    return experiment_name, codesign_name, campaign_name, username, sweepGroup, sweep
 
 
 def get_cascaded_id(ids):
