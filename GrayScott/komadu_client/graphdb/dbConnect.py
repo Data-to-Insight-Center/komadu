@@ -26,6 +26,15 @@ class Database(object):
         with self._driver.session() as session:
             session.write_transaction(self.run_init_fobs_graph, query)
 
+    def add_input_to_graph(self, query):
+        """
+        Adds an input to the graph
+        :param query:
+        :return:
+        """
+        with self._driver.session() as session:
+            session.write_transaction(self.add_input_graph, query)
+
     def add_user(self, name):
         with self._driver.session() as session:
             session.write_transaction(self.create_user_node, name)
@@ -46,6 +55,8 @@ class Database(object):
     def run_init_fobs_graph(tx, query):
         return tx.run(query).single()
 
-
+    @staticmethod
+    def add_input_graph(tx, query):
+        return tx.run(query).single()
 
 

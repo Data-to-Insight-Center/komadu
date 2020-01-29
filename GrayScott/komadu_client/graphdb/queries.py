@@ -11,3 +11,8 @@ SINGLE_FOBS_RELATIONSHIP = "MERGE (user)-[:Created]->(cod) " \
                 "MERGE (cod)-[:Created]->(camp) " \
                 "MERGE (camp)-[:Consists]->(sg) " \
                 "MERGE (sg)-[:Contains]->(sw) "
+
+INPUT_QUERY = "MERGE (in:Input{{id:'{0}', name: '{1}'"
+
+INPUT_SWEEP_RELATIONSHIP = "MERGE (sw:Sweep{{id:'{0}' }})" \
+                    " MERGE (sw)-[:TakesIn]->(in) "

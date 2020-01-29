@@ -176,13 +176,14 @@ class GrayScottEventProcessor(AbstractEventProcessor):
     Processes events related to the Gray Scott workflow.
     """
 
-    def __init__(self, komadu_connetion, location, username):
+    def __init__(self, komadu_connetion, graphdb, location, username):
         self.parser = InputParser()
         self.client = komadu_connetion
         self.workflow_name = GRAYSCOTT_WORKFLOW_NAME
         self.workflow_version = GRAYSCOTT_WORKFLOW_VERSION
         self.location = location
         self.username = username
+        self.graphdb = graphdb
 
     def process_event(self, filename, file_extension, file_path):
         workflow_id = get_experiment_info(file_path)[0]
@@ -213,9 +214,10 @@ class GrayScottEventProcessor(AbstractEventProcessor):
         When the settings.json file is detected add that to the provenance
         """
         workflow_node_id = get_node_id(workflow_id, SIMULATION_NODE_NAME)
-        input_params, raw_input = self.parser.parse(file_path, GRAYSCOTT_WORKFLOW_NAME)
+        input_params, input_query = self.parser.parse(file_path, GRAYSCOTT_WORKFLOW_NAME, workflow_id)
+        # input_query.format(workflow_id + "-input")
 
-        logger.info("filename: {}\t workflow_id:{}\t input params:{}".format(filename, workflow_id, raw_input))
+        print(input_query)
         # create the activity node and the entity node
         activity = create_workflow_activity(workflow_id, workflow_node_id, workflow_node_id,
                                             GRAYSCOTT_WORKFLOW_NAME, GRAYSCOTT_WORKFLOW_VERSION,
@@ -226,6 +228,10 @@ class GrayScottEventProcessor(AbstractEventProcessor):
         result = get_activity_entity(activity, entity, datetime.now(),
                                      activity.serviceInformation.serviceID,
                                      entity.file.fileURI, AssociationEnum.USAGE)
+
+        # publishing to the graph
+        self.graphdb.add_input_to_graph(input_query)
+
         # todo: uncomment these line
         # logger.info("Publishing " + file_path + " to Komadu!")
         # self.publish_activity_entity_relationship(result)
@@ -256,13 +262,14 @@ class BrusselatorEventProcessor(AbstractEventProcessor):
     Processes events related to the Brusselator workflow.
     """
 
-    def __init__(self, komadu_connetion, location, username):
+    def __init__(self, komadu_connetion, graphdb, location, username):
         self.parser = InputParser()
         self.client = komadu_connetion
         self.workflow_name = BRUSSELATOR_WORKFLOW_NAME
         self.workflow_version = BRUSSELATOR_WORKFLOW_VERSION
         self.location = location
         self.username = username
+        self.graphdb = graphdb
 
     def process_event(self, filename, file_extension, file_path):
         workflow_id = get_experiment_info(file_path)[0]
