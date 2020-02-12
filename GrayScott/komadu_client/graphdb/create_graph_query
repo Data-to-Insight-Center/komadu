@@ -66,4 +66,4 @@ CREATE
 
   Queries:
 “Give me input combinations of successful experiments that were ran on Summit by sachith between these two dates”
-MATCH (n:Campaign {id: 'swithana-campaigns-campaigns'})--(sw:SweepGroup{machine: 'local'})--(swe:Sweep{reason:'succeeded'})--(input:Input) RETURN input.L as L, input.F as F, input.k as k, input.Du as Du, input.Dv as Dv
+MATCH (u:User{name:'swithana'})--(cod:Codesign)--(n:Campaign {id: 'swithana-campaigns-campaigns'})--(sw:SweepGroup{machine: 'local'})--(swe:Sweep{reason:'succeeded'})--(input:Input) RETURN input.L as L, input.F as F, input.k as k, input.Du as Du, input.Dv as Dv

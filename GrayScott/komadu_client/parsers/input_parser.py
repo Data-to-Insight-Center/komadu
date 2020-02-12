@@ -49,8 +49,22 @@ class InputParser:
         # creating the input node query
         input_query = INPUT_QUERY.format(workflow_id + "-input", "settings.json")
         for key in input_content:
-            input_query += ", {}: '{}'".format(key, input_content[key])
+            value, isnumeric = self.parse_value(input_content[key])
+            if isnumeric:
+                input_query += ", {}: {}".format(key, value)
+            else:
+                input_query += ", {}: '{}'".format(key, value)
 
         input_query += "})  " + INPUT_SWEEP_RELATIONSHIP.format(workflow_id)
 
         return attributes, input_query
+
+    def parse_value(self, value):
+        """
+        Converts a number into a float (if number) else returns the string.
+        :return:
+        """
+        try:
+            return float(value), True
+        except ValueError:
+            return value, False
