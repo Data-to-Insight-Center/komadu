@@ -4,8 +4,9 @@ READ_USER = "MATCH (a:User {name: $name}) RETURN count(a)"
 INIT_SWEEP = "MERGE (user:User{{name:'{0}' }}) " \
                 "MERGE (cod:Codesign{{id:'{1}', name: '{2}' }}) " \
                 "MERGE (camp:Campaign{{id:'{3}', name: '{4}' }}) " \
-                "MERGE (sg:SweepGroup{{id:'{5}', name: '{6}', created_at: datetime('{7}'), machine: '{8}'}}) " \
-                "MERGE (sw:Sweep{{id:'{9}', name: '{10}', created_at: datetime('{11}') }})"
+                "MERGE (sg:SweepGroup{{id:'{5}'}}) " \
+                "MERGE (sw:Sweep{{id:'{9}', name: '{10}', created_at: datetime('{11}') }})"\
+                "SET sg.name= '{6}', sg.created_at= datetime('{7}'), sg.machine= '{8}'"
 
 SINGLE_FOBS_RELATIONSHIP = "MERGE (user)-[:Created]->(cod) " \
                 "MERGE (cod)-[:Created]->(camp) " \
