@@ -16,3 +16,5 @@ INPUT_QUERY = "MERGE (in:Input{{id:'{0}', name: '{1}'"
 
 INPUT_SWEEP_RELATIONSHIP = "MERGE (sw:Sweep{{id:'{0}' }})" \
                     " MERGE (sw)-[:TakesIn]->(in) "
+
+SWEEP_UPDATE_QUERY = "Merge (sw:Sweep{{id:'{0}' }}) SET sw.status='{1}', sw.reason='{2}'"

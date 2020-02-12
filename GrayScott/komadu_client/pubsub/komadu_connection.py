@@ -28,15 +28,17 @@ class KomaduClient:
 
     def __init__(self):
         self.credentials = pika.PlainCredentials(RABBITMQ_USERNAME, RABBITMQ_PWD)
-        self.parameters = pika.ConnectionParameters(RABBITMQ_HOST, RABBITMQ_PORT, RABBITMQ_PATH, self.credentials)
-        self.connection = pika.BlockingConnection(self.parameters)
-        self.channel = self.connection.channel()
+        # todo: remove these as well
+        # self.parameters = pika.ConnectionParameters(RABBITMQ_HOST, RABBITMQ_PORT, RABBITMQ_PATH, self.credentials)
+        # self.connection = pika.BlockingConnection(self.parameters)
+        # self.channel = self.connection.channel()
 
     def publish_data(self, data):
+        # todo: enable this method
         logging.debug("publishing :" + data)
-        self.channel.basic_publish(exchange=BASE_EXCHANGE + '_Notification',
-                                   routing_key=BASE_ROUTINGKEY + '_Notification',
-                                   body=data)
+        # self.channel.basic_publish(exchange=BASE_EXCHANGE + '_Notification',
+        #                            routing_key=BASE_ROUTINGKEY + '_Notification',
+        #                            body=data)
 
     def execute_command(self, notify, file):
         credentials = pika.PlainCredentials('guest', 'guest')

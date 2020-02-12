@@ -10,8 +10,9 @@ from komadu_client.parsers.adios_config_parser import parse_adios2xml
 from komadu_client.parsers.tau_profile_parser import parse_tau_file
 from komadu_client.util.association_enums import AssociationEnum
 from komadu_client.util.logger import logger
+from komadu_client.graphdb.queries import SWEEP_UPDATE_QUERY
 import logging
-from komadu_client.util.util import get_experiment_info, get_node_id, parse_json_file, flatten_dict
+from komadu_client.util.util import get_experiment_info, get_node_id, parse_json_file, flatten_dict, get_sweepgroup_id
 from abc import ABCMeta, abstractmethod
 from os import path, sep
 
@@ -39,6 +40,9 @@ class AbstractEventProcessor:
         # get the status file from the directory above
         status_file = path.dirname(path.dirname(file)) + sep + STATUS_JSON
         logger.info("Processing the status file: " + status_file)
+
+        sweepGroup = get_sweepgroup_id(file)
+
         data = parse_json_file(status_file)
         for run in data:
             if run in workflow_id:
@@ -47,6 +51,10 @@ class AbstractEventProcessor:
                                                           attributes=attributes)
                 self.client.publish_data(
                     activity_update.toxml("utf-8", element_name='ns1:addAttributes').decode('utf-8'))
+
+                run_id = sweepGroup + "-" + run
+                self.graphdb.add_property_to_node(SWEEP_UPDATE_QUERY.format(run_id, data[run]['state'], data[run]['reason']))
+
 
     def process_workflow_completion(self, file_path, location, workflow_id, workflow_name, workflow_version):
         """
@@ -191,20 +199,20 @@ class GrayScottEventProcessor(AbstractEventProcessor):
             # settings.json file
             logger.info("Processing {} !".format(filename))
             self._process_input_file(filename, file_path, self.location, workflow_id, self.username)
-        # elif self.get_file_extension(file_path.lower()) == "txt":
-        #     # skip .txt files
-        #     pass
-        # elif ADIOS_CONFIG_FILE in filename.lower():
-        #     # adios2.xml
-        #     logger.info("Processing {} !".format(filename))
-        #     self._process_gs_adios2_xml(filename, file_path, self.location, workflow_id, self.username)
-        # elif filename.lower() == GRAYSCOTT_OUTPUT_FILE:
-        #     # gs.bp
-        #     logger.info("Processing {} !".format(filename))
-        #     self._process_output_file(filename, file_path, self.location, workflow_id, self.username)
-        # elif CHEETAH_WALLTIME in file_path.lower():
-        #     self.process_workflow_completion(file_path, self.location, workflow_id, GRAYSCOTT_WORKFLOW_NAME,
-        #                                       GRAYSCOTT_WORKFLOW_VERSION)
+        elif self.get_file_extension(file_path.lower()) == "txt":
+            # skip .txt files
+            pass
+        elif ADIOS_CONFIG_FILE in filename.lower():
+            # adios2.xml
+            logger.info("Processing {} !".format(filename))
+            self._process_gs_adios2_xml(filename, file_path, self.location, workflow_id, self.username)
+        elif filename.lower() == GRAYSCOTT_OUTPUT_FILE:
+            # gs.bp
+            logger.info("Processing {} !".format(filename))
+            self._process_output_file(filename, file_path, self.location, workflow_id, self.username)
+        elif CHEETAH_WALLTIME in file_path.lower():
+            self.process_workflow_completion(file_path, self.location, workflow_id, GRAYSCOTT_WORKFLOW_NAME,
+                                              GRAYSCOTT_WORKFLOW_VERSION)
         # elif TAU_FILE_NAME == filename:
         #     logger.info("Processing Tau File: {} !".format(filename))
         #     self.publish_tau_info(file_path, workflow_id)

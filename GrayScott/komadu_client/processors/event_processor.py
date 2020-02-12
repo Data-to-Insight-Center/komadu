@@ -32,8 +32,8 @@ class EventProcessor(threading.Thread):
         graph_db_password = "root"
 
         self.graphdb = Database(graph_db_uri, graph_db_username, graph_db_password)
-        # self.komadu_conn = KomaduClient()
-        self.komadu_conn = None
+        self.komadu_conn = KomaduClient()
+
         # setting up the correct workflow processor
         if GRAYSCOTT_WORKFLOW in self.workflow_name:
             self.processor = GrayScottEventProcessor(self.komadu_conn, self.graphdb, self.machine, self.username)

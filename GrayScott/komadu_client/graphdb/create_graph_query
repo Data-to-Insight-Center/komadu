@@ -62,3 +62,8 @@ CREATE
   (`17`)-[:`Used` ]->(`16`),
   (`7`)-[:`RELATED_TO` ]->(`18`),
   (`7`)-[:`RELATED_TO` ]->(`19`)
+
+
+  Queries:
+“Give me input combinations of successful experiments that were ran on Summit by sachith between these two dates”
+MATCH (n:Campaign {id: 'swithana-campaigns-campaigns'})--(sw:SweepGroup{machine: 'local'})--(swe:Sweep{reason:'succeeded'})--(input:Input) RETURN input.L as L, input.F as F, input.k as k, input.Du as Du, input.Dv as Dv

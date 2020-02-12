@@ -90,3 +90,15 @@ def flatten_dict(data, prefix=""):
         else:
             fmap[prefix + key] = data[key]
     return fmap
+
+
+def get_dashed_id(id_list):
+    result = ""
+    for id in id_list:
+        result = result + id + "-"
+    return result[:-1]
+
+
+def get_sweepgroup_id(file):
+    experiment_id, codesign_name, campaign_name, username, sweepGroup, sweep = get_experiment_info(file)
+    return get_dashed_id([username, codesign_name, campaign_name, sweepGroup])
