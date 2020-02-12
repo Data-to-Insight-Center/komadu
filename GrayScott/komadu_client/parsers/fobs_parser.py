@@ -37,17 +37,17 @@ def parse_fobs_json(filename):
     komadu_activity_activity_type = create_provenance_graph(experiment_id, fobs, machine, runs, workflow_name,
                                                             workflow_node_ids)
     # creating the
-    graph_query = create_meta_graph(username, campaign_name, campaign_name, sweepGroup, sweep, modified_time)
+    graph_query = create_meta_graph(username, campaign_name, campaign_name, sweepGroup, sweep, modified_time, machine)
     print(graph_query)
 
     return komadu_activity_activity_type, graph_query
 
 
-def create_meta_graph(username, codesign_name, campaign_name, sweepGroup, sweep, modified_time):
+def create_meta_graph(username, codesign_name, campaign_name, sweepGroup, sweep, modified_time, machine):
     """
     Creates the graph query for the given fobs.json information
     :param username:
-    :param codesign_name:
+    :param codesign_name:parse_fobs_json
     :param campaign_name:
     :param sweepGroup:
     :param sweep:
@@ -59,7 +59,7 @@ def create_meta_graph(username, codesign_name, campaign_name, sweepGroup, sweep,
     sweep_id = sweep_group_id + "-" + sweep
 
     # graph_query = "MERGE (user:User{{name:{0} }}) ".format(username)
-    graph_query = INIT_SWEEP.format(username, codesign_id, codesign_id, campaign_id, campaign_name, sweep_group_id, sweepGroup, modified_time, sweep_id, sweep, modified_time) + " " + SINGLE_FOBS_RELATIONSHIP
+    graph_query = INIT_SWEEP.format(username, codesign_id, codesign_id, campaign_id, campaign_name, sweep_group_id, sweepGroup, modified_time, machine, sweep_id, sweep, modified_time) + " " + SINGLE_FOBS_RELATIONSHIP
 
     return graph_query
 
