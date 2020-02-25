@@ -1,0 +1,15 @@
+- cosine similirity
+"Give me top 5 similar sweeps"
+MATCH (u:User{name:'swithana'})--(cod:Codesign)--(n:Campaign)--(sw:SweepGroup)--(swe:Sweep)--(sp:SweepParams)
+Return swe.id as run,
+algo.similarity.cosine(sp.embedding, [0.2, 0.1, 0.02, 8.0, 0.0, 1.0, 0.048, 0.01, 25.0, 100.0]) AS similarity
+ORDER BY similarity DESC limit 5
+
+"Compare all the sweeps I have with similarity higher than x"
+
+MATCH (u:User{name:'swithana'})--(cod:Codesign)--(n:Campaign)--(sw:SweepGroup)--(swe:Sweep)--(sp:SweepParams) WITH {item:id(swe), weights: coalesce(sp.embedding, algo.NaN())} as userData
+WITH collect(userData) as data
+CALL algo.similarity.cosine.stream(data, {similarityCutoff: 0.0})
+YIELD item1, item2, count1, count2, similarity
+RETURN algo.asNode(item1).id AS from, algo.asNode(item2).id AS to, similarity
+ORDER BY similarity DESC

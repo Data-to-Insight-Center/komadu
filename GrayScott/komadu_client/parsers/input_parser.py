@@ -47,14 +47,21 @@ class InputParser:
         attributes.append(attribute)
 
         # creating the input node query
-        input_query = INPUT_QUERY.format(workflow_id + "-input", "settings.json")
-        for key in input_content:
+        input_query = INPUT_QUERY.format(workflow_id + "-sp", "sweep_params")
+        embedding = []
+        embedded_keys = []
+        for key in sorted (input_content.keys()):
             value, isnumeric = self.parse_value(input_content[key])
             if isnumeric:
                 input_query += ", {}: {}".format(key, value)
+                embedding.append(value)
+                embedded_keys.append(key)
             else:
                 input_query += ", {}: '{}'".format(key, value)
 
+        # adding the embeddings
+        input_query += ", {}: {}".format('embedding', embedding)
+        input_query += ", {}: {}".format('embedded_keys', embedded_keys)
         input_query += "})  " + INPUT_SWEEP_RELATIONSHIP.format(workflow_id)
 
         return attributes, input_query

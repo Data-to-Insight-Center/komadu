@@ -13,9 +13,9 @@ SINGLE_FOBS_RELATIONSHIP = "MERGE (user)-[:Created]->(cod) " \
                 "MERGE (camp)-[:Consists]->(sg) " \
                 "MERGE (sg)-[:Contains]->(sw) "
 
-INPUT_QUERY = "MERGE (in:Input{{id:'{0}', name: '{1}'"
+INPUT_QUERY = "MERGE (sp:SweepParams{{id:'{0}', name: '{1}'"
 
 INPUT_SWEEP_RELATIONSHIP = "MERGE (sw:Sweep{{id:'{0}' }})" \
-                    " MERGE (sw)-[:TakesIn]->(in) "
+                    " MERGE (sw)-[:TakesIn]->(sp) "
 
 SWEEP_UPDATE_QUERY = "Merge (sw:Sweep{{id:'{0}' }}) SET sw.status='{1}', sw.reason='{2}'"
