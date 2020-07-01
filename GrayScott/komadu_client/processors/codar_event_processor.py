@@ -240,9 +240,8 @@ class GrayScottEventProcessor(AbstractEventProcessor):
         # publishing to the graph
         self.graphdb.add_input_to_graph(input_query)
 
-        # todo: uncomment these line
-        # logger.info("Publishing " + file_path + " to Komadu!")
-        # self.publish_activity_entity_relationship(result)
+        logger.info("Publishing " + file_path + " to Komadu!")
+        self.publish_activity_entity_relationship(result)
 
     def _process_output_file(self, filename, file_path, location, workflow_id, username):
         """
