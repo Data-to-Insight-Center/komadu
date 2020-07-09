@@ -39,6 +39,8 @@ class EventProcessor(threading.Thread):
             self.processor = GrayScottEventProcessor(self.komadu_conn, self.graphdb, self.machine, self.username)
         elif BRUSSELATOR_WORKFLOW_NAME in self.workflow_name:
             self.processor = BrusselatorEventProcessor(self.komadu_conn, self.graphdb, self.machine, self.username)
+        else:
+            self.processor = GrayScottEventProcessor(self.komadu_conn, self.graphdb, self.machine, self.username)
         return
 
     def run(self):
@@ -52,9 +54,9 @@ class EventProcessor(threading.Thread):
         filename = event_content[-1]
         file_extension = os.path.splitext(filename)[1]
 
-        if not filename or os.path.isfile(filename):
-            # not a file
-            return
+        # if not filename or os.path.isfile(filename):
+        #     # not a file
+        #     return
         if str(filename).startswith("."):
             # ignore files starting with a '.'
             return
