@@ -10,7 +10,7 @@ from komadu_client.models.ingest_models import activityActivityType, communicati
 from komadu_client.graphdb.queries import INIT_SWEEP, SINGLE_FOBS_RELATIONSHIP
 
 
-def parse_fobs_json(filename):
+def parse_fobs_json(filename, workflow_name_main):
     """
     This function passes the fobs.json file and creates the workflow in Komadu.
     :param filename:
@@ -30,6 +30,8 @@ def parse_fobs_json(filename):
     # extracting workflow information
     machine = fobs["machine_name"]
     workflow_name = get_workflow_name(filename)
+    if not workflow_name:
+        workflow_name = workflow_name_main
     runs = fobs["runs"]
     workflow_node_ids = list(range(len(runs)))
 

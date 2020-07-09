@@ -68,9 +68,10 @@ class EventProcessor(threading.Thread):
         if FOBS_FILE in file_path:
             logger.info("Processing the fobs file: {}".format(file_path))
             # init the workflow using the fobs.json file
-            activity_activity, graph_query = parse_fobs_json(file_path)
+            activity_activity, graph_query = parse_fobs_json(file_path, self.workflow_name)
             activity_activity = activity_activity.toxml("utf-8", element_name='ns1:addActivityActivityRelationship').decode(
                 'utf-8').replace('"', "'")
+
             self.komadu_conn.publish_data(activity_activity)
 
             logger.info("Publishing the graph to the database")
