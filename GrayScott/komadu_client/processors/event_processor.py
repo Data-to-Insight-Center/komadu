@@ -52,6 +52,9 @@ class EventProcessor(threading.Thread):
         filename = event_content[-1]
         file_extension = os.path.splitext(filename)[1]
 
+        if not filename or os.path.isfile(filename):
+            # not a file
+            return
         if str(filename).startswith("."):
             # ignore files starting with a '.'
             return
@@ -64,9 +67,9 @@ class EventProcessor(threading.Thread):
             logger.info("Processing the fobs file: {}".format(file_path))
             # init the workflow using the fobs.json file
             activity_activity, graph_query = parse_fobs_json(file_path)
-            # activity_activity = activity_activity.toxml("utf-8", element_name='ns1:addActivityActivityRelationship').decode(
-            #     'utf-8').replace('"', "'")
-            # self.komadu_conn.publish_data(activity_activity)
+            activity_activity = activity_activity.toxml("utf-8", element_name='ns1:addActivityActivityRelationship').decode(
+                'utf-8').replace('"', "'")
+            self.komadu_conn.publish_data(activity_activity)
 
             logger.info("Publishing the graph to the database")
             self.graphdb.run_fobs_init_graph_query(graph_query)
