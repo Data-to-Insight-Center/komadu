@@ -158,6 +158,26 @@ public class KomaduOperations {
                         return ERROR_STRING + ": " + qe.getMessage();
                     }
                     return getAgentGraphResponseDocument.xmlText(new XmlOptions().setSavePrettyPrint());
+                case GET_FORWARD_GRAPH:
+                    GetEntityForwardGraphResponseDocument entityResponse;
+                    try {
+                        entityResponse = querier.getEntityForwardGraph((GetEntityForwardGraphRequestDocument) query);
+                    } catch (QueryException qe) {
+                        l.error("Error in findAbstractMethod().");
+                        l.error(qe.getMessage());
+                        return ERROR_STRING + ": " + qe.getMessage();
+                    }
+                    return entityResponse.xmlText(new XmlOptions().setSavePrettyPrint());
+                case GET_BACKWARD_GRAPH:
+                    GetEntityBackwardGraphResponseDocument entityBackwardGraphResponseDocument;
+                    try {
+                        entityBackwardGraphResponseDocument = querier.getEntityBackwardGraph((GetEntityBackwardGraphRequestDocument) query);
+                    } catch (QueryException qe) {
+                        l.error("Error in findAbstractMethod().");
+                        l.error(qe.getMessage());
+                        return ERROR_STRING + ": " + qe.getMessage();
+                    }
+                    return entityBackwardGraphResponseDocument.xmlText(new XmlOptions().setSavePrettyPrint());
                 case UNKNOWN_TYPES:
                     l.error("Unknown query type.");
                     return "Unknown Query";

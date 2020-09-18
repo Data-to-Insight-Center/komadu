@@ -46,7 +46,9 @@ public class QuerySummary {
 		GET_CONTEXT_WORKFLOW_GRAPH, 
 		GET_ENTITY_GRAPH, 
 		GET_ACTIVITY_GRAPH, 
-		GET_AGENT_GRAPH, 
+		GET_AGENT_GRAPH,
+		GET_FORWARD_GRAPH,
+		GET_BACKWARD_GRAPH,
 		UNKNOWN_TYPES;
 
 		public static QueryTypeEnum determineQueryTypeFromXmlBeansDocument(
@@ -67,6 +69,10 @@ public class QuerySummary {
 				return GET_ACTIVITY_GRAPH;
 			} else if (document instanceof GetAgentGraphRequestDocument) {
 				return GET_AGENT_GRAPH;
+			} else if (document instanceof GetEntityForwardGraphRequestDocument) {
+				return GET_FORWARD_GRAPH;
+			} else if (document instanceof GetEntityBackwardGraphRequestDocument) {
+				return GET_BACKWARD_GRAPH;
 			}
 			return UNKNOWN_TYPES;
 		}
