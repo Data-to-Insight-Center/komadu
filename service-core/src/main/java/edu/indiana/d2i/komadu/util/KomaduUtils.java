@@ -87,7 +87,7 @@ public class KomaduUtils {
                     int actualTimeout = timeout * i * 2;
                     lockStmt.setInt(1, lockOperation);
                     lockStmt.setInt(2, actualTimeout);
-                    lockStmt.setString(3, objectID);
+                    lockStmt.setString(3, calculateMD5(objectID));
                     lockStmt.registerOutParameter(4, java.sql.Types.INTEGER);
                     lockStmt.execute();
                     lockStatus = lockStmt.getInt(4);
