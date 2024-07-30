@@ -193,7 +193,7 @@
         <neethi.version>3.0.2</neethi.version>
         <xmlschema.version>1.4.7</xmlschema.version>
         <xmlbeans.version>3.0.0</xmlbeans.version>
-        <log4j.version>1.2.17</log4j.version>
+        <log4j.version>2.18.0</log4j.version>
         <prov.version>0.4.0</prov.version>
         <jaxb.api.version>2.2.4</jaxb.api.version>
         <jaxb.common.version>0.4.1.5</jaxb.common.version>
